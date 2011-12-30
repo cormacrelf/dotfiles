@@ -5,7 +5,7 @@ export DOT=$HOME/.dotfiles
 export ZSH=$HOME/.oh-my-zsh
 
 # customize omz
-plugins=(osx github gem cloudapp brew rails3 git textmate ruby history-substring-search zsh-syntax-highlighting)
+plugins=(osx github gem cloudapp brew rails3 git git-flow textmate ruby history-substring-search zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
