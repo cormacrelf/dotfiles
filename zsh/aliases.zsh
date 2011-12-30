@@ -1,7 +1,7 @@
-alias reload!='. ~/.zshrc'
+alias reload!="source $HOME/.zshrc"
 
 alias say="say --progress"
-
+alias ok="echo 'F.A.B., Thunderbird 2.'"
 alias szh='source ~/.zshrc'
 alias tweet='twitter tweet'
 alias byword='open -a Byword'
