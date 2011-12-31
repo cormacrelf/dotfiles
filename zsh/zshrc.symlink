@@ -15,7 +15,7 @@ source $ZSH/oh-my-zsh.sh
 export PROJECTS=~/Dropbox/Code
 
 # source every .zsh file in this rep
-for config_file ($DOT/**/*~*/lib/*.zsh) source $config_file
+for config_file ($DOT/**/*^lib/*.zsh) source $config_file
 
 # source each oh-my-zsh plugin listed
 
