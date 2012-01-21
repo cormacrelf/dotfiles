@@ -1,0 +1,7 @@
+hash -d dk="/Users/Cormac/Desktop"
+hash -d dl="/Users/Cormac/Downloads"
+hash -d co="/Users/Cormac/Dropbox/Code"
+hash -d xc="/Users/Cormac/Xcode"
+hash -d db="/Users/Cormac/Dropbox"
+hash -d exp="/Users/Cormac/Xcode/Expression"
+hash -d cal="/Users/Cormac/Dropbox/Apps/Calepin"
