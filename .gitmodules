@@ -4,3 +4,6 @@
 [submodule "vim/vim.symlink/bundle/CamelCaseMotion"]
 	path = vim/vim.symlink/bundle/CamelCaseMotion
 	url = https://github.com/bkad/CamelCaseMotion.git
+[submodule "vim/vim.symlink/bundle/solarized"]
+	path = vim/vim.symlink/bundle/solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
