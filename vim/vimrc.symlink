@@ -1,18 +1,28 @@
 set noswapfile
 
+call pathogen#infect() " do this first so we can load colorschemes, etc.
+
 " ----------------------------------------------------------------------------
 "  Text Formatting
 " ----------------------------------------------------------------------------
 
+syntax on " pretty obvious there
+set background=dark
+colorscheme solarized
+
+" change the default light/dark switch key
+call togglebg#map("<F8>")
+
+
 set autoindent             " automatic indent new lines
 set smartindent            " be smart about it
 inoremap # X<BS>#
-set nowrap                 " do not wrap lines
+" set nowrap                 " do not wrap lines
 set softtabstop=2          " yep, two
 set shiftwidth=2           " ..
 set tabstop=4
-set expandtab              " expand tabs to spaces
-set nosmarttab             " fuck tabs
+" set expandtab              " expand tabs to spaces
+" set nosmarttab             " fuck tabs
 set formatoptions+=n       " support for numbered/bullet lists
 "set textwidth=80           " wrap at 80 chars by default
 set virtualedit=block      " allow virtual edit in visual block ..
@@ -25,7 +35,7 @@ set virtualedit=block      " allow virtual edit in visual block ..
 let mapleader = ","
 
 " exit to normal mode with 'jj'
-inoremap jj <ESC>
+" inoremap jj <ESC>
 
 
 " reflow paragraph with Q in normal and visual mode
@@ -50,11 +60,11 @@ inoremap <Up> <C-o>gk
 
 set ruler                  " show the cursor position all the time
 set noshowcmd              " don't display incomplete commands
-set nolazyredraw           " turn off lazy redraw
+" set nolazyredraw           " turn off lazy redraw
 set number                 " line numbers
 set wildmenu               " turn on wild menu
 set wildmode=list:longest,full
-set ch=2                   " command line height
+" set ch=2                   " command line height
 set backspace=2            " allow backspacing over everything in insert mode
 set whichwrap+=<,>,h,l,[,] " backspace and cursor keys wrap to
 set shortmess=filtIoOA     " shorten messages
@@ -83,3 +93,13 @@ function! StripWhitespace ()
     exec ':%s/ \+$//gc'
 endfunction
 map ,s :call StripWhitespace ()<CR>
+
+set nocompatible      " We're running Vim, not Vi!
+syntax on             " Enable syntax highlighting
+filetype on           " Enable filetype detection
+filetype indent on    " Enable filetype-specific indenting
+filetype plugin on    " Enable filetype-specific plugins
+compiler ruby         " Enable compiler support for ruby
+
+runtime macros/matchit.vim
+

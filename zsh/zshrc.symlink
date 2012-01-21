@@ -36,3 +36,4 @@ compinit
 # load every completion after autocomplete loads
 for config_file ($DOT/**/completion.sh) source $config_file
 
+export CC=/usr/bin/gcc-4.2

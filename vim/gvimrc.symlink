@@ -1,4 +1,8 @@
-colorscheme desert
+
+
+" colorscheme desert
+" just use .vimrc's default
+
 set anti
 set lines=999 columns=84
 set guioptions=egmrt
