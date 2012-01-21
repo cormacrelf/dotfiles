@@ -1,7 +1,7 @@
 
 
 " colorscheme desert
-" just use .vimrc's default
+colorscheme solarized
 
 set anti
 set lines=999 columns=84

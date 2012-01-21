@@ -1,4 +1,5 @@
 set noswapfile
+set nocompatible
 
 call pathogen#infect() " do this first so we can load colorschemes, etc.
 
@@ -6,9 +7,10 @@ call pathogen#infect() " do this first so we can load colorschemes, etc.
 "  Text Formatting
 " ----------------------------------------------------------------------------
 
-syntax on " pretty obvious there
-set background=dark
-colorscheme solarized
+syntax on				  " pretty obvious there
+" let g:solarized_termcolors=256 " degrade solarized
+" set background=dark		  "use the darker bg of solarized
+colorscheme desert256	  " use solarized
 
 " change the default light/dark switch key
 call togglebg#map("<F8>")
@@ -94,8 +96,6 @@ function! StripWhitespace ()
 endfunction
 map ,s :call StripWhitespace ()<CR>
 
-set nocompatible      " We're running Vim, not Vi!
-syntax on             " Enable syntax highlighting
 filetype on           " Enable filetype detection
 filetype indent on    " Enable filetype-specific indenting
 filetype plugin on    " Enable filetype-specific plugins
