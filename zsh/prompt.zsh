@@ -81,3 +81,7 @@ precmd() {
   title "zsh" "%m" "%55<...<%~"
   set_prompt
 }
+
+bell=`tput bel`
+
+precmd () { echo -n "\033]1;$USERNAME@$HOST$bell\033]2;$PWD> - $USERNAME@$HOST ($status)$bell" }

@@ -7,13 +7,12 @@ call pathogen#infect() " do this first so we can load colorschemes, etc.
 "  Text Formatting
 " ----------------------------------------------------------------------------
 
+set t_Co=256
 syntax on				  " pretty obvious there
-" let g:solarized_termcolors=256 " degrade solarized
-" set background=dark		  "use the darker bg of solarized
-colorscheme desert256	  " use solarized
+colorscheme rdark	  " set yo theme
 
 " change the default light/dark switch key
-call togglebg#map("<F8>")
+" call togglebg#map("<F8>")
 
 
 set autoindent             " automatic indent new lines
@@ -55,6 +54,7 @@ vnoremap <Down> gj
 vnoremap <Up> gk
 inoremap <Down> <C-o>gj
 inoremap <Up> <C-o>gk
+
 
 " ----------------------------------------------------------------------------
 "  UI
@@ -103,3 +103,9 @@ compiler ruby         " Enable compiler support for ruby
 
 runtime macros/matchit.vim
 
+
+" ---------------------------------------------------------------------------
+" Plugin Configuration
+" ---------------------------------------------------------------------------
+
+let g:slime_target = "tmux"
