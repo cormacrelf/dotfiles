@@ -1,0 +1,7 @@
+function sedgrep ()
+{
+    C_PATT=`echo -e '\033[33;01m'`
+    C_NORM=`echo -e '\033[m'`
+
+    sed "s/$1/${C_PATT}&${C_NORM}/g"
+}

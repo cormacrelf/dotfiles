@@ -7,3 +7,4 @@ alias tweet='twitter tweet'
 alias byword='open -a Byword'
 alias ql='qlmanage -p "$@" >& /dev/null'
 
+alias pat="pygmentize"

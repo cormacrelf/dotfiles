@@ -1,0 +1,8 @@
+pat () {
+  if (/usr/bin/env pygmentize $1 =~ "Error: no lexer for filename")
+	cat $@
+  else
+	/usr/bin/env pygmentize $1
+  fi 
+}
+

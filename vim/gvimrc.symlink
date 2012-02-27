@@ -1,10 +1,11 @@
-
-
-" colorscheme desert
+" colorscheme desert256
 colorscheme solarized
 
+
+set guifont=Inconsolata\-dz:h12
+
 set anti
-set lines=999 columns=84
+set lines=50 columns=96
 set guioptions=egmrt
 
 " Command + t to :CommandT
@@ -12,6 +13,14 @@ if has("gui_macvim")
   macmenu &File.New\ Tab key=<nop>
   map <D-t> :CommandT<CR>
 endif
+
+if has('gui_macvim')
+  nnoremap <silent> <SwipeLeft> :macaction _cycleWindowsBackwards:<CR>
+  nnoremap <silent> <SwipeRight> :macaction _cycleWindows:<CR>
+endif
+
+" automatically reload vimrc when it's saved
+au BufWritePost .gvimrc so ~/.gvimrc
 
 " Open Command+T in a new tab
 let g:CommandTAcceptSelectionTabMap='<CR>'

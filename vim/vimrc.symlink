@@ -7,18 +7,28 @@ call pathogen#infect() " do this first so we can load colorschemes, etc.
 "  Text Formatting
 " ----------------------------------------------------------------------------
 
-set t_Co=256
 syntax on				  " pretty obvious there
-colorscheme rdark	  " set yo theme
+set background=dark
+colorscheme solarized
+
 
 " change the default light/dark switch key
-" call togglebg#map("<F8>")
+call togglebg#map("<F8>")
 
 
-set autoindent             " automatic indent new lines
-set smartindent            " be smart about it
+" set autoindent             " automatic indent new lines
+" set smartindent            " be smart about it
 inoremap # X<BS>#
+" Shortcut to rapidly toggle `set list`
+nmap <leader>l :set list!<CR>
+ 
+" Use the same symbols as TextMate for tabstops and EOLs
+set listchars=tab:▸\ ,eol:¬
+
 " set nowrap                 " do not wrap lines
+set formatoptions=l
+set lbr
+set showbreak=\ \ \ \
 set softtabstop=2          " yep, two
 set shiftwidth=2           " ..
 set tabstop=4
@@ -26,6 +36,9 @@ set tabstop=4
 " set nosmarttab             " fuck tabs
 set formatoptions+=n       " support for numbered/bullet lists
 "set textwidth=80           " wrap at 80 chars by default
+"p>   " disable arrow key navigation
+"p>   " disable arrow key navigation
+"p>   " disable arrow key navigation
 set virtualedit=block      " allow virtual edit in visual block ..
 
 " ----------------------------------------------------------------------------
@@ -36,7 +49,7 @@ set virtualedit=block      " allow virtual edit in visual block ..
 let mapleader = ","
 
 " exit to normal mode with 'jj'
-" inoremap jj <ESC>
+inoremap jj <ESC>
 
 
 " reflow paragraph with Q in normal and visual mode
@@ -85,14 +98,14 @@ set laststatus=2           " always show the status line
 set ignorecase             " ignore case when searching
 set nohlsearch             " don't highlight searches
 set visualbell             " shut the fuck up
-
+set title
 
 " ---------------------------------------------------------------------------
 "  Strip all trailing whitespace in file
 " ---------------------------------------------------------------------------
 
 function! StripWhitespace ()
-    exec ':%s/ \+$//gc'
+exec ':%s/ \+$//gc'
 endfunction
 map ,s :call StripWhitespace ()<CR>
 
@@ -109,3 +122,24 @@ runtime macros/matchit.vim
 " ---------------------------------------------------------------------------
 
 let g:slime_target = "tmux"
+
+
+
+" ---------------------------------------------------------------------------
+" Vimbits
+" ---------------------------------------------------------------------------
+
+" make Y behave like C - yank until EOL
+map Y y$
+
+" Easy split navigation
+noremap <C-h> <C-w>h 
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+
+" select all
+map <Leader>a ggVG
+
+" automatically reload vimrc when it's saved
+au BufWritePost .vimrc so ~/.vimrc
