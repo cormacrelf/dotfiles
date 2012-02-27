@@ -1,7 +1,7 @@
 
 
-" colorscheme desert
-colorscheme solarized
+" colorscheme desert256
+" colorscheme solarized
 
 set anti
 set lines=999 columns=84

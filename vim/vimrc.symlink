@@ -9,7 +9,7 @@ call pathogen#infect() " do this first so we can load colorschemes, etc.
 
 set t_Co=256
 syntax on				  " pretty obvious there
-colorscheme rdark	  " set yo theme
+colorscheme ir_black      " set yo theme
 
 " change the default light/dark switch key
 " call togglebg#map("<F8>")
@@ -19,6 +19,9 @@ set autoindent             " automatic indent new lines
 set smartindent            " be smart about it
 inoremap # X<BS>#
 " set nowrap                 " do not wrap lines
+set formatoptions=l
+set lbr
+set showbreak=\ \ \ \
 set softtabstop=2          " yep, two
 set shiftwidth=2           " ..
 set tabstop=4
@@ -26,6 +29,9 @@ set tabstop=4
 " set nosmarttab             " fuck tabs
 set formatoptions+=n       " support for numbered/bullet lists
 "set textwidth=80           " wrap at 80 chars by default
+"p>   " disable arrow key navigation
+"p>   " disable arrow key navigation
+"p>   " disable arrow key navigation
 set virtualedit=block      " allow virtual edit in visual block ..
 
 " ----------------------------------------------------------------------------
@@ -92,7 +98,7 @@ set visualbell             " shut the fuck up
 " ---------------------------------------------------------------------------
 
 function! StripWhitespace ()
-    exec ':%s/ \+$//gc'
+exec ':%s/ \+$//gc'
 endfunction
 map ,s :call StripWhitespace ()<CR>
 
@@ -109,3 +115,38 @@ runtime macros/matchit.vim
 " ---------------------------------------------------------------------------
 
 let g:slime_target = "tmux"
+
+
+
+" ---------------------------------------------------------------------------
+" Vimbits
+" ---------------------------------------------------------------------------
+
+map Y y$ " make Y behave like C - yank until EOL
+
+noremap <C-h> <C-w>h " Easy split navigation
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+
+inoremap jk <Esc> " use jk as <ESC> alternative
+inoremap jj <Esc>
+
+nnoremap / /\v " use sane regexes
+vnoremap / /\v
+
+nnoremap <up> <nop>   " disable arrow key navigation
+nnoremap <down> <nop>
+nnoremap <left> <nop>
+nnoremap <right> <nop>
+inoremap <up> <nop>
+inoremap <down> <nop>
+inoremap <left> <nop>
+inoremap <right> <nop>
+
+map <Leader>a ggVG	" select all
+
+
+" Web-Browser-like scrolling
+map <S-Space> <C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y><C-Y>
+map <Space> <C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E><C-E>
