@@ -11,13 +11,12 @@ syntax on				  " pretty obvious there
 set background=dark
 colorscheme solarized
 
-
 " change the default light/dark switch key
 call togglebg#map("<F8>")
 
 
-" set autoindent             " automatic indent new lines
-" set smartindent            " be smart about it
+set autoindent             " automatic indent new lines
+set smartindent            " be smart about it
 inoremap # X<BS>#
 " Shortcut to rapidly toggle `set list`
 nmap <leader>l :set list!<CR>
