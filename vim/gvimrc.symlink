@@ -5,6 +5,8 @@ colorscheme solarized
 " colorscheme desert256
 " colorscheme solarized
 
+set guifont=Inconsolata\-dz:12
+
 set anti
 set lines=50 columns=96
 set guioptions=egmrt

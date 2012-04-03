@@ -16,7 +16,9 @@ call togglebg#map("<F8>")
 
 
 set autoindent             " automatic indent new lines
-set smartindent            " be smart about it
+set smartindent            " be smart about it: actually, use filetype
+" specific things
+"
 inoremap # X<BS>#
 " Shortcut to rapidly toggle `set list`
 nmap <leader>l :set list!<CR>
@@ -28,8 +30,8 @@ set listchars=tab:▸\ ,eol:¬
 set formatoptions=l
 set lbr
 set showbreak=\ \ \ \
-set softtabstop=2          " yep, two
-set shiftwidth=2           " ..
+" set softtabstop=2          " yep, two
+" set shiftwidth=2           " ..
 set tabstop=4
 " set expandtab              " expand tabs to spaces
 " set nosmarttab             " fuck tabs
@@ -39,6 +41,9 @@ set formatoptions+=n       " support for numbered/bullet lists
 "p>   " disable arrow key navigation
 "p>   " disable arrow key navigation
 set virtualedit=block      " allow virtual edit in visual block ..
+
+set hlsearch
+
 
 " ----------------------------------------------------------------------------
 "  Remapping
@@ -67,6 +72,10 @@ vnoremap <Up> gk
 inoremap <Down> <C-o>gj
 inoremap <Up> <C-o>gk
 
+" use NERDTree on ,d
+
+map <leader>d :execute 'NERDTreeToggle ' . getcwd()<CR>
+
 
 " ----------------------------------------------------------------------------
 "  UI
@@ -85,6 +94,10 @@ set shortmess=filtIoOA     " shorten messages
 set report=0               " tell us about changes
 set nostartofline          " don't jump to the start of line when scrolling
 
+set cpoptions+=$
+
+
+autocmd vimenter * if !argc() | NERDTree | endif
 
 " ----------------------------------------------------------------------------
 " Visual Cues
@@ -98,9 +111,10 @@ set ignorecase             " ignore case when searching
 set nohlsearch             " don't highlight searches
 set visualbell             " shut the fuck up
 set title
+set hidden
 
 " ---------------------------------------------------------------------------
-"  Strip all trailing whitespace in file
+" Strip all trailing whitespace in file
 " ---------------------------------------------------------------------------
 
 function! StripWhitespace ()
@@ -108,9 +122,17 @@ exec ':%s/ \+$//gc'
 endfunction
 map ,s :call StripWhitespace ()<CR>
 
+" ---------------------------------------------------------------------------
+" Filetypes
+" ---------------------------------------------------------------------------
+
 filetype on           " Enable filetype detection
 filetype indent on    " Enable filetype-specific indenting
 filetype plugin on    " Enable filetype-specific plugins
+filetype plugin indent on
+
+autocmd FileType objc setlocal shiftwidth=4 tabstop=4
+
 compiler ruby         " Enable compiler support for ruby
 
 runtime macros/matchit.vim
@@ -120,7 +142,6 @@ runtime macros/matchit.vim
 " Plugin Configuration
 " ---------------------------------------------------------------------------
 
-let g:slime_target = "tmux"
 
 
 

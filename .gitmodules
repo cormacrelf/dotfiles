@@ -43,3 +43,31 @@
 [submodule "vim/vim.symlink/bundle/clang_complete"]
 	path = vim/vim.symlink/bundle/clang_complete
 	url = https://github.com/Rip-Rip/clang_complete.git
+[submodule "vim/vim.symlink/bundle/vim-repeat"]
+	path = vim/vim.symlink/bundle/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule "vim/vim.symlink/bundle/vim-commentary"]
+	path = vim/vim.symlink/bundle/vim-commentary
+	url = git://github.com/tpope/vim-commentary.git
+[submodule "vim/vim.symlink/bundle/vim-fugitive"]
+	path = vim/vim.symlink/bundle/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vim/vim.symlink/bundle/gist-vim"]
+	path = vim/vim.symlink/bundle/gist-vim
+	url = https://github.com/mattn/gist-vim.git
+[submodule "vim/vim.symlink/bundle/cocoa.vim"]
+	path = vim/vim.symlink/bundle/cocoa.vim
+	url = https://github.com/fomichev/cocoa.vim.git
+	ignore = dirty
+[submodule "vim/vim.symlink/bundle/snipmate.vim"]
+	path = vim/vim.symlink/bundle/snipmate.vim
+	url = https://github.com/msanders/snipmate.vim.git
+[submodule "vim/vim.symlink/bundle/nerdtree"]
+	path = vim/vim.symlink/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "vim/vim.symlink/bundle/vim-afterimage"]
+	path = vim/vim.symlink/bundle/vim-afterimage
+	url = http://github.com/tpope/vim-afterimage.git
+[submodule "vim/vim.symlink/bundle/vim-rails"]
+	path = vim/vim.symlink/bundle/vim-rails
+	url = https://github.com/tpope/vim-rails.git
