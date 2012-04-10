@@ -14,6 +14,8 @@ colorscheme solarized
 " change the default light/dark switch key
 call togglebg#map("<F8>")
 
+set shell=/bin/zsh
+
 
 set autoindent             " automatic indent new lines
 set smartindent            " be smart about it: actually, use filetype
@@ -24,12 +26,12 @@ inoremap # X<BS>#
 nmap <leader>l :set list!<CR>
  
 " Use the same symbols as TextMate for tabstops and EOLs
-set listchars=tab:▸\ ,eol:¬
+" set listchars=tab:▸\ ,eol:¬
 
 " set nowrap                 " do not wrap lines
 set formatoptions=l
 set lbr
-set showbreak=\ \ \ \
+" set showbreak=\ \ \ \
 " set softtabstop=2          " yep, two
 " set shiftwidth=2           " ..
 set tabstop=4
@@ -37,9 +39,6 @@ set tabstop=4
 " set nosmarttab             " fuck tabs
 set formatoptions+=n       " support for numbered/bullet lists
 "set textwidth=80           " wrap at 80 chars by default
-"p>   " disable arrow key navigation
-"p>   " disable arrow key navigation
-"p>   " disable arrow key navigation
 set virtualedit=block      " allow virtual edit in visual block ..
 
 set hlsearch
@@ -53,7 +52,7 @@ set hlsearch
 let mapleader = ","
 
 " exit to normal mode with 'jj'
-inoremap jj <ESC>
+" inoremap jj <ESC>
 
 
 " reflow paragraph with Q in normal and visual mode
@@ -75,7 +74,11 @@ inoremap <Up> <C-o>gk
 " use NERDTree on ,d
 
 map <leader>d :execute 'NERDTreeToggle ' . getcwd()<CR>
+map <silent> <C-s> :NERDTree<CR><C-w>p:NERDTreeFind<CR>
 
+" Increment & decrement
+nnoremap + <C-a>
+nnoremap - <C-x>
 
 " ----------------------------------------------------------------------------
 "  UI
@@ -93,9 +96,9 @@ set whichwrap+=<,>,h,l,[,] " backspace and cursor keys wrap to
 set shortmess=filtIoOA     " shorten messages
 set report=0               " tell us about changes
 set nostartofline          " don't jump to the start of line when scrolling
+set scrolloff=3            " scroll early, give us a bit of context
 
-set cpoptions+=$
-
+set splitright splitbelow  " when :[v]split-ting, go to the right/down
 
 autocmd vimenter * if !argc() | NERDTree | endif
 
@@ -129,7 +132,6 @@ map ,s :call StripWhitespace ()<CR>
 filetype on           " Enable filetype detection
 filetype indent on    " Enable filetype-specific indenting
 filetype plugin on    " Enable filetype-specific plugins
-filetype plugin indent on
 
 autocmd FileType objc setlocal shiftwidth=4 tabstop=4
 
@@ -142,7 +144,7 @@ runtime macros/matchit.vim
 " Plugin Configuration
 " ---------------------------------------------------------------------------
 
-
+let g:slime_target = "tmux"
 
 
 " ---------------------------------------------------------------------------
@@ -157,6 +159,19 @@ noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
+
+" Find merge conflict markers
+nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
+
+" Insert one character
+nnoremap <C-i> :exec "normal i".nr2char(getchar())."\e"<CR>
+nnoremap <C-i>a :exec "normal a".nr2char(getchar())."\e"<CR>
+
+" Better command-line editing (:O emacs mode!)
+cnoremap <C-j> <t_kd>
+cnoremap <C-k> <t_ku>
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
 
 " select all
 map <Leader>a ggVG
