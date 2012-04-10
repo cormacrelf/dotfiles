@@ -5,7 +5,11 @@
 ## dotfiles
 
 Your dotfiles are how you personalize your system. These are mine. The very
+<<<<<<< HEAD
 prejudiced mix: OS X, zsh, Ruby, Rails, git, homebrew, vim. If you
+=======
+prejudiced mix: OS X, zsh, Ruby, Rails, git, homebrew, rbenv, vim. If you
+>>>>>>> upstream/master
 match up along most of those lines, you may dig my dotfiles.
 
 I was a little tired of having long alias files and everything strewn about
@@ -68,13 +72,18 @@ bubble bath.
 
 - If you want some more colors for things like `ls`, install grc: `brew install
   grc`.
+<<<<<<< HEAD
 - You should probably install the excellent [rbenv](https://github.com/sstephenson/rbenv) or [rvm](http://rvm.beginrescueend.com) to manage
   multiple rubies. With the latter, your current branch will show up in the prompt. Bonus.
+=======
+- If you install the excellent [rbenv](https://github.com/sstephenson/rbenv) to
+  manage multiple rubies, your current branch will show up in the prompt. Bonus.
+>>>>>>> upstream/master
 
 ## bugs
 
 I want this to work for everyone; that means when you clone it down it should
-work for you even though you may not have `rvm` installed, for example. That
+work for you even though you may not have `rbenv` installed, for example. That
 said, I do use this as *my* dotfiles, so there's a good chance I may break
 something if I forget to make a check for a dependency.
 
