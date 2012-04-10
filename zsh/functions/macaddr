@@ -1,0 +1,4 @@
+macaddr() {
+  ifconfig en0 | ack -o "[\d\w]{2}:[\d\w]{2}:[\d\w]{2}:[\d\w]{2}:[\d\w]{2}:[\d\w]{2}"
+}
+
