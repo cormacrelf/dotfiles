@@ -4,3 +4,73 @@
 [submodule "vim/vim.symlink/bundle/CamelCaseMotion"]
 	path = vim/vim.symlink/bundle/CamelCaseMotion
 	url = https://github.com/bkad/CamelCaseMotion.git
+[submodule "vim/vim.symlink/bundle/solarized"]
+	path = vim/vim.symlink/bundle/solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
+[submodule "vim/vim.symlink/bundle/sparkup"]
+	path = vim/vim.symlink/bundle/sparkup
+	url = https://github.com/bingaman/vim-sparkup.git
+[submodule "vim/vim.symlink/bundle/tcomment_vim"]
+	path = vim/vim.symlink/bundle/tcomment_vim
+	url = https://github.com/vim-scripts/tComment.git
+[submodule "vim-easymotion"]
+	path = vim/vim.symlink/bundle/vim-easymotion 
+	url = https://github.com/Lokaltog/vim-easymotion.git
+[submodule "vim/vim.symlink/bundle/vim-surround"]
+	path = vim/vim.symlink/bundle/vim-surround
+	url = https://github.com/tpope/vim-surround.git
+[submodule "vim/vim.symlink/bundle/vim-textobj-rubyblock"]
+	path = vim/vim.symlink/bundle/vim-textobj-rubyblock
+	url = https://github.com/tpope/vim-surround.git
+[submodule "vim/vim.symlink/bundle/vim-textobj-rubysymbol"]
+	path = vim/vim.symlink/bundle/vim-textobj-rubysymbol
+	url = https://github.com/tpope/vim-surround.git
+[submodule "vim/vim.symlink/bundle/vim-textobj-user"]
+	path = vim/vim.symlink/bundle/vim-textobj-user
+	url = https://github.com/kana/vim-textobj-user.gitw
+[submodule "vim/vim.symlink/bundle/vim-slime"]
+	path = vim/vim.symlink/bundle/vim-slime
+	url = git://github.com/jpalardy/vim-slime.git
+[submodule "lib/explode"]
+	path = lib/explode
+	url = https://github.com/wuffers/explode.git
+[submodule "vim/vim.symlink/bundle/supertab"]
+	path = vim/vim.symlink/bundle/supertab
+	url = https://github.com/ervandew/supertab.git
+[submodule "vim/vim.symlink/bundle/vim-less"]
+	path = vim/vim.symlink/bundle/vim-less
+	url = https://github.com/groenewege/vim-less.git
+[submodule "vim/vim.symlink/bundle/clang_complete"]
+	path = vim/vim.symlink/bundle/clang_complete
+	url = https://github.com/Rip-Rip/clang_complete.git
+[submodule "vim/vim.symlink/bundle/vim-repeat"]
+	path = vim/vim.symlink/bundle/vim-repeat
+	url = https://github.com/tpope/vim-repeat.git
+[submodule "vim/vim.symlink/bundle/vim-commentary"]
+	path = vim/vim.symlink/bundle/vim-commentary
+	url = git://github.com/tpope/vim-commentary.git
+[submodule "vim/vim.symlink/bundle/vim-fugitive"]
+	path = vim/vim.symlink/bundle/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "vim/vim.symlink/bundle/gist-vim"]
+	path = vim/vim.symlink/bundle/gist-vim
+	url = https://github.com/mattn/gist-vim.git
+[submodule "vim/vim.symlink/bundle/cocoa.vim"]
+	path = vim/vim.symlink/bundle/cocoa.vim
+	url = https://github.com/fomichev/cocoa.vim.git
+	ignore = dirty
+[submodule "vim/vim.symlink/bundle/snipmate.vim"]
+	path = vim/vim.symlink/bundle/snipmate.vim
+	url = https://github.com/msanders/snipmate.vim.git
+[submodule "vim/vim.symlink/bundle/nerdtree"]
+	path = vim/vim.symlink/bundle/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "vim/vim.symlink/bundle/vim-afterimage"]
+	path = vim/vim.symlink/bundle/vim-afterimage
+	url = http://github.com/tpope/vim-afterimage.git
+[submodule "vim/vim.symlink/bundle/vim-rails"]
+	path = vim/vim.symlink/bundle/vim-rails
+	url = https://github.com/tpope/vim-rails.git
+[submodule "vim/vim.symlink/bundle/ack.vim"]
+	path = vim/vim.symlink/bundle/ack.vim
+	url = https://github.com/mileszs/ack.vim.git
