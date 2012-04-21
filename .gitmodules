@@ -58,7 +58,7 @@
 	ignore = dirty
 [submodule "vim/vim.symlink/bundle/snipmate.vim"]
 	path = vim/vim.symlink/bundle/snipmate.vim
-	url = https://github.com/msanders/snipmate.vim.git
+	url = https://github.com/garbas/vim-snipmate.git
 [submodule "vim/vim.symlink/bundle/nerdtree"]
 	path = vim/vim.symlink/bundle/nerdtree
 	url = https://github.com/scrooloose/nerdtree.git
@@ -77,3 +77,30 @@
 [submodule "vim/vim.symlink/bundle/vim-smartinput"]
 	path = vim/vim.symlink/bundle/vim-smartinput
 	url = https://github.com/kana/vim-smartinput.git
+[submodule "vim/vim.symlink/bundle/vim-coffee-script"]
+	path = vim/vim.symlink/bundle/vim-coffee-script
+	url = http://github.com/kchmck/vim-coffee-script.git
+[submodule "vim/vim.symlink/bundle/vim-textobj-indent"]
+	path = vim/vim.symlink/bundle/vim-textobj-indent
+	url = http://github.com/kana/vim-textobj-indent.git
+[submodule "vim/vim.symlink/bundle/tlib_vim"]
+	path = vim/vim.symlink/bundle/tlib_vim
+	url = https://github.com/tomtom/tlib_vim.git
+[submodule "vim/vim.symlink/bundle/vim-addon-mw-utils"]
+	path = vim/vim.symlink/bundle/vim-addon-mw-utils
+	url = https://github.com/MarcWeber/vim-addon-mw-utils.git
+[submodule "vim/vim.symlink/bundle/snipmate-snippets"]
+	path = vim/vim.symlink/bundle/snipmate-snippets
+	url = https://github.com/honza/snipmate-snippets.git
+[submodule "vim/vim.symlink/bundle/tabular"]
+	path = vim/vim.symlink/bundle/tabular
+	url = https://github.com/godlygeek/tabular.git
+[submodule "vim/vim.symlink/bundle/vim-multimarkdown"]
+	path = vim/vim.symlink/bundle/vim-multimarkdown
+	url = https://github.com/jngeist/vim-multimarkdown.git
+[submodule "vim/vim.symlink/bundle/vim-js-beautify"]
+	path = vim/vim.symlink/bundle/vim-js-beautify
+	url = https://github.com/bigfish/vim-js-beautify.git
+[submodule "vim/vim.symlink/bundle/vim-pathogen"]
+	path = vim/vim.symlink/bundle/vim-pathogen
+	url = https://github.com/tpope/vim-pathogen.git
