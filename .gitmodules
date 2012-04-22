@@ -104,9 +104,6 @@
 [submodule "vim/vim.symlink/bundle/neocomplcache"]
 	path = vim/vim.symlink/bundle/neocomplcache
 	url = https://github.com/Shougo/neocomplcache.git
-[submodule "vim/vim.symlink/bundle/vim-ruby"]
-	path = vim/vim.symlink/bundle/vim-ruby
-	url = git://github.com/vim-ruby/vim-ruby.git
 [submodule "vim/vim.symlink/bundle/detectindent"]
 	path = vim/vim.symlink/bundle/detectindent
 	url = https://github.com/ciaranm/detectindent.git

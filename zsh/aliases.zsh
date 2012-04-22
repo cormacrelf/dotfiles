@@ -8,3 +8,6 @@ alias byword='open -a Byword'
 alias ql='qlmanage -p "$@" >& /dev/null'
 
 alias pat="pygmentize"
+alias bi="brew install"
+alias gi="gem install"
+

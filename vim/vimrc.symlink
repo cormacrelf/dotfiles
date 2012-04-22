@@ -1,6 +1,8 @@
 set noswapfile
 set nocompatible
 
+set shell=/bin/zsh
+runtime bundle/vim-pathogen/autoload/pathogen.vim
 call pathogen#infect() " do this first so we can load colorschemes, etc.
 
 " ----------------------------------------------------------------------------
@@ -14,35 +16,18 @@ colorscheme solarized
 " change the default light/dark switch key
 call togglebg#map("<F8>")
 
-set shell=/bin/zsh
-
-
 set autoindent             " automatic indent new lines
 set smartindent            " be smart about it: actually, use filetype
-" specific things
-"
 inoremap # X<BS>#
-" Shortcut to rapidly toggle `set list`
-nmap <leader>l :set list!<CR>
- 
-" Use the same symbols as TextMate for tabstops and EOLs
-" set listchars=tab:▸\ ,eol:¬
-
+nmap <leader>l :set list!<CR> " Shortcut to rapidly toggle `set list`
 " set nowrap                 " do not wrap lines
 set formatoptions=l
 set lbr
-" set showbreak=\ \ \ \
-" set softtabstop=2          " yep, two
-" set shiftwidth=2           " ..
-set tabstop=4
-" set expandtab              " expand tabs to spaces
 set smarttab             " fuck tabs
 set formatoptions+=n       " support for numbered/bullet lists
-"set textwidth=80           " wrap at 80 chars by default
+" set textwidth=80           " wrap at 80 chars by default
 set virtualedit=block      " allow virtual edit in visual block ..
-
 set hlsearch
-
 
 " ----------------------------------------------------------------------------
 "  Remapping
@@ -79,6 +64,9 @@ map <silent> <C-s> :NERDTree<CR><C-w>p:NERDTreeFind<CR>
 " Increment & decrement
 nnoremap + <C-a>
 nnoremap - <C-x>
+
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! %!sudo tee > /dev/null %
 
 " ----------------------------------------------------------------------------
 "  UI
@@ -124,7 +112,7 @@ set hidden
 function! StripWhitespace ()
 exec ':%s/ \+$//gc'
 endfunction
-map ,s :call StripWhitespace ()<CR>
+map <leader>s :call StripWhitespace ()<CR>
 
 " ---------------------------------------------------------------------------
 " Filetypes
@@ -140,20 +128,25 @@ compiler ruby         " Enable compiler support for ruby
 
 runtime macros/matchit.vim
 
+autocmd FileType ruby call smartinput#map_to_trigger('i', '#', '#', '#')
+autocmd FIleType ruby call smartinput#define_rule({
+    \   'at': '\%#',
+    \   'char': '#',
+    \   'input': '#{}<Left>',
+    \   'filetype': ['ruby'],
+    \   'syntax': ['Constant', 'Special'],
+    \ })
 
 " ---------------------------------------------------------------------------
 " Plugin Configuration
 " ---------------------------------------------------------------------------
 
 let g:slime_target = "tmux"
-
+let g:neocomplcache_enable_at_startup = 1
 
 " ---------------------------------------------------------------------------
 " Vimbits
 " ---------------------------------------------------------------------------
-
-" make Y behave like C - yank until EOL
-map Y y$
 
 " Easy split navigation
 noremap <C-h> <C-w>h 
@@ -165,8 +158,8 @@ noremap <C-l> <C-w>l
 nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 
 " Insert one character
-nnoremap <C-i> :exec "normal i".nr2char(getchar())."\e"<CR>
-nnoremap <C-i>a :exec "normal a".nr2char(getchar())."\e"<CR>
+" nnoremap <C-i> :exec "normal i".nr2char(getchar())."\e"<CR>
+" nnoremap <C-i>a :exec "normal a".nr2char(getchar())."\e"<CR>
 
 " Better command-line editing (:O emacs mode!)
 cnoremap <C-j> <t_kd>
@@ -189,6 +182,7 @@ au BufWritePost .vimrc so ~/.vimrc
 let g:ConqueTerm_InsertOnEnter = 0
 let g:ConqueTerm_CWInsert = 1
 nmap <silent> <Leader>r :call RunRubyCurrentFileConque()<CR>
+nmap <silent> <Leader>r :w !ruby<CR>
 nmap <silent> <Leader>R :call RunRakeConque()<CR>
 nmap <silent> <Leader>c :execute 'ConqueTermSplit script/console'<CR>
 nmap <silent> <Leader>i :execute 'ConqueTermSplit pry'<CR>
@@ -213,3 +207,15 @@ endfunction
 " console open and running irb for this to work. Somehow it gets confused
 " when multiple consoles are open. If you know how to fix this let me know :)
 let g:ConqueTerm_SendVisKey = '<Leader>e'
+
+
+
+" ---------------------------------------------------------------------------
+" Indentation
+" ---------------------------------------------------------------------------
+
+autocmd Filetype html setlocal ts=2 sw=2 expandtab
+autocmd Filetype ruby setlocal ts=2 sw=2 expandtab
+autocmd Filetype javascript setlocal ts=4 sw=4 sts=0 noexpandtab
+autocmd Filetype coffee setlocal ts=2 sw=2 expandtab
+autocmd Filetype haskell setlocal ts=8 sw=8 noexpandtab
