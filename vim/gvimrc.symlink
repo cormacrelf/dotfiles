@@ -20,6 +20,7 @@ endif
 if has('gui_macvim')
   nnoremap <silent> <SwipeLeft> :macaction _cycleWindowsBackwards:<CR>
   nnoremap <silent> <SwipeRight> :macaction _cycleWindows:<CR>
+  set macmeta
 endif
 
 " automatically reload vimrc when it's saved

@@ -20,10 +20,10 @@ set autoindent             " automatic indent new lines
 set smartindent            " be smart about it: actually, use filetype
 inoremap # X<BS>#
 nmap <leader>l :set list!<CR> " Shortcut to rapidly toggle `set list`
-" set nowrap                 " do not wrap lines
+set nowrap                 " do not wrap lines
 set formatoptions=l
 set lbr
-set smarttab             " fuck tabs
+set smarttab               " fuck tabs
 set formatoptions+=n       " support for numbered/bullet lists
 " set textwidth=80           " wrap at 80 chars by default
 set virtualedit=block      " allow virtual edit in visual block ..
@@ -38,7 +38,6 @@ let mapleader = ","
 
 " exit to normal mode with 'jj'
 " inoremap jj <ESC>
-
 
 " reflow paragraph with Q in normal and visual mode
 nnoremap Q gqap
