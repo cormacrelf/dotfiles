@@ -11,7 +11,7 @@ if [[ -s $HOME/.rvm/scripts/rvm ]]
 then
   if $(which hub &> /dev/null) && [[ -s $HOME/.rvm/rubies/ruby-1.8.7-p334 ]]
   then
-    alias git='$HOME/.rvm/rubies/ruby-1.8.7-p358/bin/ruby `which hub`'
+    alias git='/usr/bin/ruby `which hub`'
   else
   fi
 fi
@@ -29,3 +29,5 @@ alias gco='git checkout'
 alias gb='git branch'
 alias gs='git status -sb' # upgrade your git if -sb breaks for you. it's fun.
 alias grm="git status | grep deleted | awk '{print \$3}' | xargs git rm"
+alias gcl="git clone"
+

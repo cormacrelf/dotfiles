@@ -4,8 +4,7 @@ else
   export PS1='%3~$(git_info_for_prompt)%# '
 fi
 
-export LSCOLORS="exfxcxdxbxegedabagacad"
-export CLICOLOR=true
+eval `gdircolors $DOT/zsh/dircolors.ansi-dark`
 
 fpath=($DOT/zsh/functions $fpath)
 
