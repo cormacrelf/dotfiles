@@ -5,6 +5,12 @@ set shell=/bin/zsh
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 call pathogen#infect() " do this first so we can load colorschemes, etc.
 
+filetype on	      " Enable filetype detection
+filetype indent on    " Enable filetype-specific indenting
+filetype plugin on    " Enable filetype-specific plugins
+
+set thesaurus+=/Users/cormac/lib/mthesaur.txt
+
 " ----------------------------------------------------------------------------
 "  Text Formatting
 " ----------------------------------------------------------------------------
@@ -16,17 +22,19 @@ colorscheme solarized
 " change the default light/dark switch key
 call togglebg#map("<F8>")
 
-set autoindent             " automatic indent new lines
-set smartindent            " be smart about it: actually, use filetype
+set autoindent		   " automatic indent new lines
+set smartindent		   " be smart about it: actually, use filetype
 inoremap # X<BS>#
 nmap <leader>l :set list!<CR> " Shortcut to rapidly toggle `set list`
-set nowrap                 " do not wrap lines
-set formatoptions=l
+set wrap		 " wrap lines
+set formatoptions=aw2tql
+set nojs
 set lbr
-set smarttab               " fuck tabs
-set formatoptions+=n       " support for numbered/bullet lists
-" set textwidth=80           " wrap at 80 chars by default
-set virtualedit=block      " allow virtual edit in visual block ..
+set smarttab		   " fuck tabs
+set formatoptions+=n	   " support for numbered/bullet lists
+" set textwidth=80	     " wrap at 80 chars by default
+set virtualedit=block	   " allow virtual edit in visual block ..
+set incsearch
 set hlsearch
 
 " ----------------------------------------------------------------------------
@@ -38,6 +46,9 @@ let mapleader = ","
 
 " exit to normal mode with 'jj'
 " inoremap jj <ESC>
+
+" create vsplit and switch to it
+nnoremap <leader>w <C-w>v<C-w>l
 
 " reflow paragraph with Q in normal and visual mode
 nnoremap Q gqap
@@ -55,6 +66,12 @@ vnoremap <Up> gk
 inoremap <Down> <C-o>gj
 inoremap <Up> <C-o>gk
 
+" also for EOL, etc
+nnoremap $ g$
+nnoremap 0 g0
+nnoremap A g$a
+nnoremap I g0i
+
 " use NERDTree on ,d
 
 map <leader>d :execute 'NERDTreeToggle ' . getcwd()<CR>
@@ -67,25 +84,53 @@ nnoremap - <C-x>
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! %!sudo tee > /dev/null %
 
+vmap gd "_dP
+
+" don't let plugins override this one
+vmap s s
+
+" copy default register to clipboard
+nmap <leader>c :let @+=@"<cr>
+
+" new scratch buffer on
+nmap <leader><Tab> :Sscratch<CR>
+
+vnoremap < <gv
+vnoremap > >gv
+
+map <M-Tab> :MBEbn<CR>
+map <M-S-Tab> :MBEbp<CR>
+
+imap <D-]> <C-t>
+imap <D-[> <C-d>
+
 " ----------------------------------------------------------------------------
 "  UI
 " ----------------------------------------------------------------------------
 
-set ruler                  " show the cursor position all the time
-set noshowcmd              " don't display incomplete commands
-" set nolazyredraw           " turn off lazy redraw
-set number                 " line numbers
-set wildmenu               " turn on wild menu
+set ruler		   " show the cursor position all the time
+set noshowcmd		   " don't display incomplete commands
+" set nolazyredraw	     " turn off lazy redraw
+set number		   " line numbers
+set wildmenu		   " turn on wild menu
 set wildmode=list:longest,full
-" set ch=2                   " command line height
-set backspace=2            " allow backspacing over everything in insert mode
+" set ch=2		     " command line height
+set backspace=2		   " allow backspacing over everything in insert mode
 set whichwrap+=<,>,h,l,[,] " backspace and cursor keys wrap to
-set shortmess=filtIoOA     " shorten messages
-set report=0               " tell us about changes
-set nostartofline          " don't jump to the start of line when scrolling
-set scrolloff=3            " scroll early, give us a bit of context
+set shortmess=filtIoOA	   " shorten messages
+set report=0		   " tell us about changes
+set nostartofline	   " don't jump to the start of line when scrolling
+set scrolloff=1		   " scroll early, give us a bit of context
 
 set splitright splitbelow  " when :[v]split-ting, go to the right/down
+set statusline=%F\ %m\ %{fugitive#statusline()}\ %y%=%l,%c\ %P
+function! WordCount()
+  let s:old_status = v:statusmsg
+  exe "silent normal g\<c-g>"
+  let s:word_count = str2nr(split(v:statusmsg)[11])
+  let v:statusmsg = s:old_status
+  return s:word_count
+endfunction
 
 " autocmd vimenter * if !argc() | NERDTree | endif
 " if no arguments passed to VIM, open up NERDTree.
@@ -94,13 +139,13 @@ set splitright splitbelow  " when :[v]split-ting, go to the right/down
 " Visual Cues
 " ----------------------------------------------------------------------------
 
-set showmatch              " brackets/braces that is
-set mat=5                  " duration to show matching brace (1/10 sec)
-set incsearch              " do incremental searching
-set laststatus=2           " always show the status line
-set ignorecase             " ignore case when searching
-set nohlsearch             " don't highlight searches
-set visualbell             " shut the fuck up
+set showmatch		   " brackets/braces that is
+set mat=5		   " duration to show matching brace (1/10 sec)
+set incsearch		   " do incremental searching
+set laststatus=2	   " always show the status line
+set ignorecase		   " ignore case when searching
+set nohlsearch		   " don't highlight searches
+set visualbell		   " shut the fuck up
 set title
 set hidden
 
@@ -117,23 +162,19 @@ map <leader>s :call StripWhitespace ()<CR>
 " Filetypes
 " ---------------------------------------------------------------------------
 
-filetype on           " Enable filetype detection
-filetype indent on    " Enable filetype-specific indenting
-filetype plugin on    " Enable filetype-specific plugins
-
 autocmd FileType objc setlocal shiftwidth=4 tabstop=4
 
-compiler ruby         " Enable compiler support for ruby
+compiler ruby	      " Enable compiler support for ruby
 
 runtime macros/matchit.vim
 
 autocmd FileType ruby call smartinput#map_to_trigger('i', '#', '#', '#')
 autocmd FIleType ruby call smartinput#define_rule({
-    \   'at': '\%#',
-    \   'char': '#',
-    \   'input': '#{}<Left>',
-    \   'filetype': ['ruby'],
-    \   'syntax': ['Constant', 'Special'],
+    \	'at': '\%#',
+    \	'char': '#',
+    \	'input': '#{}<Left>',
+    \	'filetype': ['ruby'],
+    \	'syntax': ['Constant', 'Special'],
     \ })
 
 " ---------------------------------------------------------------------------
@@ -142,6 +183,8 @@ autocmd FIleType ruby call smartinput#define_rule({
 
 let g:slime_target = "tmux"
 let g:neocomplcache_enable_at_startup = 1
+
+nnoremap <F6> :GundoToggle<CR>
 
 " ---------------------------------------------------------------------------
 " Vimbits
@@ -172,6 +215,26 @@ map <Leader>a ggVG
 " automatically reload vimrc when it's saved
 au BufWritePost .vimrc so ~/.vimrc
 
+" Maps Alt-[h,j,k,l] to resizing a window split
+map <silent> <A-h> <C-w>5<
+map <silent> <A-l> <C-w>5>
+map <silent> <A-j> <C-W>5-
+map <silent> <A-k> <C-W>5+
+
+" Accordion style
+map <silent> <S-A-h> <C-w>h<C-w><bar>
+map <silent> <S-A-l> <C-w>l<C-w><bar>
+map <silent> <S-A-j> <C-w>j<C-w>_
+map <silent> <S-A-k> <C-w>k<C-w>_
+map <silent> <S-A-k> <C-w>k<C-w>_
+
+" All windows in equal space
+map <silent> <S-Space> <C-w>=
+
+" Maximize window
+map <silent> <C-Space> <C-w><bar><C-w>_
+
+set winminheight=0
 
 " ---------------------------------------------------------------------------
 " ConqueTerm
@@ -214,7 +277,10 @@ let g:ConqueTerm_SendVisKey = '<Leader>e'
 " ---------------------------------------------------------------------------
 
 autocmd Filetype html setlocal ts=2 sw=2 expandtab
-autocmd Filetype ruby setlocal ts=2 sw=2 expandtab
-autocmd Filetype javascript setlocal ts=4 sw=4 sts=0 noexpandtab
-autocmd Filetype coffee setlocal ts=2 sw=2 expandtab
-autocmd Filetype haskell setlocal ts=8 sw=8 noexpandtab
+autocmd Filetype xml setlocal ts=2 sw=2 expandtab
+autocmd Filetype ruby setlocal ts=2 sw=2 expandtab fo+=c
+autocmd Filetype javascript setlocal ts=4 sw=4 sts=0 noexpandtab fo+=c
+autocmd Filetype coffee setlocal ts=2 sw=2 expandtab fo+=c
+autocmd Filetype haskell setlocal ts=8 sw=8 noexpandtab fo+=c
+autocmd Filetype objc setlocal ts=4 sw=4 sts=0 noexpandtab fo+=c
+autocmd Filetype markdown setlocal ts=2 sw=2 expandtab

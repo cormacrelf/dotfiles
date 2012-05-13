@@ -1,11 +1,7 @@
-" colorscheme desert256
 colorscheme solarized
 
-
-" colorscheme desert256
-" colorscheme solarized
-
 set guifont=Inconsolata-dz:h14
+let g:writer_guifont="Inconsolata-dz:h16"
 
 set anti
 set lines=50 columns=96

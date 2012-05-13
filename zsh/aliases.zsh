@@ -11,3 +11,4 @@ alias pat="pygmentize"
 alias bi="brew install"
 alias gi="gem install"
 
+alias vime="vim -u ~/.vimencrypt -x"
