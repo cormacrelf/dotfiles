@@ -1,4 +1,4 @@
-colorscheme solarized
+" colorscheme solarized
 
 set guifont=Inconsolata-dz:h14
 let g:writer_guifont="Inconsolata-dz:h16"
@@ -7,24 +7,15 @@ set anti
 set lines=50 columns=96
 set guioptions=egmrt
 
-" Command + t to :CommandT
-if has("gui_macvim")
-  macmenu &File.New\ Tab key=<nop>
-  map <D-t> :CommandT<CR>
-endif
-
 if has('gui_macvim')
   nnoremap <silent> <SwipeLeft> :macaction _cycleWindowsBackwards:<CR>
   nnoremap <silent> <SwipeRight> :macaction _cycleWindows:<CR>
   set macmeta
+  macmenu &Tools.Make key=<nop>
 endif
 
 " automatically reload vimrc when it's saved
 au BufWritePost .gvimrc so ~/.gvimrc
-
-" Open Command+T in a new tab
-let g:CommandTAcceptSelectionMap='<D-CR>'
-let g:CommandTAcceptSelectionTabMap='<CR>'
 
 " C-TAB and C-SHIFT-TAB cycle tabs forward and backward
 nmap <c-tab> :tabnext<cr>

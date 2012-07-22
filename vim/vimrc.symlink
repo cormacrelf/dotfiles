@@ -2,8 +2,13 @@ set noswapfile
 set nocompatible
 
 set shell=/bin/zsh
+let $PATH = $PATH . ':' . expand("~/Library/Haskell/bin/")
 runtime bundle/vim-pathogen/autoload/pathogen.vim
 call pathogen#infect() " do this first so we can load colorschemes, etc.
+filetype off
+call pathogen#runtime_append_all_bundles()
+
+call yankstack#setup() " do this first so any yank mappings still cache
 
 filetype on	      " Enable filetype detection
 filetype indent on    " Enable filetype-specific indenting
@@ -19,36 +24,70 @@ syntax on				  " pretty obvious there
 set background=dark
 colorscheme solarized
 
-" change the default light/dark switch key
-call togglebg#map("<F8>")
+" Map toggling of background colour to <F5>
+call togglebg#map("<F5>")
 
 set autoindent		   " automatic indent new lines
 set smartindent		   " be smart about it: actually, use filetype
 inoremap # X<BS>#
-nmap <leader>l :set list!<CR> " Shortcut to rapidly toggle `set list`
 set wrap		 " wrap lines
-set formatoptions=aw2tql
+set formatoptions=aw1tqlrocn
 set nojs
 set lbr
 set smarttab		   " fuck tabs
 set formatoptions+=n	   " support for numbered/bullet lists
 " set textwidth=80	     " wrap at 80 chars by default
 set virtualedit=block	   " allow virtual edit in visual block ..
-set incsearch
-set hlsearch
+
+" ----------------------------------------------------------------------------
+"  Leader Mappings
+" ----------------------------------------------------------------------------
+
+" lead with , and use '\' for the original functionality
+let mapleader = ","
+noremap <C-;> ,
+
+" create vsplit and switch to it
+nnoremap <leader>w <C-w>v<C-w>l
+
+" Shortcut to rapidly toggle `set list`
+nmap <leader>l :set list!<CR>
+
+" use NERDTree on ,d
+map <leader>d :execute 'NERDTreeToggle ' . getcwd()<CR>
+map <silent> <C-s> :NERDTree<CR><C-w>p:NERDTreeFind<CR>
+
+" copy default register to clipboard
+nmap <leader>c :let @+=@"<cr>
+
+" new scratch buffer on
+nmap <leader><Tab> :Sscratch<CR>
+" toggle spelling
+nmap <leader>Sp :set spell!<CR>
+" quick delete buffer
+nmap <leader>bd :bd<CR>
+" Find merge conflict markers
+nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
+" select all
+map <Leader>a ggVG
+
 
 " ----------------------------------------------------------------------------
 "  Remapping
 " ----------------------------------------------------------------------------
 
-" lead with ,
-let mapleader = ","
+" replace using current selection
+vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
 
-" exit to normal mode with 'jj'
-" inoremap jj <ESC>
+" find using current selection
+vnoremap f "hy/<C-r>h<cr>
 
-" create vsplit and switch to it
-nnoremap <leader>w <C-w>v<C-w>l
+" Substitute
+nnoremap <leader>s :%s//g<left><left>
+vnoremap <leader>s :s//g<left><left>
+
+nnoremap <Space> <C-d>
+nnoremap <S-Space> <C-u>
 
 " reflow paragraph with Q in normal and visual mode
 nnoremap Q gqap
@@ -72,28 +111,17 @@ nnoremap 0 g0
 nnoremap A g$a
 nnoremap I g0i
 
-" use NERDTree on ,d
-
-map <leader>d :execute 'NERDTreeToggle ' . getcwd()<CR>
-map <silent> <C-s> :NERDTree<CR><C-w>p:NERDTreeFind<CR>
+" make Y behave like other capitals
+map Y y$
 
 " Increment & decrement
 nnoremap + <C-a>
 nnoremap - <C-x>
 
-" Allow saving of files as sudo when I forgot to start vim using sudo.
-cmap w!! %!sudo tee > /dev/null %
-
 vmap gd "_dP
 
 " don't let plugins override this one
 vmap s s
-
-" copy default register to clipboard
-nmap <leader>c :let @+=@"<cr>
-
-" new scratch buffer on
-nmap <leader><Tab> :Sscratch<CR>
 
 vnoremap < <gv
 vnoremap > >gv
@@ -101,8 +129,59 @@ vnoremap > >gv
 map <M-Tab> :MBEbn<CR>
 map <M-S-Tab> :MBEbp<CR>
 
+" TextMate-like indentation, less movement required
 imap <D-]> <C-t>
 imap <D-[> <C-d>
+
+imap <C-a> <C-o>diw
+
+" Use Mac OS X style accents, works for (at least) French.
+imap <M-e> <C-k>'
+imap <M-`> <C-k>`
+imap <M-i> <C-k>^
+imap <M-u> <C-k>:
+imap <M-c> <C-k>,c
+imap <M-S-c> <C-k>,C
+
+" " Make <space> insert a single character
+" nmap <Space> i_<Esc>r
+" nmap <C-S-Space> a_<Esc>r
+
+" Motion for "next/last object". For example, "din(" would go to the next "()" pair
+" and delete its contents.
+
+onoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
+xnoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
+onoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
+xnoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
+
+onoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
+xnoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
+onoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
+xnoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
+
+" Quickreturn
+inoremap <c-cr> <esc>A<cr>
+inoremap <s-cr> <esc>A;<cr>
+
+" Map <F8> to toggle paste mode, turn paste off when we leave
+set pastetoggle=<F8>
+au InsertLeave * set nopaste
+
+" ----------------------------------------------------------------------------
+"  Commands
+" ----------------------------------------------------------------------------
+
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! %!sudo tee > /dev/null %
+
+" Make :Q work just as well
+cmap Q q
+
+" ----------------------------------------------------------------------------
+" Events
+" ----------------------------------------------------------------------------
+
 
 " ----------------------------------------------------------------------------
 "  UI
@@ -110,17 +189,17 @@ imap <D-[> <C-d>
 
 set ruler		   " show the cursor position all the time
 set noshowcmd		   " don't display incomplete commands
-" set nolazyredraw	     " turn off lazy redraw
+set nolazyredraw	   " turn off lazy redraw
 set number		   " line numbers
 set wildmenu		   " turn on wild menu
 set wildmode=list:longest,full
 " set ch=2		     " command line height
 set backspace=2		   " allow backspacing over everything in insert mode
 set whichwrap+=<,>,h,l,[,] " backspace and cursor keys wrap to
-set shortmess=filtIoOA	   " shorten messages
+set shortmess=filtIoOA	   " Shorten messages
 set report=0		   " tell us about changes
 set nostartofline	   " don't jump to the start of line when scrolling
-set scrolloff=1		   " scroll early, give us a bit of context
+set scrolloff=0		   " scroll early, give us a bit of context
 
 set splitright splitbelow  " when :[v]split-ting, go to the right/down
 set statusline=%F\ %m\ %{fugitive#statusline()}\ %y%=%l,%c\ %P
@@ -140,14 +219,17 @@ endfunction
 " ----------------------------------------------------------------------------
 
 set showmatch		   " brackets/braces that is
-set mat=5		   " duration to show matching brace (1/10 sec)
+set mat=1			   " duration to show matching brace (1/10 sec)
 set incsearch		   " do incremental searching
 set laststatus=2	   " always show the status line
-set ignorecase		   " ignore case when searching
-set nohlsearch		   " don't highlight searches
+set smartcase		   " ignore case when searching
+set hlsearch		   " don't highlight searches
+	" remove highlight:
+	nnoremap <cr> :noh<cr><cr>
 set visualbell		   " shut the fuck up
 set title
 set hidden
+set spl=en_au
 
 " ---------------------------------------------------------------------------
 " Strip all trailing whitespace in file
@@ -156,7 +238,7 @@ set hidden
 function! StripWhitespace ()
 exec ':%s/ \+$//gc'
 endfunction
-map <leader>s :call StripWhitespace ()<CR>
+map <leader>ws :call StripWhitespace ()<CR>
 
 " ---------------------------------------------------------------------------
 " Filetypes
@@ -183,21 +265,41 @@ autocmd FIleType ruby call smartinput#define_rule({
 
 let g:slime_target = "tmux"
 let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_force_overwrite_completefunc=1
+let g:clang_complete_auto=1
+
+" Enable omni completion.
+" autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+" autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
+" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+" autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+" autocmd FileType ruby setlocal omnifunc=rubycomplete#CompleteTags
+" autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+
+" <CR>: close popup and save indent.
+inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
+
+" <C-h>, <BS>: close popup and delete backword char.
+inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplcache#close_popup()
+inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
 nnoremap <F6> :GundoToggle<CR>
+
+let g:vimclojure#HighlightBuiltins = 1
+let g:vimclojure#ParenRainbow = 1
 
 " ---------------------------------------------------------------------------
 " Vimbits
 " ---------------------------------------------------------------------------
 
 " Easy split navigation
-noremap <C-h> <C-w>h 
+noremap <C-h> <C-w>h
 noremap <C-j> <C-w>j
 noremap <C-k> <C-w>k
 noremap <C-l> <C-w>l
-
-" Find merge conflict markers
-nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 
 " Insert one character
 " nnoremap <C-i> :exec "normal i".nr2char(getchar())."\e"<CR>
@@ -209,11 +311,8 @@ cnoremap <C-k> <t_ku>
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
-" select all
-map <Leader>a ggVG
-
 " automatically reload vimrc when it's saved
-au BufWritePost .vimrc so ~/.vimrc
+" au BufWritePost .vimrc so ~/.vimrc
 
 " Maps Alt-[h,j,k,l] to resizing a window split
 map <silent> <A-h> <C-w>5<
@@ -243,13 +342,11 @@ set winminheight=0
 " Run the current file in a ConqueTerm, great for ruby tests
 let g:ConqueTerm_InsertOnEnter = 0
 let g:ConqueTerm_CWInsert = 1
-nmap <silent> <Leader>r :call RunRubyCurrentFileConque()<CR>
-nmap <silent> <Leader>r :w !ruby<CR>
+
+nmap <silent> <Leader>rb :w !ruby<CR>
 nmap <silent> <Leader>R :call RunRakeConque()<CR>
-nmap <silent> <Leader>c :execute 'ConqueTermSplit script/console'<CR>
 nmap <silent> <Leader>i :execute 'ConqueTermSplit pry'<CR>
 nmap <silent> <Leader>b :execute 'ConqueTermSplit /bin/bash --login'<CR>
-nmap <silent> <Leader>S :call RunRspecCurrentFileConque()<CR>
 
 " Run the current file as a ruby file, great for running unit tests
 function! RunRubyCurrentFileConque()
@@ -264,12 +361,52 @@ function! RunRakeConque()
   execute "ConqueTermSplit rake"
 endfunction
 
-" Send the current selection to conqueterm. This lets you easily veal
-" Ruby code in an irb console. Note: you must have only one ConqueTerm
-" console open and running irb for this to work. Somehow it gets confused
-" when multiple consoles are open. If you know how to fix this let me know :)
-let g:ConqueTerm_SendVisKey = '<Leader>e'
+" Jump to the next or previous line that has the same level or a lower
+" level of indentation than the current line.
+"
+" exclusive (bool): true: Motion is exclusive
+" false: Motion is inclusive
+" fwd (bool): true: Go to next line
+" false: Go to previous line
+" lowerlevel (bool): true: Go to line with lower indentation level
+" false: Go to line with the same indentation level
+" skipblanks (bool): true: Skip blank lines
+" false: Don't skip blank lines
+function! NextIndent(exclusive, fwd, lowerlevel, skipblanks)
+  let line = line('.')
+  let column = col('.')
+  let lastline = line('$')
+  let indent = indent(line)
+  let stepvalue = a:fwd ? 1 : -1
+  while (line > 0 && line <= lastline)
+    let line = line + stepvalue
+    if ( ! a:lowerlevel && indent(line) == indent ||
+          \ a:lowerlevel && indent(line) < indent)
+      if (! a:skipblanks || strlen(getline(line)) > 0)
+        if (a:exclusive)
+          let line = line - stepvalue
+        endif
+        exe line
+        exe "normal " column . "|"
+        return
+      endif
+    endif
+  endwhile
+endfunction
 
+" Moving back and forth between lines of same or lower indentation.
+nnoremap <silent> [l :call NextIndent(0, 0, 0, 1)<CR>
+nnoremap <silent> ]l :call NextIndent(0, 1, 0, 1)<CR>
+nnoremap <silent> [L :call NextIndent(0, 0, 1, 1)<CR>
+nnoremap <silent> ]L :call NextIndent(0, 1, 1, 1)<CR>
+vnoremap <silent> [l <Esc>:call NextIndent(0, 0, 0, 1)<CR>m'gv''
+vnoremap <silent> ]l <Esc>:call NextIndent(0, 1, 0, 1)<CR>m'gv''
+vnoremap <silent> [L <Esc>:call NextIndent(0, 0, 1, 1)<CR>m'gv''
+vnoremap <silent> ]L <Esc>:call NextIndent(0, 1, 1, 1)<CR>m'gv''
+onoremap <silent> [l :call NextIndent(0, 0, 0, 1)<CR>
+onoremap <silent> ]l :call NextIndent(0, 1, 0, 1)<CR>
+onoremap <silent> [L :call NextIndent(1, 0, 1, 1)<CR>
+onoremap <silent> ]L :call NextIndent(1, 1, 1, 1)<CR>
 
 
 " ---------------------------------------------------------------------------
@@ -277,10 +414,14 @@ let g:ConqueTerm_SendVisKey = '<Leader>e'
 " ---------------------------------------------------------------------------
 
 autocmd Filetype html setlocal ts=2 sw=2 expandtab
+autocmd Filetype jst setlocal ts=2 sw=2 expandtab
 autocmd Filetype xml setlocal ts=2 sw=2 expandtab
-autocmd Filetype ruby setlocal ts=2 sw=2 expandtab fo+=c
-autocmd Filetype javascript setlocal ts=4 sw=4 sts=0 noexpandtab fo+=c
-autocmd Filetype coffee setlocal ts=2 sw=2 expandtab fo+=c
-autocmd Filetype haskell setlocal ts=8 sw=8 noexpandtab fo+=c
-autocmd Filetype objc setlocal ts=4 sw=4 sts=0 noexpandtab fo+=c
-autocmd Filetype markdown setlocal ts=2 sw=2 expandtab
+autocmd Filetype ruby setlocal ts=2 sw=2 expandtab
+autocmd Filetype javascript setlocal ts=4 sw=4 sts=0 expandtab
+autocmd Filetype coffee setlocal ts=2 sw=2 expandtab
+autocmd Filetype haskell setlocal ts=4 sw=4 noexpandtab
+autocmd Filetype objc setlocal ts=4 sw=4 sts=0 expandtab
+autocmd Filetype markdown setlocal ts=4 sw=4 expandtab fo-=c
+
+" markdown: 
+autocmd FileType markdown let b:surround_109 = "<< \r >>"

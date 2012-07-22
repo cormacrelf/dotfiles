@@ -1,0 +1,631 @@
+let SessionLoad = 1
+if &cp | set nocp | endif
+let s:cpo_save=&cpo
+set cpo&vim
+imap <S-CR> o<BS>* 
+inoremap <silent> <expr> <Plug>(neocomplcache_start_unite_snippet) unite#sources#snippet#start_complete()
+inoremap <silent> <expr> <Plug>(neocomplcache_start_unite_quick_match) unite#sources#neocomplcache#start_quick_match()
+inoremap <silent> <expr> <Plug>(neocomplcache_start_unite_complete) unite#sources#neocomplcache#start_complete()
+imap <C-S-Tab> :tabprevious
+imap <C-Tab> :tabnext
+imap <D-BS> 
+imap <M-BS> 
+imap <M-Down> }
+inoremap <D-Down> <C-End>
+imap <M-Up> {
+inoremap <D-Up> <C-Home>
+noremap! <M-Right> <C-Right>
+noremap! <D-Right> <End>
+noremap! <M-Left> <C-Left>
+noremap! <D-Left> <Home>
+inoremap <silent> <S-Tab> =snipMate#BackwardsSnippet()
+inoremap <silent> <Plug>ragtagXmlV ="&#".getchar().";"
+inoremap <Right> lxpi
+inoremap <Left> xphi
+imap <D-[> 
+imap <D-]> 
+inoremap <Up> ddkPi
+inoremap <Down> ddpi
+imap <F8> <Plug>ToggleBackground
+imap <F5> <Plug>ToggleBackground
+nmap  vip
+noremap  h 
+xnoremap 	 s:let g:snipmate_content_visual=getreg( 1 )
+snoremap <silent> 	 i<Right>=snipMate#TriggerSnippet()
+noremap <NL> j
+noremap  k
+noremap  l
+map <silent>  :NERDTreep:NERDTreeFind
+snoremap  b<BS>
+nnoremap <silent>  :TComment
+nnoremap <silent> r :TCommentRight
+noremap s :TCommentAs =&ft_
+noremap n :TCommentAs =&ft 
+noremap a :TCommentAs 
+noremap b :TCommentBlock
+vnoremap <silent> r :TCommentRight
+vnoremap <silent> i :TCommentInline
+onoremap <silent> r :TCommentRight
+noremap   :TComment 
+noremap <silent> p m`vip:TComment``
+vnoremap <silent>  :TCommentMaybeInline
+onoremap <silent>  :TComment
+nnoremap $ g$
+snoremap % b<BS>%
+snoremap ' b<BS>'
+nnoremap + 
+snoremap <silent> ,__ :TComment
+nnoremap <silent> ,__ :TComment
+snoremap <silent> ,_r :TCommentRight
+nnoremap <silent> ,_r :TCommentRight
+vnoremap <silent> ,,w :call EasyMotion#WB(1, 0)
+onoremap <silent> ,,w :call EasyMotion#WB(0, 0)
+nnoremap <silent> ,,w :call EasyMotion#WB(0, 0)
+vnoremap <silent> ,,t :call EasyMotion#T(1, 0)
+onoremap <silent> ,,t :call EasyMotion#T(0, 0)
+nnoremap <silent> ,,t :call EasyMotion#T(0, 0)
+vnoremap <silent> ,,n :call EasyMotion#Search(1, 0)
+onoremap <silent> ,,n :call EasyMotion#Search(0, 0)
+nnoremap <silent> ,,n :call EasyMotion#Search(0, 0)
+vnoremap <silent> ,,k :call EasyMotion#JK(1, 1)
+onoremap <silent> ,,k :call EasyMotion#JK(0, 1)
+nnoremap <silent> ,,k :call EasyMotion#JK(0, 1)
+vnoremap <silent> ,,j :call EasyMotion#JK(1, 0)
+onoremap <silent> ,,j :call EasyMotion#JK(0, 0)
+nnoremap <silent> ,,j :call EasyMotion#JK(0, 0)
+vnoremap <silent> ,,gE :call EasyMotion#EW(1, 1)
+onoremap <silent> ,,gE :call EasyMotion#EW(0, 1)
+nnoremap <silent> ,,gE :call EasyMotion#EW(0, 1)
+vnoremap <silent> ,,f :call EasyMotion#F(1, 0)
+onoremap <silent> ,,f :call EasyMotion#F(0, 0)
+nnoremap <silent> ,,f :call EasyMotion#F(0, 0)
+vnoremap <silent> ,,e :call EasyMotion#E(1, 0)
+onoremap <silent> ,,e :call EasyMotion#E(0, 0)
+nnoremap <silent> ,,e :call EasyMotion#E(0, 0)
+vnoremap <silent> ,,b :call EasyMotion#WB(1, 1)
+onoremap <silent> ,,b :call EasyMotion#WB(0, 1)
+nnoremap <silent> ,,b :call EasyMotion#WB(0, 1)
+vnoremap <silent> ,,W :call EasyMotion#WBW(1, 0)
+onoremap <silent> ,,W :call EasyMotion#WBW(0, 0)
+nnoremap <silent> ,,W :call EasyMotion#WBW(0, 0)
+vnoremap <silent> ,,T :call EasyMotion#T(1, 1)
+onoremap <silent> ,,T :call EasyMotion#T(0, 1)
+nnoremap <silent> ,,T :call EasyMotion#T(0, 1)
+vnoremap <silent> ,,N :call EasyMotion#Search(1, 1)
+onoremap <silent> ,,N :call EasyMotion#Search(0, 1)
+nnoremap <silent> ,,N :call EasyMotion#Search(0, 1)
+vnoremap <silent> ,,ge :call EasyMotion#E(1, 1)
+onoremap <silent> ,,ge :call EasyMotion#E(0, 1)
+nnoremap <silent> ,,ge :call EasyMotion#E(0, 1)
+vnoremap <silent> ,,F :call EasyMotion#F(1, 1)
+onoremap <silent> ,,F :call EasyMotion#F(0, 1)
+nnoremap <silent> ,,F :call EasyMotion#F(0, 1)
+vnoremap <silent> ,,E :call EasyMotion#EW(1, 0)
+onoremap <silent> ,,E :call EasyMotion#EW(0, 0)
+nnoremap <silent> ,,E :call EasyMotion#EW(0, 0)
+vnoremap <silent> ,,B :call EasyMotion#WBW(1, 1)
+onoremap <silent> ,,B :call EasyMotion#WBW(0, 1)
+nnoremap <silent> ,,B :call EasyMotion#WBW(0, 1)
+noremap ,_s :TCommentAs =&ft_
+noremap ,_n :TCommentAs =&ft 
+noremap ,_a :TCommentAs 
+noremap ,_b :TCommentBlock
+xnoremap <silent> ,_r :TCommentRight
+onoremap <silent> ,_r :TCommentRight
+xnoremap <silent> ,_i :TCommentInline
+noremap ,_  :TComment 
+noremap <silent> ,_p vip:TComment
+xnoremap <silent> ,__ :TCommentMaybeInline
+onoremap <silent> ,__ :TComment
+map ,mq <Plug>MBEMarkCurrent
+map ,mbt <Plug>TMiniBufExplorer
+map ,mbu <Plug>UMiniBufExplorer
+map ,mbc <Plug>CMiniBufExplorer
+map ,mbe <Plug>MiniBufExplorer
+xmap <silent> ,e <Plug>CamelCaseMotion_e
+xmap <silent> ,b <Plug>CamelCaseMotion_b
+xmap <silent> ,w <Plug>CamelCaseMotion_w
+omap <silent> ,e <Plug>CamelCaseMotion_e
+omap <silent> ,b <Plug>CamelCaseMotion_b
+omap <silent> ,w <Plug>CamelCaseMotion_w
+nmap <silent> ,e <Plug>CamelCaseMotion_e
+nmap <silent> ,t :CommandT
+nmap <silent> ,S :call RunRspecCurrentFileConque()
+nmap <silent> ,b <Plug>CamelCaseMotion_b
+nmap <silent> ,i :execute 'ConqueTermSplit pry'
+nmap <silent> ,R :call RunRakeConque()
+nmap <silent> ,r :w !ruby
+map ,a ggVG
+nmap <silent> ,cf /\v^[<=>]{7}( .*|$)
+map ,s :call StripWhitespace ()
+nmap ,bd :bd
+nmap ,ss :set spell!
+nmap ,	 :Sscratch
+nmap ,c :let @+=@"
+map ,d :execute 'NERDTreeToggle ' . getcwd()
+nmap <silent> ,w <Plug>CamelCaseMotion_w
+nnoremap - 
+nnoremap 0 g0
+smap 0 <Plug>yankstack_key_0
+smap 1 <Plug>yankstack_key_1
+smap 2 <Plug>yankstack_key_2
+smap 3 <Plug>yankstack_key_3
+smap 4 <Plug>yankstack_key_4
+smap 5 <Plug>yankstack_key_5
+smap 6 <Plug>yankstack_key_6
+smap 7 <Plug>yankstack_key_7
+smap 8 <Plug>yankstack_key_8
+smap 9 <Plug>yankstack_key_9
+vnoremap < <gv
+vnoremap > >gv
+nnoremap A g$a
+xmap C <Plug>yankstack_key_C
+nmap C <Plug>yankstack_key_C
+xmap D <Plug>yankstack_key_D
+nmap D <Plug>yankstack_key_D
+nnoremap I g0i
+xmap P <Plug>yankstack_key_P
+nmap P <Plug>yankstack_key_P
+vnoremap Q gq
+nnoremap Q gqap
+xmap S <Plug>VSurround
+nmap S <Plug>yankstack_key_S
+snoremap U b<BS>U
+xmap X <Plug>yankstack_key_X
+nmap X <Plug>yankstack_key_X
+xmap Y <Plug>yankstack_key_Y
+nmap Y <Plug>yankstack_key_Y
+nmap [YY <Plug>unimpairedLineBase64Encode
+xmap [Y <Plug>unimpairedBase64Encode
+nmap [Y <Plug>unimpairedBase64Encode
+nmap [xx <Plug>unimpairedLineXmlEncode
+xmap [x <Plug>unimpairedXmlEncode
+nmap [x <Plug>unimpairedXmlEncode
+nmap [uu <Plug>unimpairedLineUrlEncode
+xmap [u <Plug>unimpairedUrlEncode
+nmap [u <Plug>unimpairedUrlEncode
+nmap [yy <Plug>unimpairedLineStringEncode
+xmap [y <Plug>unimpairedStringEncode
+nmap [y <Plug>unimpairedStringEncode
+xmap [e <Plug>unimpairedMoveUp
+nmap [e <Plug>unimpairedMoveUp
+nmap [  <Plug>unimpairedBlankUp
+omap [n <Plug>unimpairedContextPrevious
+nmap [n <Plug>unimpairedContextPrevious
+nmap [o <Plug>unimpairedOPrevious
+nmap <silent> [T <Plug>unimpairedTFirst
+nmap <silent> [t <Plug>unimpairedTPrevious
+nmap <silent> [Q <Plug>unimpairedQFirst
+nmap <silent> [q <Plug>unimpairedQPrevious
+nmap <silent> [L <Plug>unimpairedLFirst
+nmap <silent> [l <Plug>unimpairedLPrevious
+nmap <silent> [B <Plug>unimpairedBFirst
+nmap <silent> [b <Plug>unimpairedBPrevious
+nmap <silent> [A <Plug>unimpairedAFirst
+nmap <silent> [a <Plug>unimpairedAPrevious
+vmap [% [%m'gv``
+snoremap \ b<BS>\
+nmap \\u <Plug>CommentaryUndo
+nmap \\\ <Plug>CommentaryLine
+nmap \\ <Plug>Commentary
+xmap \\ <Plug>Commentary
+nmap \l :set list! " Shortcut to rapidly toggle `set list`
+nmap ]YY <Plug>unimpairedLineBase64Decode
+xmap ]Y <Plug>unimpairedBase64Decode
+nmap ]Y <Plug>unimpairedBase64Decode
+nmap ]xx <Plug>unimpairedLineXmlDecode
+xmap ]x <Plug>unimpairedXmlDecode
+nmap ]x <Plug>unimpairedXmlDecode
+nmap ]uu <Plug>unimpairedLineUrlDecode
+xmap ]u <Plug>unimpairedUrlDecode
+nmap ]u <Plug>unimpairedUrlDecode
+nmap ]yy <Plug>unimpairedLineStringDecode
+xmap ]y <Plug>unimpairedStringDecode
+nmap ]y <Plug>unimpairedStringDecode
+xmap ]e <Plug>unimpairedMoveDown
+nmap ]e <Plug>unimpairedMoveDown
+nmap ]  <Plug>unimpairedBlankDown
+omap ]n <Plug>unimpairedContextNext
+nmap ]n <Plug>unimpairedContextNext
+nmap ]o <Plug>unimpairedONext
+nmap <silent> ]T <Plug>unimpairedTLast
+nmap <silent> ]t <Plug>unimpairedTNext
+nmap <silent> ]Q <Plug>unimpairedQLast
+nmap <silent> ]q <Plug>unimpairedQNext
+nmap <silent> ]L <Plug>unimpairedLLast
+nmap <silent> ]l <Plug>unimpairedLNext
+nmap <silent> ]B <Plug>unimpairedBLast
+nmap <silent> ]b <Plug>unimpairedBNext
+nmap <silent> ]A <Plug>unimpairedALast
+nmap <silent> ]a <Plug>unimpairedANext
+vmap ]% ]%m'gv``
+snoremap ^ b<BS>^
+smap _ <Plug>yankstack_key__
+snoremap ` b<BS>`
+omap a: <Plug>(textobj-rubysymbol-a)
+xmap a: <Plug>(textobj-rubysymbol-a)
+omap ar <Plug>(textobj-rubyblock-a)
+xmap ar <Plug>(textobj-rubyblock-a)
+omap ai <Plug>(textobj-indent-a)
+xmap ai <Plug>(textobj-indent-a)
+omap aI <Plug>(textobj-indent-same-a)
+xmap aI <Plug>(textobj-indent-same-a)
+vmap a% [%v]%
+smap a <Plug>yankstack_key_a
+smap b <Plug>yankstack_key_b
+nmap cs <Plug>Csurround
+smap c <Plug>yankstack_key_c
+xmap c <Plug>yankstack_key_c
+nmap c <Plug>yankstack_key_c
+nmap ds <Plug>Dsurround
+smap d <Plug>yankstack_key_d
+xmap d <Plug>yankstack_key_d
+nmap d <Plug>yankstack_key_d
+smap e <Plug>yankstack_key_e
+smap f <Plug>yankstack_key_f
+nmap gx <Plug>NetrwBrowseX
+xmap gS <Plug>VgSurround
+xnoremap <silent> gC :TCommentMaybeInline
+nnoremap <silent> gCc :let w:tcommentPos = getpos(".") | set opfunc=tcomment#OperatorLineAnywayg@$
+nnoremap <silent> gC :let w:tcommentPos = getpos(".") | set opfunc=tcomment#OperatorAnywayg@
+xnoremap <silent> gc :TCommentMaybeInline
+nnoremap <silent> gcc :let w:tcommentPos = getpos(".") | set opfunc=tcomment#OperatorLineg@$
+nnoremap <silent> gc :let w:tcommentPos = getpos(".") | set opfunc=tcomment#Operatorg@
+vmap gd "_dP
+smap g <Plug>yankstack_key_g
+smap h <Plug>yankstack_key_h
+omap i: <Plug>(textobj-rubysymbol-i)
+xmap i: <Plug>(textobj-rubysymbol-i)
+omap ir <Plug>(textobj-rubyblock-i)
+xmap ir <Plug>(textobj-rubyblock-i)
+omap ii <Plug>(textobj-indent-i)
+xmap ii <Plug>(textobj-indent-i)
+omap iI <Plug>(textobj-indent-same-i)
+xmap iI <Plug>(textobj-indent-same-i)
+xmap <silent> i,e <Plug>CamelCaseMotion_ie
+xmap <silent> i,b <Plug>CamelCaseMotion_ib
+xmap <silent> i,w <Plug>CamelCaseMotion_iw
+omap <silent> i,e <Plug>CamelCaseMotion_ie
+omap <silent> i,b <Plug>CamelCaseMotion_ib
+omap <silent> i,w <Plug>CamelCaseMotion_iw
+smap i <Plug>yankstack_key_i
+nnoremap j gj
+vnoremap j gj
+nnoremap k gk
+vnoremap k gk
+smap l <Plug>yankstack_key_l
+smap m <Plug>yankstack_key_m
+smap n <Plug>yankstack_key_n
+smap o <Plug>yankstack_key_o
+smap p <Plug>yankstack_key_p
+xmap p <Plug>yankstack_key_p
+nmap p <Plug>yankstack_key_p
+smap q <Plug>yankstack_key_q
+smap r <Plug>yankstack_key_r
+vmap s s
+nmap s <Plug>yankstack_key_s
+smap t <Plug>yankstack_key_t
+smap u <Plug>yankstack_key_u
+smap v <Plug>yankstack_key_v
+smap w <Plug>yankstack_key_w
+smap x <Plug>yankstack_key_x
+xmap x <Plug>yankstack_key_x
+nmap x <Plug>yankstack_key_x
+nmap ySS <Plug>YSsurround
+nmap ySs <Plug>YSsurround
+nmap yss <Plug>Yssurround
+nmap yS <Plug>YSurround
+nmap ys <Plug>Ysurround
+smap y <Plug>yankstack_key_y
+xmap y <Plug>yankstack_key_y
+nmap y <Plug>yankstack_key_y
+smap z <Plug>yankstack_key_z
+xnoremap <silent> <Plug>unimpairedMoveDown :exe 'normal! m`'|exe '''<,''>move''>+'.v:count1``
+xnoremap <silent> <Plug>unimpairedMoveUp :exe 'normal! m`'|exe '''<,''>move--'.v:count1``
+nmap <silent> <Plug>unimpairedTLast :exe "tlast ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedTFirst :exe "tfirst ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedTNext :exe "tnext ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedTPrevious :exe "tprevious ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedQLast :exe "clast ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedQFirst :exe "cfirst ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedQNext :exe "cnext ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedQPrevious :exe "cprevious ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedLLast :exe "llast ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedLFirst :exe "lfirst ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedLNext :exe "lnext ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedLPrevious :exe "lprevious ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedBLast :exe "blast ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedBFirst :exe "bfirst ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedBNext :exe "bnext ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedBPrevious :exe "bprevious ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedALast :exe "last ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedAFirst :exe "first ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedANext :exe "next ".(v:count ? v:count : "")
+nmap <silent> <Plug>unimpairedAPrevious :exe "previous ".(v:count ? v:count : "")
+nmap <C-~> ~h
+nmap <D-9> 9gt
+nmap <D-8> 8gt
+nmap <D-7> 7gt
+nmap <D-6> 6gt
+nmap <D-5> 5gt
+nmap <D-4> 4gt
+nmap <D-3> 3gt
+nmap <D-2> 2gt
+nmap <D-1> 1gt
+vmap <C-S-Tab> :tabprevious
+nmap <C-S-Tab> :tabprevious
+vmap <C-Tab> :tabnext
+nmap <C-Tab> :tabnext
+nnoremap <silent> <SwipeRight> :macaction _cycleWindows:
+nnoremap <silent> <SwipeLeft> :macaction _cycleWindowsBackwards:
+map <D-t> :CommandT
+map <M-Down> }
+noremap <D-Down> <C-End>
+map <M-Up> {
+noremap <D-Up> <C-Home>
+noremap <M-Right> <C-Right>
+noremap <D-Right> <End>
+noremap <M-Left> <C-Left>
+noremap <D-Left> <Home>
+snoremap <Left> bi
+snoremap <Right> a
+snoremap <BS> b<BS>
+snoremap <silent> <S-Tab> i<Right>=snipMate#BackwardsSnippet()
+nnoremap <silent> <Plug>NetrwBrowseX :call netrw#NetrwBrowseX(expand("<cWORD>"),0)
+nnoremap <silent> <F11> :call conque_term#exec_file()
+vnoremap <Plug>CamelCaseMotion_ie :call camelcasemotion#InnerMotion('e',v:count1)
+vnoremap <Plug>CamelCaseMotion_ib :call camelcasemotion#InnerMotion('b',v:count1)
+vnoremap <Plug>CamelCaseMotion_iw :call camelcasemotion#InnerMotion('w',v:count1)
+onoremap <Plug>CamelCaseMotion_ie :call camelcasemotion#InnerMotion('e',v:count1)
+onoremap <Plug>CamelCaseMotion_ib :call camelcasemotion#InnerMotion('b',v:count1)
+onoremap <Plug>CamelCaseMotion_iw :call camelcasemotion#InnerMotion('w',v:count1)
+vnoremap <Plug>CamelCaseMotion_e :call camelcasemotion#Motion('e',v:count1,'v')
+vnoremap <Plug>CamelCaseMotion_b :call camelcasemotion#Motion('b',v:count1,'v')
+vnoremap <Plug>CamelCaseMotion_w :call camelcasemotion#Motion('w',v:count1,'v')
+onoremap <Plug>CamelCaseMotion_e :call camelcasemotion#Motion('e',v:count1,'o')
+onoremap <Plug>CamelCaseMotion_b :call camelcasemotion#Motion('b',v:count1,'o')
+onoremap <Plug>CamelCaseMotion_w :call camelcasemotion#Motion('w',v:count1,'o')
+nnoremap <Plug>CamelCaseMotion_e :call camelcasemotion#Motion('e',v:count1,'n')
+nnoremap <Plug>CamelCaseMotion_b :call camelcasemotion#Motion('b',v:count1,'n')
+nnoremap <Plug>CamelCaseMotion_w :call camelcasemotion#Motion('w',v:count1,'n')
+map <silent> <C-Space> |_
+map <silent> <S-Space> =
+nnoremap <F6> :GundoToggle
+xnoremap <Right> >
+xnoremap <Left> <
+nnoremap <Right> >>
+nnoremap <Left> <<
+map <M-S-Tab> :MBEbp
+vnoremap <Up> <Nop>
+vnoremap <Down> <Nop>
+nnoremap <Up> <Nop>
+nnoremap <Down> <Nop>
+vmap <F8> <Plug>ToggleBackground
+nmap <F8> <Plug>ToggleBackground
+vmap <F5> <Plug>ToggleBackground
+nmap <F5> <Plug>ToggleBackground
+xmap <BS> "-d
+cnoremap  <Home>
+imap  diw
+cnoremap  <End>
+imap S <Plug>ISurround
+imap s <Plug>Isurround
+imap c <Plug>CapsLockToggle
+inoremap <silent> 	 u=snipMate#TriggerSnippet()
+cnoremap <NL> <Down>
+cnoremap  <Up>
+inoremap <silent> 	 =snipMate#ShowAvailableSnips()
+imap  <Plug>Isurround
+inoremap s :TCommentAs =&ft_
+inoremap n :TCommentAs =&ft 
+inoremap a :TCommentAs 
+inoremap b :TCommentBlock
+inoremap <silent> r :TCommentRight
+inoremap   :TComment 
+inoremap <silent> p :norm! m`vip:TComment``
+inoremap <silent>  :TComment
+inoremap # X<BS>#
+map  :MBEbn
+nmap ï A<S-CR>
+nmap Ð <Plug>yankstack_substitute_newer_paste
+nmap ð <Plug>yankstack_substitute_older_paste
+map <silent> Ë k_
+map <silent> Ê j_
+map <silent> Ì l|
+map <silent> È h|
+map <silent> ë 5+
+map <silent> ê 5-
+map <silent> ì 5>
+map <silent> è 5<
+cmap w!! %!sudo tee > /dev/null %
+let &cpo=s:cpo_save
+unlet s:cpo_save
+set autoindent
+set background=dark
+set backspace=2
+set noequalalways
+set expandtab
+set fileencodings=ucs-bom,utf-8,default,latin1
+set formatoptions=aw1rotqlnc
+set guifont=Inconsolata-dz:h14
+set guioptions=egmrt
+set guitablabel=%M%t
+set helplang=en
+set hidden
+set ignorecase
+set incsearch
+set isident=@,48-57,_,192-255,$
+set nojoinspaces
+set langmenu=none
+set laststatus=2
+set macmeta
+set mouse=a
+set operatorfunc=<SNR>136_TransformOpfunc
+set printexpr=system('open\ -a\ Preview\ '.v:fname_in)\ +\ v:shell_error
+set report=0
+set ruler
+set runtimepath=~/.vim,~/.vim/bundle/CamelCaseMotion,~/.vim/bundle/ack.vim,~/.vim/bundle/clang_complete,~/.vim/bundle/cocoa.vim,~/.vim/bundle/detectindent,~/.vim/bundle/gist-165090,~/.vim/bundle/gist-vim,~/.vim/bundle/gundo.vim,~/.vim/bundle/matchit,~/.vim/bundle/minibufexpl.vim,~/.vim/bundle/mustache.vim,~/.vim/bundle/neocomplcache,~/.vim/bundle/nerdtree,~/.vim/bundle/quicksilver.vim,~/.vim/bundle/sessionman.vim,~/.vim/bundle/snipmate-snippets,~/.vim/bundle/snipmate.vim,~/.vim/bundle/solarized,~/.vim/bundle/sparkup,~/.vim/bundle/tabular,~/.vim/bundle/tcomment_vim,~/.vim/bundle/tlib_vim,~/.vim/bundle/vim-addon-mw-utils,~/.vim/bundle/vim-afterimage,~/.vim/bundle/vim-coffee-script,~/.vim/bundle/vim-commentary,~/.vim/bundle/vim-conque,~/.vim/bundle/vim-css-color,~/.vim/bundle/vim-easymotion,~/.vim/bundle/vim-eunuch,~/.vim/bundle/vim-fugitive,~/.vim/bundle/vim-haml,~/.vim/bundle/vim-js-beautify,~/.vim/bundle/vim-jst,~/.vim/bundle/vim-less,~/.vim/bundle/vim-multimarkdown,~/.vim/bundle/vim-pasta,~/.vim/bundle/vim-pathogen,~/.vim/
+set shiftwidth=4
+set shortmess=filtIoOA
+set showmatch
+set smartindent
+set smarttab
+set spelllang=en_au
+set splitbelow
+set splitright
+set nostartofline
+set statusline=%F\ %m\ %{fugitive#statusline()}\ %y%=%l,%c\ %P
+set noswapfile
+set tabstop=4
+set termencoding=utf-8
+set textwidth=160
+set thesaurus=~/lib/mthesaur.txt
+set title
+set updatetime=100
+set virtualedit=block
+set visualbell
+set whichwrap=b,s,<,>,h,l,[,]
+set wildignore=.DS_Store,.svn,.tissues,*~,*.swp,*.rbc
+set wildmenu
+set wildmode=list:longest,full
+set window=43
+set winminheight=0
+let s:so_save = &so | let s:siso_save = &siso | set so=0 siso=0
+let v:this_session=expand("<sfile>:p")
+silent only
+cd ~/
+if expand('%') == '' && !&modified && line('$') <= 1 && getline(1) == ''
+  let s:wipebuf = bufnr('%')
+endif
+set shortmess=aoO
+badd +129 Dropbox/Elements/chem_revision.md
+silent! argdel *
+edit Dropbox/Elements/chem_revision.md
+set splitbelow splitright
+wincmd t
+set winheight=1 winwidth=1
+argglobal
+setlocal keymap=
+setlocal noarabic
+setlocal autoindent
+setlocal balloonexpr=
+setlocal nobinary
+setlocal bufhidden=
+setlocal buflisted
+setlocal buftype=
+setlocal nocindent
+setlocal cinkeys=0{,0},0),:,0#,!^F,o,O,e
+setlocal cinoptions=
+setlocal cinwords=if,else,while,do,for,switch
+setlocal colorcolumn=
+setlocal comments=fb:*,fb:-,fb:+,n:>,n:*
+setlocal commentstring=>\ %s
+setlocal complete=.,w,b,u,t,i
+setlocal concealcursor=
+setlocal conceallevel=0
+setlocal completefunc=
+setlocal nocopyindent
+setlocal cryptmethod=
+setlocal nocursorbind
+setlocal nocursorcolumn
+setlocal nocursorline
+setlocal define=
+setlocal dictionary=
+setlocal nodiff
+setlocal equalprg=
+setlocal errorformat=%+E%f:%l:\ parse\ error,%W%f:%l:\ warning:\ %m,%E%f:%l:in\ %*[^:]:\ %m,%E%f:%l:\ %m,%-C%tfrom\ %f:%l:in\ %.%#,%-Z%tfrom\ %f:%l,%-Z%p^,%-G%.%#
+setlocal expandtab
+if &filetype != 'markdown'
+setlocal filetype=markdown
+endif
+setlocal foldcolumn=0
+setlocal foldenable
+setlocal foldexpr=0
+setlocal foldignore=#
+setlocal foldlevel=0
+setlocal foldmarker={{{,}}}
+setlocal foldmethod=manual
+setlocal foldminlines=1
+setlocal foldnestmax=20
+setlocal foldtext=foldtext()
+setlocal formatexpr=
+setlocal formatoptions=aw1rotqlnc
+setlocal formatlistpat=^\\s*\\d\\+\\.\\s\\+\\|^[-*+]\\s\\+
+setlocal grepprg=
+setlocal iminsert=2
+setlocal imsearch=2
+setlocal include=
+setlocal includeexpr=
+setlocal indentexpr=
+setlocal indentkeys=0{,0},:,0#,!^F,o,O,e
+setlocal noinfercase
+setlocal iskeyword=@,48-57,_,192-255
+setlocal keywordprg=
+set linebreak
+setlocal linebreak
+setlocal nolisp
+setlocal nolist
+setlocal macmeta
+setlocal makeprg=ruby\ -w\ $*
+setlocal matchpairs=(:),{:},[:],<:>
+setlocal modeline
+setlocal modifiable
+setlocal nrformats=octal,hex
+set number
+setlocal number
+setlocal numberwidth=4
+setlocal omnifunc=htmlcomplete#CompleteTags
+setlocal path=
+setlocal nopreserveindent
+setlocal nopreviewwindow
+setlocal quoteescape=\\
+setlocal noreadonly
+setlocal norelativenumber
+setlocal norightleft
+setlocal rightleftcmd=search
+setlocal noscrollbind
+setlocal shiftwidth=4
+setlocal noshortname
+setlocal smartindent
+setlocal softtabstop=0
+setlocal nospell
+setlocal spellcapcheck=[.?!]\\_[\\])'\"\	\ ]\\+
+setlocal spellfile=
+setlocal spelllang=en_au
+setlocal statusline=
+setlocal suffixesadd=
+setlocal noswapfile
+setlocal synmaxcol=3000
+if &syntax != 'markdown'
+setlocal syntax=markdown
+endif
+setlocal tabstop=4
+setlocal tags=
+setlocal textwidth=160
+setlocal thesaurus=
+setlocal noundofile
+setlocal winfixheight
+setlocal winfixwidth
+setlocal wrap
+setlocal wrapmargin=0
+silent! normal! zE
+let s:l = 180 - ((31 * winheight(0) + 21) / 42)
+if s:l < 1 | let s:l = 1 | endif
+exe s:l
+normal! zt
+180
+normal! 09l
+tabnext 1
+if exists('s:wipebuf')
+  silent exe 'bwipe ' . s:wipebuf
+endif
+unlet! s:wipebuf
+set winheight=1 winwidth=20 shortmess=filtIoOA
+let s:sx = expand("<sfile>:p:r")."x.vim"
+if file_readable(s:sx)
+  exe "source " . fnameescape(s:sx)
+endif
+let &so = s:so_save | let &siso = s:siso_save
+doautoall SessionLoadPost
+unlet SessionLoad
+" vim: set ft=vim :
