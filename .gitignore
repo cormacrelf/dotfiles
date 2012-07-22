@@ -3,3 +3,4 @@ git/gitconfig.symlink
 .DS_Store
 **/.DS_Store
 */**/.DS_Store
+vim/vim.symlink/bundle/*
