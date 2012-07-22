@@ -3,16 +3,15 @@ set nocompatible
 
 set shell=/bin/zsh
 let $PATH = $PATH . ':' . expand("~/Library/Haskell/bin/")
-runtime bundle/vim-pathogen/autoload/pathogen.vim
-call pathogen#infect() " do this first so we can load colorschemes, etc.
+
 filetype off
-call pathogen#runtime_append_all_bundles()
+set rtp+=~/.vim/bundle/vundle/
+call vundle#rc()
+source ~/.vim/vundlerc.vim
+
+filetype plugin indent on	      " Enable filetype detection
 
 call yankstack#setup() " do this first so any yank mappings still cache
-
-filetype on	      " Enable filetype detection
-filetype indent on    " Enable filetype-specific indenting
-filetype plugin on    " Enable filetype-specific plugins
 
 set thesaurus+=/Users/cormac/lib/mthesaur.txt
 
