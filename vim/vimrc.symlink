@@ -249,15 +249,6 @@ compiler ruby	      " Enable compiler support for ruby
 
 runtime macros/matchit.vim
 
-autocmd FileType ruby call smartinput#map_to_trigger('i', '#', '#', '#')
-autocmd FIleType ruby call smartinput#define_rule({
-    \	'at': '\%#',
-    \	'char': '#',
-    \	'input': '#{}<Left>',
-    \	'filetype': ['ruby'],
-    \	'syntax': ['Constant', 'Special'],
-    \ })
-
 " ---------------------------------------------------------------------------
 " Plugin Configuration
 " ---------------------------------------------------------------------------
