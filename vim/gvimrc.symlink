@@ -1,10 +1,14 @@
-" colorscheme solarized
+"set guifont=Menlo\ for\ Powerline:h14
+"set guifont=Inconsolata-dz\ for\ Powerline:h12
+"set guifont=Pragmata\ TT:h13
 
-set guifont=Inconsolata-dz:h14
-let g:writer_guifont="Inconsolata-dz:h16"
+set guifont=M+\ 1m\ regular:h14
+set noantialias
+
+"let g:writer_guifont="Inconsolata-dz:h16"
 
 set anti
-set lines=50 columns=96
+set lines=50 columns=100
 set guioptions=egmrt
 
 if has('gui_macvim')
