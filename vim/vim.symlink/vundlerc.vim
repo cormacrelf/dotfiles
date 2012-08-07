@@ -1,48 +1,63 @@
-" From vim.org
-Bundle "gmarik/vundle"
-Bundle "matchit.zip"
-Bundle "VimClojure"
-Bundle "argtextobj.vim"
-Bundle "sessionman.vim"
+" Vundle Must manage vundle.
+Bundle 'gmarik/vundle'
 
-Bundle "Lokaltog/vim-easymotion"
-Bundle "MarcWeber/vim-addon-mw-utils"
-Bundle "Rip-Rip/clang_complete"
-Bundle "Shougo/neocomplcache"
-Bundle "altercation/vim-colors-solarized"
-Bundle "bingaman/vim-sparkup"
-Bundle "bkad/CamelCaseMotion"
-Bundle "briancollins/vim-jst"
-Bundle "ciaranm/detectindent"
-Bundle "fholgado/minibufexpl.vim"
-Bundle "fomichev/cocoa.vim"
-Bundle "garbas/vim-snipmate"
-Bundle "godlygeek/tabular"
-Bundle "honza/snipmate-snippets"
-Bundle "juvenn/mustache.vim"
-Bundle "kana/vim-filetype-haskell"
-Bundle "Raimondi/delimitMate"
-Bundle "kana/vim-textobj-user"
-Bundle "kana/vim-textobj-indent"
-Bundle "kchmck/vim-coffee-script"
-Bundle "kien/ctrlp.vim"
-Bundle "maxbrunsfeld/vim-yankstack"
-Bundle "mileszs/ack.vim"
-Bundle "nelstrom/vim-textobj-rubyblock"
-Bundle "osyo-manga/neocomplcache-clang_complete"
-Bundle "rcyrus/snipmate-snippets-rubymotion"
-Bundle "rprimus/vim-snipmate-scheme"
-Bundle "scrooloose/nerdtree"
-Bundle "sickill/vim-pasta"
-Bundle "sjl/gundo.vim"
-Bundle "tomtom/tlib_vim"
-Bundle "tpope/vim-commentary"
-Bundle "tpope/vim-eunuch"
-Bundle "tpope/vim-haml"
-Bundle "tpope/vim-ragtag"
-Bundle "tpope/vim-rails"
-Bundle "tpope/vim-repeat"
-Bundle "tpope/vim-surround"
-Bundle "tpope/vim-unimpaired"
-Bundle "tpope/vim-fugitive"
-Bundle "ujihisa/neco-ghc"
+" Language-specific
+Bundle 'kana/vim-filetype-haskell'
+Bundle 'rcyrus/snipmate-snippets-rubymotion'
+Bundle 'fomichev/cocoa.vim'
+Bundle 'briancollins/vim-jst'
+Bundle 'juvenn/mustache.vim'
+Bundle 'kchmck/vim-coffee-script'
+Bundle 'tpope/vim-rails'
+Bundle 'tpope/vim-haml'
+Bundle 'VimClojure'
+
+" Text Objects
+Bundle 'argtextobj.vim'
+Bundle 'textobj-line'
+Bundle 'kana/vim-textobj-user'
+Bundle 'kana/vim-textobj-indent'
+Bundle 'nelstrom/vim-textobj-rubyblock'
+Bundle 'tpope/vim-surround'
+
+" Navigation, behaviour
+Bundle 'Lokaltog/vim-easymotion'
+Bundle 'fholgado/minibufexpl.vim'
+Bundle 'kien/ctrlp.vim'
+Bundle 'mileszs/ack.vim'
+Bundle 'scrooloose/nerdtree'
+Bundle 'sjl/gundo.vim'
+Bundle 'tpope/vim-fugitive'
+Bundle 'Lokaltog/vim-powerline'
+
+" Motion, commands
+Bundle 'bingaman/vim-sparkup'
+Bundle 'godlygeek/tabular'
+Bundle 'Raimondi/delimitMate'
+Bundle 'maxbrunsfeld/vim-yankstack'
+Bundle 'tpope/vim-commentary'
+Bundle 'tpope/vim-eunuch'
+Bundle 'tpope/vim-ragtag'
+Bundle 'tpope/vim-repeat'
+Bundle 'tpope/vim-unimpaired'
+Bundle 'bkad/CamelCaseMotion'
+Bundle 'matchit.zip'
+Bundle 'paredit.vim'
+Bundle 'spiiph/vim-space'
+
+" Completion
+Bundle 'Rip-Rip/clang_complete'
+Bundle 'Shougo/neocomplcache'
+Bundle 'garbas/vim-snipmate'
+Bundle 'honza/snipmate-snippets'
+Bundle 'osyo-manga/neocomplcache-clang_complete'
+Bundle 'ujihisa/neco-ghc'
+
+" Other
+Bundle 'MarcWeber/vim-addon-mw-utils'
+Bundle 'altercation/vim-colors-solarized'
+Bundle 'sjl/badwolf'
+Bundle 'ciaranm/detectindent'
+Bundle 'sickill/vim-pasta'
+Bundle 'tomtom/tlib_vim'
+Bundle 'sessionman.vim'
