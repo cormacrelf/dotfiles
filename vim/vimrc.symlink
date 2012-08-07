@@ -44,6 +44,7 @@ set virtualedit=block	   " allow virtual edit in visual block ..
 
 " lead with , and use '\' for the original functionality
 let mapleader = ","
+let maplocalleader = ","
 noremap <C-;> ,
 
 " create vsplit and switch to it
@@ -70,6 +71,15 @@ nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 " select all
 map <Leader>a ggVG
 
+map <leader>/ <Plug>NERDCommenterToggle
+
+map <D-<> :tabe ~/.vimrc<cr>
+
+map <leader>nc :NeoComplCacheToggle<cr>
+
+" toggle typewriter mode
+nnoremap <Leader>zz :let &scrolloff=999-&scrolloff<CR>
+
 
 " ----------------------------------------------------------------------------
 "  Remapping
@@ -89,7 +99,7 @@ nnoremap <Space> <C-d>
 nnoremap <S-Space> <C-u>
 
 " reflow paragraph with Q in normal and visual mode
-nnoremap Q gqap
+nnoremap Q m`gqap``
 vnoremap Q gq
 
 " sane movement with wrap turned on
@@ -221,10 +231,9 @@ set showmatch		   " brackets/braces that is
 set mat=1			   " duration to show matching brace (1/10 sec)
 set incsearch		   " do incremental searching
 set laststatus=2	   " always show the status line
-set smartcase		   " ignore case when searching
-set hlsearch		   " don't highlight searches
-	" remove highlight:
-	nnoremap <cr> :noh<cr><cr>
+set ignorecase		   " ignore case when searching
+set nohlsearch		   " don't highlight searches
+nnoremap <leader>hl :set hlsearch!<cr>
 set visualbell		   " shut the fuck up
 set title
 set hidden
@@ -253,7 +262,6 @@ runtime macros/matchit.vim
 " Plugin Configuration
 " ---------------------------------------------------------------------------
 
-let g:slime_target = "tmux"
 let g:neocomplcache_enable_at_startup = 1
 let g:neocomplcache_force_overwrite_completefunc=1
 let g:clang_complete_auto=1
@@ -280,6 +288,13 @@ nnoremap <F6> :GundoToggle<CR>
 
 let g:vimclojure#HighlightBuiltins = 1
 let g:vimclojure#ParenRainbow = 1
+
+" Paredit
+let g:paredit_electric_return = 1
+
+" Powerline
+let g:Powerline_symbols = "compatible"
+let g:Powerline_theme = "default"
 
 " ---------------------------------------------------------------------------
 " Vimbits
