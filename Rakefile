@@ -54,4 +54,10 @@ task :uninstall do
   end
 end
 
+task :brew do
+  puts "Are you sure? Building/installing all this might take a while."
+  reply = STDIN.gets.chomp.downcase
+  `/bin/sh homebrew/brew.sh` if reply == "y" or reply == "yes"
+end
+
 task :default => 'install'
