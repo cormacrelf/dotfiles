@@ -10,19 +10,7 @@ brew update
 brew upgrade
 
 # Install formulae
-for formula in (
-git
-hub
-zsh
-rbenv
-ruby-build
-ack
-tree
-vim
-haskell-platform
-tig
-clojure
-); do
+for formula in git hub zsh rbenv ruby-build ack tree vim haskell-platform tig clojure; do
 	brew install $formula
 done
 
