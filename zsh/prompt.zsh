@@ -2,6 +2,13 @@ autoload colors && colors
 # cheers, @ehrenmurdick
 # http://github.com/ehrenmurdick/config/blob/master/zsh/prompt.zsh
 
+
+function ssh_connection() {
+  if [[ -n $SSH_CONNECTION ]]; then
+    echo "%{$fg_bold[red]%}(ssh) "
+  fi
+}
+
 git_branch() {
   echo $(/usr/bin/git symbolic-ref HEAD 2>/dev/null | awk -F/ {'print $NF'})
 }
@@ -52,7 +59,7 @@ rb_prompt(){
 }
 
 directory_name(){
-  echo "%{$fg_bold[cyan]%}%1/%\/%{$reset_color%}"
+  echo "%{$fg_bold[cyan]%}%2~%{$reset_color%}"
 }
 
 coloured_char() {
@@ -60,7 +67,7 @@ coloured_char() {
 }
 
 # export PROMPT=$'\n$(rb_prompt) in $(directory_name) $(git_dirty)$(need_push)\n› '
-export PROMPT=$'$(directory_name)$(git_dirty)$(need_push)$(coloured_char "#") '
+export PROMPT=$'$(ssh_connection)$(directory_name)$(git_dirty)$(need_push)$(coloured_char "#") '
 
 
 set_prompt () {
