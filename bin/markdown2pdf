@@ -1,0 +1,28 @@
+#!/bin/sh
+
+INPUT=$1
+OUTPUT="`echo $1 | cut -f 1 -d .`.pdf"
+# DIR="`echo $1 | cut -f 1 -d . | cut -f 1 -d '/'`"
+shift
+ARGS=$@
+
+# echo "input: $INPUT"
+# echo "output: $OUTPUT"
+# echo "args: $ARGS"
+
+pandoc -f markdown $INPUT \
+    -o $OUTPUT \
+    -V geometry:"a4paper" \
+    -V papersize:"a4paper" \
+    -V margin:"1.2in" \
+    -V mainfont="Adobe Caslon Pro" \
+    -V sansfont="Helvetica" \
+    -V monofont="Pragmata TT" \
+    -V fontsize="12pt" \
+    --highlight-style haddock \
+    --latex-engine xelatex \
+    -S -s \
+    $ARGS \
+    # --bibliography="$DIR/citations.bib" \
+
+echo "PDF written to $OUTPUT"
