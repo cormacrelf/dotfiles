@@ -1,0 +1,9 @@
+snippet graph
+	\begin{tikzpicture}
+	\begin{axis}[
+		samples=50,
+		smooth,
+		domain=${1:-10}:${2:10},
+		]
+	\addplot +[mark=none] {${3:-ln(x) - 3}};
+	\end{axis} \end{tikzpicture}

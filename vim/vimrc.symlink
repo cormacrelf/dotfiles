@@ -1,5 +1,4 @@
-set noswapfile
-set nocompatible
+" vim: set nospell: set noswapfile set nocompatible
 
 set shell=/bin/zsh
 let $PATH = $PATH . ':' . expand("~/Library/Haskell/bin/")
@@ -14,6 +13,8 @@ filetype plugin indent on	      " Enable filetype detection
 call yankstack#setup() " do this first so any yank mappings still cache
 
 set thesaurus+=/Users/cormac/lib/mthesaur.txt
+
+so ~/.vim/private.vim
 
 " ----------------------------------------------------------------------------
 "  Text Formatting
@@ -37,6 +38,8 @@ set smarttab		   " fuck tabs
 set formatoptions+=n	   " support for numbered/bullet lists
 " set textwidth=80	     " wrap at 80 chars by default
 set virtualedit=block	   " allow virtual edit in visual block ..
+set nofoldenable	   " don't automatically close all folds initially
+set foldmethod=syntax	   " how to determine folds
 
 " ----------------------------------------------------------------------------
 "  Leader Mappings
@@ -44,8 +47,8 @@ set virtualedit=block	   " allow virtual edit in visual block ..
 
 " lead with , and use '\' for the original functionality
 let mapleader = ","
-let maplocalleader = ","
-noremap <C-;> ,
+let maplocalleader = "\\"
+map <C-;> ,
 
 " create vsplit and switch to it
 nnoremap <leader>w <C-w>v<C-w>l
@@ -62,10 +65,13 @@ nmap <leader>c :let @+=@"<cr>
 
 " new scratch buffer on
 nmap <leader><Tab> :Sscratch<CR>
+
 " toggle spelling
-nmap <leader>Sp :set spell!<CR>
+nmap <leader>Sp :setlocal spell!<cr>
+
 " quick delete buffer
 nmap <leader>bd :bd<CR>
+
 " Find merge conflict markers
 nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
 " select all
@@ -79,6 +85,15 @@ map <leader>nc :NeoComplCacheToggle<cr>
 
 " toggle typewriter mode
 nnoremap <Leader>zz :let &scrolloff=999-&scrolloff<CR>
+
+" Look up in online French dictionary
+nmap <leader>wr viw"hy:!open "http://wordreference.com/enfr/<c-r>h"<cr><cr>
+
+" toggle undo tree
+nnoremap <leader>g :GundoToggle<CR>
+
+" word count
+nnoremap <leader>wc g<c-g>
 
 
 " ----------------------------------------------------------------------------
@@ -135,8 +150,8 @@ vmap s s
 vnoremap < <gv
 vnoremap > >gv
 
-map <M-Tab> :MBEbn<CR>
-map <M-S-Tab> :MBEbp<CR>
+map <M-Tab> :bn<CR>
+map <M-S-Tab> :bp<CR>
 
 " TextMate-like indentation, less movement required
 imap <D-]> <C-t>
@@ -152,22 +167,8 @@ imap <M-u> <C-k>:
 imap <M-c> <C-k>,c
 imap <M-S-c> <C-k>,C
 
-" " Make <space> insert a single character
-" nmap <Space> i_<Esc>r
-" nmap <C-S-Space> a_<Esc>r
-
-" Motion for "next/last object". For example, "din(" would go to the next "()" pair
-" and delete its contents.
-
-onoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
-xnoremap an :<c-u>call <SID>NextTextObject('a', 'f')<cr>
-onoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
-xnoremap in :<c-u>call <SID>NextTextObject('i', 'f')<cr>
-
-onoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
-xnoremap al :<c-u>call <SID>NextTextObject('a', 'F')<cr>
-onoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
-xnoremap il :<c-u>call <SID>NextTextObject('i', 'F')<cr>
+" Split lines
+nnoremap gs i<cr><esc>
 
 " Quickreturn
 inoremap <c-cr> <esc>A<cr>
@@ -175,17 +176,31 @@ inoremap <s-cr> <esc>A;<cr>
 
 " Map <F8> to toggle paste mode, turn paste off when we leave
 set pastetoggle=<F8>
-au InsertLeave * set nopaste
+au! InsertLeave * set nopaste
+
+" Use <C-s> to save
+nnoremap <C-s> :w<cr>
+
+" Open CtrlP buffer explorer with ,b
+nnoremap <C-b> :CtrlPBuffer<cr>
+" Open MRU files
+nnoremap <C-M-P> :CtrlPMRUFiles<cr>
+
+nmap <silent> <Leader>rb :w !ruby<CR>
 
 " ----------------------------------------------------------------------------
-"  Commands
+"  Commands ------------------------------------------------------------------
 " ----------------------------------------------------------------------------
 
 " Allow saving of files as sudo when I forgot to start vim using sudo.
 cmap w!! %!sudo tee > /dev/null %
 
 " Make :Q work just as well
-cmap Q q
+command! Q q
+
+" Set language quickly
+command! FR setlocal spl=fr
+command! EN setlocal spl=en_au
 
 " ----------------------------------------------------------------------------
 " Events
@@ -209,19 +224,18 @@ set shortmess=filtIoOA	   " Shorten messages
 set report=0		   " tell us about changes
 set nostartofline	   " don't jump to the start of line when scrolling
 set scrolloff=0		   " scroll early, give us a bit of context
+set autoread		   " automatically read changes in files from other
+			   " applications
 
 set splitright splitbelow  " when :[v]split-ting, go to the right/down
-set statusline=%F\ %m\ %{fugitive#statusline()}\ %y%=%l,%c\ %P
-function! WordCount()
-  let s:old_status = v:statusmsg
-  exe "silent normal g\<c-g>"
-  let s:word_count = str2nr(split(v:statusmsg)[11])
-  let v:statusmsg = s:old_status
-  return s:word_count
-endfunction
+" set statusline=%F\ %m\ %{fugitive#statusline()}\ %y%=%l,%c\ %P
 
 " autocmd vimenter * if !argc() | NERDTree | endif
 " if no arguments passed to VIM, open up NERDTree.
+"
+if has("mouse")
+  set mouse=a
+endif
 
 " ----------------------------------------------------------------------------
 " Visual Cues
@@ -252,7 +266,7 @@ map <leader>ws :call StripWhitespace ()<CR>
 " Filetypes
 " ---------------------------------------------------------------------------
 
-autocmd FileType objc setlocal shiftwidth=4 tabstop=4
+autocmd! FileType objc setlocal shiftwidth=4 tabstop=4
 
 compiler ruby	      " Enable compiler support for ruby
 
@@ -262,29 +276,24 @@ runtime macros/matchit.vim
 " Plugin Configuration
 " ---------------------------------------------------------------------------
 
-let g:neocomplcache_enable_at_startup = 1
-let g:neocomplcache_force_overwrite_completefunc=1
-let g:clang_complete_auto=1
+" for pandoc speed
+let g:pandoc_no_empty_implicits = 1
+let g:pandoc_no_spans = 1
+let g:pandoc_no_folding = 1
 
-" Enable omni completion.
-" autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
-" autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-" autocmd FileType javascript setlocal omnifunc=javascriptcomplete#CompleteJS
-" autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-" autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
-" autocmd FileType ruby setlocal omnifunc=rubycomplete#CompleteTags
-" autocmd FileType haskell setlocal omnifunc=necoghc#omnifunc
+let g:neocomplcache_enable_at_startup = 1
+" let g:neocomplcache_force_overwrite_completefunc=1
+let g:clang_complete_auto = 1
+let g:neocomplcache_use_vimproc = 1
 
 " <CR>: close popup and save indent.
-inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
+" inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
 
 " <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplcache#close_popup()
-inoremap <expr><C-e>  neocomplcache#cancel_popup()
-
-nnoremap <F6> :GundoToggle<CR>
+" inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+" inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+" inoremap <expr><C-y>  neocomplcache#close_popup()
+" inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
 let g:vimclojure#HighlightBuiltins = 1
 let g:vimclojure#ParenRainbow = 1
@@ -293,8 +302,18 @@ let g:vimclojure#ParenRainbow = 1
 let g:paredit_electric_return = 1
 
 " Powerline
-let g:Powerline_symbols = "compatible"
+let g:Powerline_symbols = "fancy"
 let g:Powerline_theme = "default"
+let g:Powerline_colorscheme = "skwp"
+
+" Tagbar
+" nmap <f8> :TagbarToggle<CR>
+
+" CtrlP
+let g:ctrlp_extensions = ['tag']
+
+" Vim-Pad
+let g:pad_dir = "~/Dropbox/Elements/notes/"
 
 " ---------------------------------------------------------------------------
 " Vimbits
@@ -318,6 +337,7 @@ cnoremap <C-e> <End>
 
 " automatically reload vimrc when it's saved
 " au BufWritePost .vimrc so ~/.vimrc
+" au BufWritePost ~/.vim/vundlerc.vim so ~/.vim/vundlerc.vim
 
 " Maps Alt-[h,j,k,l] to resizing a window split
 map <silent> <A-h> <C-w>5<
@@ -341,42 +361,9 @@ map <silent> <C-Space> <C-w><bar><C-w>_
 set winminheight=0
 
 " ---------------------------------------------------------------------------
-" ConqueTerm
+" Random Definitions
 " ---------------------------------------------------------------------------
 
-" Run the current file in a ConqueTerm, great for ruby tests
-let g:ConqueTerm_InsertOnEnter = 0
-let g:ConqueTerm_CWInsert = 1
-
-nmap <silent> <Leader>rb :w !ruby<CR>
-nmap <silent> <Leader>R :call RunRakeConque()<CR>
-nmap <silent> <Leader>i :execute 'ConqueTermSplit pry'<CR>
-nmap <silent> <Leader>b :execute 'ConqueTermSplit /bin/bash --login'<CR>
-
-" Run the current file as a ruby file, great for running unit tests
-function! RunRubyCurrentFileConque()
-  execute "ConqueTermSplit ruby" bufname('%')
-endfunction
-
-function! RunRspecCurrentFileConque()
-  execute "ConqueTermSplit rspec" bufname('%') " --color --format doc"
-endfunction
-
-function! RunRakeConque()
-  execute "ConqueTermSplit rake"
-endfunction
-
-" Jump to the next or previous line that has the same level or a lower
-" level of indentation than the current line.
-"
-" exclusive (bool): true: Motion is exclusive
-" false: Motion is inclusive
-" fwd (bool): true: Go to next line
-" false: Go to previous line
-" lowerlevel (bool): true: Go to line with lower indentation level
-" false: Go to line with the same indentation level
-" skipblanks (bool): true: Skip blank lines
-" false: Don't skip blank lines
 function! NextIndent(exclusive, fwd, lowerlevel, skipblanks)
   let line = line('.')
   let column = col('.')
@@ -418,15 +405,90 @@ onoremap <silent> ]L :call NextIndent(1, 1, 1, 1)<CR>
 " Indentation
 " ---------------------------------------------------------------------------
 
-autocmd Filetype html setlocal ts=2 sw=2 expandtab
-autocmd Filetype jst setlocal ts=2 sw=2 expandtab
-autocmd Filetype xml setlocal ts=2 sw=2 expandtab
-autocmd Filetype ruby setlocal ts=2 sw=2 expandtab
-autocmd Filetype javascript setlocal ts=4 sw=4 sts=0 expandtab
-autocmd Filetype coffee setlocal ts=2 sw=2 expandtab
-autocmd Filetype haskell setlocal ts=4 sw=4 noexpandtab
-autocmd Filetype objc setlocal ts=4 sw=4 sts=0 expandtab
-autocmd Filetype markdown setlocal ts=4 sw=4 expandtab fo-=c
+autocmd! Filetype html setlocal ts=2 sw=2 expandtab
+autocmd! Filetype jst setlocal ts=2 sw=2 expandtab
+autocmd! Filetype xml setlocal ts=2 sw=2 expandtab
+autocmd! Filetype ruby setlocal ts=2 sw=2 expandtab
+autocmd! Filetype javascript setlocal ts=4 sw=4 sts=0 expandtab
+autocmd! Filetype coffee setlocal ts=2 sw=2 expandtab
+autocmd! Filetype haskell setlocal ts=4 sw=4 noexpandtab
+autocmd! Filetype objc setlocal ts=4 sw=4 sts=0 expandtab
+autocmd! Filetype markdown setlocal ts=4 sw=4 expandtab fo-=c
 
 " markdown: 
-autocmd FileType markdown let b:surround_109 = "<< \r >>"
+
+" Marked.app preview
+noremap <leader>mm :!mark %<cr><cr>
+
+autocmd! FileType markdown let b:surround_109 = "<< \r >>"
+
+au! FileType markdown syn sync fromstart
+
+" Extending tabar to support markdown (additionally to the ~/.ctags-file!)
+
+let g:tagbar_type_md = {
+  \ 'ctagstype' : 'markdown',
+  \ 'kinds' : [
+    \ 'h:Heading_L1',
+    \ 'i:Heading_L2',
+    \ 'k:Heading_L3'
+  \ ]
+\ }
+
+function! DistractionFreeWriting()
+	" colorscheme iawriter
+	" set background=light
+	set gfn=Cousine:h14                " font to use
+	set linespace=4
+	set lines=100 columns=90            " size of the editable area
+	set textwidth=90		   " same as cols
+	set laststatus=0                   " don't show status line
+	set noruler                        " don't show ruler
+	set nonumber
+	set fullscreen                     " go to fullscreen editing mode
+	set linebreak                      " break the lines on words
+endfunction
+
+function! NormalWriting()
+	" colorscheme solarized
+	" set background=dark
+	set gfn=Pragmata\ TT:h14           " font to normally
+	set linespace=0
+	set lines=100 columns=100           " size of the editable area
+	set textwidth=0	 		   " same as cols
+	set laststatus=1                   " don't show status line
+	set ruler                          " don't show ruler
+	set number
+	set nofullscreen                   " go to fullscreen editing mode
+	set linebreak                      " break the lines on words
+endfunction
+
+command! Writer :call DistractionFreeWriting()
+command! WriterNormal :call NormalWriting()
+
+inoremap <silent> <Bar>   <Bar><Esc>:call AlignIt()<CR>a
+ 
+function! AlignIt()
+  let p = '^\s*|\s.*\s|\s*$'
+  if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+    let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+    let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+    Tabularize/|/l1
+    normal! 0
+    call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+  endif
+endfunction
+
+vnoremap <leader>t :call <SID>table()<cr>
+function! s:table() range
+   exe "'<,'>Tab /|"
+   let hsepline= substitute(getline("."),'[^|]','-','g')
+   exe "norm! o" .  hsepline
+   exe "'<,'>s/-|/ |/g"
+   exe "'<,'>s/|-/| /g"
+   exe "'<,'>s/^| \\|\\s*|$\\||//g"
+endfunction
+
+command! -range=% Rst :'<,'>!pandoc -f markdown -t rst
+
+nnoremap <leader>pr :!/Users/cormac/dotfiles/bin/markdown2pdf %; open %:r.pdf<cr>

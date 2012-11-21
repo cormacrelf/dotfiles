@@ -12,3 +12,5 @@ alias bi="brew install"
 alias gi="gem install"
 
 alias vime="vim -u ~/.vimencrypt -x"
+# Disable capturing of <C-s> by tty
+alias vim="stty stop '' -ixoff ; vim"

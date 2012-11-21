@@ -1,25 +1,33 @@
-"set guifont=Menlo\ for\ Powerline:h14
-"set guifont=Inconsolata-dz\ for\ Powerline:h12
-"set guifont=Pragmata\ TT:h13
+" set guifont=Menlo\ for\ Powerline:h14
+" set guifont=Skyhook\ Mono:h16
+" set guifont=Ubuntu\ Mono:h15
+" set guifont=M+\ 1m\ regular:h14
+" set guifont=DejaVu\ Sans\ Mono:h14
+" set guifont=Monaco:h13
+" set guifont=Envy\ Code\ R\ for\ Powerline:h13
+" set guifont=Inconsolata-dz:h14
+set guifont=Pragmata\ TT:h14
+" set guifont=Dark\ Courier:h16
+" set guifont=Cousine:h14
 
-set guifont=M+\ 1m\ regular:h14
-set noantialias
+set antialias
 
-"let g:writer_guifont="Inconsolata-dz:h16"
+" let g:writer_guifont="Inconsolata-dz:h16"
 
-set anti
-set lines=50 columns=100
-set guioptions=egmrt
+set lines=100 columns=102
+set guioptions=egmt
 
 if has('gui_macvim')
   nnoremap <silent> <SwipeLeft> :macaction _cycleWindowsBackwards:<CR>
   nnoremap <silent> <SwipeRight> :macaction _cycleWindows:<CR>
   set macmeta
   macmenu &Tools.Make key=<nop>
+  set fuoptions=background:Normal    " macvim specific setting for 
+				     " editor's background colour
 endif
 
 " automatically reload vimrc when it's saved
-au BufWritePost .gvimrc so ~/.gvimrc
+au! BufWritePost .gvimrc so ~/.gvimrc
 
 " C-TAB and C-SHIFT-TAB cycle tabs forward and backward
 nmap <c-tab> :tabnext<cr>
