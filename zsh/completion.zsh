@@ -5,3 +5,4 @@ zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 zstyle ':completion:*' insert-tab pending
 
 fpath=(/usr/local/share/zsh-completions $fpath)
+fpath=(/usr/local/share/zsh/functions $fpath)

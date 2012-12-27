@@ -17,7 +17,7 @@ export DYLD_FALLBACK_LIBRARY_PATH
 
 
 # your project folder that we can `c [tab]` to
-export PROJECTS=~/Dropbox/Code
+export code=~/Dropbox/Code
 
 # source every .zsh file in this rep
 for config_file ($DOT/**/*^lib/*.zsh) source $config_file
@@ -31,7 +31,7 @@ fi
 
 # initialize autocomplete here, otherwise functions won't be loaded
 autoload -U compinit
-compinit
+compinit -i
 
 # load every completion after autocomplete loads
 for config_file ($DOT/**/completion.sh) source $config_file
