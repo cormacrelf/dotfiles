@@ -32,6 +32,43 @@ task :install do
     end
     `ln -s "$PWD/#{linkable}" "#{target}"`
   end
+
+  pandoc_templates = Dir.glob("./pandoc/templates/*")
+
+  skip_all = false
+  overwrite_all = false
+  backup_all = false
+
+  puts "Enter the directory for pandoc templates. If you don't want to install them, just hit enter."
+  target_dir = gets.chomp
+
+  if target_dir != "" 
+    pandoc_templates.each do |template|
+      overwrite = false
+      backup = false
+
+      file = template.split('/').last
+      target = target_dir + "/" + "#{file}"
+
+      if File.exists?(target) || File.symlink?(target)
+        unless skip_all || overwrite_all || backup_all
+          puts "File already exists: #{target}, what do you want to do? [s]kip, [S]kip all, [o]verwrite, [O]verwrite all, [b]ackup, [B]ackup all"
+          case STDIN.gets.chomp
+          when 'o' then overwrite = true
+          when 'b' then backup = true
+          when 'O' then overwrite_all = true
+          when 'B' then backup_all = true
+          when 'S' then skip_all = true
+          when 's' then next
+          end
+        end
+        FileUtils.rm_rf(target) if overwrite || overwrite_all
+        `mv "#{target_dir}/#{file}" "#{target_dir}/#{file}.backup"` if backup || backup_all
+      end
+      `ln -s "$PWD/#{template}" "#{target}"`
+    end
+  end
+  
 end
 
 task :uninstall do
