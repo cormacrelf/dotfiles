@@ -4,25 +4,78 @@ INPUT=$1
 OUTPUT="`echo $1 | cut -f 1 -d .`.pdf"
 # DIR="`echo $1 | cut -f 1 -d . | cut -f 1 -d '/'`"
 shift
+MODE=$1
+shift
 ARGS=$@
 
-# echo "input: $INPUT"
-# echo "output: $OUTPUT"
-# echo "args: $ARGS"
+# Defaults
+parindent="0pt"
+parskip="14pt plus 2pt minus 1pt"
 
-pandoc -f markdown $INPUT \
+if [[ $MODE == "--draft" ]]; then
+	mainfont="Courier Prime"
+	sansfont="Courier Prime"
+	monofont="Courier Prime"
+	fontsize="12pt"
+	linespace="1.5"
+elif [[ $MODE == "--final" ]]; then
+	mainfont="Adobe Caslon Pro"
+	sansfont="Helvetica"
+	monofont="Courier Prime"
+	fontsize="12pt"
+	linespace="1.7"
+elif [[ $MODE == "--prose" ]]; then
+	mainfont="Adobe Caslon Pro"
+	sansfont="Helvetica"
+	monofont="Courier Prime"
+	fontsize="12pt"
+	linespace="1.5"
+	parindent="12pt"
+	parskip="8pt"
+elif [[ $MODE == "--gatsby" ]]; then
+	mainfont="Courier Prime"
+	sansfont="Courier Prime"
+	monofont="Courier Prime"
+	fontsize="12pt"
+	linespace="1.3"
+	parindent="12pt"
+	parskip="2pt"
+elif [[ $MODE == "--modal" ]]; then
+	mainfont="Dark Courier"
+	sansfont="Dark Courier"
+	monofont="Dark Courier"
+	fontsize="12pt"
+	linespace="1.4"
+else
+	mainfont="Helvetica"
+	sansfont="Helvetica"
+	monofont="Courier Prime"
+	fontsize="12pt"
+	linespace="1.2"
+fi
+
+
+echo "input: $INPUT"
+echo "output: $OUTPUT"
+echo "mode: $MODE"
+echo "args: $ARGS"
+
+pandoc -f markdown+line_blocks $INPUT \
     -o $OUTPUT \
+    $ARGS \
     -V geometry:"a4paper" \
     -V papersize:"a4paper" \
-    -V margin:"1.2in" \
-    -V mainfont="Adobe Caslon Pro" \
-    -V sansfont="Helvetica" \
-    -V monofont="Pragmata TT" \
-    -V fontsize="12pt" \
+    -V margin:"3cm" \
+    -V mainfont="$mainfont" \
+    -V sansfont="$sansfont" \
+    -V monofont="$monofont" \
+    -V fontsize="$fontsize" \
+    -V linespace="$linespace" \
+    -V parindent="$parindent" \
+    -V parskip="$parskip" \
     --highlight-style haddock \
     --latex-engine xelatex \
     -S -s \
-    $ARGS \
     # --bibliography="$DIR/citations.bib" \
 
 echo "PDF written to $OUTPUT"
