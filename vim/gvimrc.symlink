@@ -6,7 +6,8 @@
 " set guifont=Monaco:h13
 " set guifont=Envy\ Code\ R\ for\ Powerline:h13
 " set guifont=Inconsolata-dz:h14
-set guifont=Pragmata\ TT:h14
+" set guifont=Pragmata\ TT:h14
+set gfn=Source\ Code\ Pro\ for\ Powerline:h13                " font to use
 " set guifont=Dark\ Courier:h16
 " set guifont=Cousine:h14
 
@@ -14,8 +15,15 @@ set antialias
 
 " let g:writer_guifont="Inconsolata-dz:h16"
 
-set lines=100 columns=102
+set lines=47
+set columns=102
 set guioptions=egmt
+
+let g:fullscreen_colorscheme = "iawriter"
+let g:fullscreen_font = "Cousine:h14"
+let g:normal_colorscheme = "solarized"
+let g:normal_font="Pragmata\ TT:h14"
+
 
 if has('gui_macvim')
   nnoremap <silent> <SwipeLeft> :macaction _cycleWindowsBackwards:<CR>
