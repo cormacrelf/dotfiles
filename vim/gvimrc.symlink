@@ -7,15 +7,20 @@
 " set guifont=Envy\ Code\ R\ for\ Powerline:h13
 " set guifont=Inconsolata-dz:h14
 " set guifont=Pragmata\ TT:h14
-set gfn=Source\ Code\ Pro\ for\ Powerline:h13                " font to use
+" set gfn=Source\ Code\ Pro\ for\ Powerline:h13                " font to use
 " set guifont=Dark\ Courier:h16
 " set guifont=Cousine:h14
+set guifont=Input:h12
+set linespace=4
 
 set antialias
 
+colorscheme gotham
+exec "AirlineTheme gotham"
+
 " let g:writer_guifont="Inconsolata-dz:h16"
 
-set lines=47
+set lines=53
 set columns=102
 set guioptions=egmt
 
