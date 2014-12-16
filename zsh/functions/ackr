@@ -1,0 +1,5 @@
+pattern="$1"
+replacement="$2"
+shift 2
+echo "$pattern $replacement" > file.txt
+ack -l "$pattern" $@ | xargs perl -pi -E "s/$pattern/$replacement/g"

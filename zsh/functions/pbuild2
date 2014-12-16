@@ -1,0 +1,1 @@
+make -f $HOME/.pandoc/Makefile -s $@

@@ -1,5 +1,6 @@
 hash -d dk="/Users/Cormac/Desktop"
 hash -d dl="/Users/Cormac/Downloads"
 hash -d co="/Users/Cormac/Dropbox/Code"
+hash -d blog="/Users/Cormac/Dropbox/Code/blog/"
 hash -d xc="/Users/Cormac/Dropbox/Xcode"
 hash -d db="/Users/Cormac/Dropbox"
