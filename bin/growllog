@@ -1,0 +1,3 @@
+#!/bin/sh
+
+/usr/bin/tail -Fqn 0 $@ | /usr/local/bin/php -r 'while ($m = fgets(STDIN)) shell_exec("growlnotify -p 0 Adium -a /Applications/Adium.app -m ". escapeshellarg($m));'

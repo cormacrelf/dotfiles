@@ -1,0 +1,4 @@
+#!/bin/sh
+markdown2pdf $@
+OUTPUT="`echo $1 | cut -f 1 -d .`.pdf"
+open -a Preview $OUTPUT
