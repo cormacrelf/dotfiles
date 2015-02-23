@@ -1,9 +1,3 @@
-if [[ -n $SSH_CONNECTION ]]; then
-  export PS1='%m:%3~$(git_info_for_prompt)%# '
-else
-  export PS1='%3~$(git_info_for_prompt)%# '
-fi
-
 eval `gdircolors $DOT/zsh/dircolors.ansi-dark`
 
 fpath=($DOT/zsh/functions $fpath)
