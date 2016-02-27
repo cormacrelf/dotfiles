@@ -20,6 +20,7 @@ setopt PROMPT_SUBST
 setopt CORRECT
 setopt COMPLETE_IN_WORD
 setopt IGNORE_EOF
+setopt INTERACTIVE_COMMENTS
 unsetopt nomatch
 
 setopt APPEND_HISTORY # adds history

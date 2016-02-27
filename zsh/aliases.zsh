@@ -15,4 +15,9 @@ alias vime="vim -u ~/.vimencrypt -x"
 
 alias pprint="lp -d Photosmart_C309a"
 
-alias vtop="vtop --theme wizard"
+alias vtop="vtop --theme brew"
+
+eval "$(thefuck --alias)"
+alias FUCK='fuck'
+
+alias curl-resume="curl -C - -L"
