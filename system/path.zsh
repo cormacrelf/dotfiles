@@ -3,7 +3,6 @@ export PATH=".:bin:$HOME/bin:/usr/local/share/npm/bin:$HOME/.cabal/bin:/usr/loca
 # GNU coreutils
 export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
 
-export GOROOT="/usr/local/go"
 export GOPATH="$HOME/go"
 
 export PATH="$PATH:$GOPATH/bin"
