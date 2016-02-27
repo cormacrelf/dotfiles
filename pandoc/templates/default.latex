@@ -19,6 +19,9 @@
 % Chemistry
 \usepackage[version=3]{mhchem}
 
+% Fitch-style Natural Deduction Proofs
+\usepackage{fitch}
+
 % Spacing
 \usepackage{setspace}
 \usepackage{parskip}
