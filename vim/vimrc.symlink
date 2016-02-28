@@ -1,526 +1,971 @@
-" vim: set nospell: set noswapfile set nocompatible
+" vim: set nospell noswapfile nocompatible
 
-
-set shell=/bin/zsh
-let $PATH =  expand("~/Library/Haskell/bin/") . ":" . expand("/usr/local/bin") . ":" . $PATH
+set shell=/bin/bash
+let $PATH = expand("~/bin").":".expand("~/dotfiles/bin/").":".expand("~/.cabal/bin/").":".expand("/usr/local/bin").":".$PATH
 
 set nocompatible
-syntax on
 filetype off
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
-source ~/.vim/vundlerc.vim
+
+set rtp+=~/.vim/bundle/Vundle.vim
+call vundle#begin()
+so ~/.vim/vundlerc.vim
+call vundle#end()
+
 filetype plugin indent on
-" 
-" call yankstack#setup() " do this first so any yank mappings still cache
-" 
-" set thesaurus+=/Users/cormac/lib/mthesaur.txt
-" 
-" if filereadable("~/.vim/private.vim")
-" 	so ~/.vim/private.vim
-" endif
-" 
-" set noswapfile
-" au BufEnter /tmp/crontab.* setl backupcopy=yes
-" 
-" " ----------------------------------------------------------------------------
-" "  Text Formatting
-" " ----------------------------------------------------------------------------
-" 
-" " let g:hybrid_use_Xresources = 1
+syntax on
+
+call yankstack#setup()        " do this first so any yank mappings still cache
+
+set thesaurus+=/Users/cormac/lib/mthesaur.txt
+
+if filereadable("~/.vim/private.vim")
+    so ~/.vim/private.vim
+endif
+
+set noswapfile
+au BufEnter /tmp/crontab.* setl backupcopy=yes
+
+" ----------------------------------------------------------------------------
+"  Text Formatting
+" ----------------------------------------------------------------------------
+
 " set background=dark
-" colorscheme molokai
-" 
-" " Map toggling of background colour to <F5>
-" call togglebg#map("<F5>")
-" 
-" set autoindent		   " automatic indent new lines
-" set smartindent		   " be smart about it: actually, use filetype
-" inoremap # X<BS>#
-" set wrap		 " wrap lines
-" set formatoptions=w1tqlrocn "a
-" set nojs
-" set lbr
-" set smarttab		   " fuck tabs
-" " set formatoptions+=n	   " support for numbered/bullet lists
-" " set textwidth=1000	   " wrap at x chars by default
-" set virtualedit=block	   " allow virtual edit in visual block ..
-" set nofoldenable	   " don't automatically close all folds initially
-" set foldmethod=syntax	   " how to determine folds
-" set listchars=tab:▸\ ,eol:¬
-" 
-" " ----------------------------------------------------------------------------
-" "  Leader Mappings
-" " ----------------------------------------------------------------------------
-" 
-" " lead with , and use '\' for the original functionality
-" let mapleader = ","
-" let maplocalleader = "\\"
-" map <C-;> ,
-" 
-" " create vsplit and switch to it
-" nnoremap <leader>w <C-w>v<C-w>l
-" 
-" " Shortcut to rapidly toggle `set list`
-" nmap <leader>l :set list!<CR>
-" 
-" " use NERDTree on ,d
-" map <leader>d :execute 'NERDTreeToggle ' . getcwd()<CR>
-" map <leader>D :NERDTreeFind<CR>
-" 
-" " copy default register to clipboard
-" nmap <leader>c :let @+=@"<cr>
-" 
-" " new scratch buffer on
-" nmap <leader><Tab> :Sscratch<CR>
-" 
-" " toggle spelling
-" nmap <leader>Sp :setlocal spell!<cr>
-" 
-" " quick delete buffer
-" nmap <leader>bd :bd<CR>
-" 
-" " Find merge conflict markers
-" nmap <silent> <leader>cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
-" " select all
-" map <Leader>a ggVG
-" 
-" map <leader>/ <Plug>NERDCommenterToggle
-" 
-" map <D-<> :tabe ~/.vimrc<cr>
-" 
-" map <leader>nc :NeoComplCacheToggle<cr>
-" 
-" " toggle typewriter mode
-" nnoremap <Leader>zz :let &scrolloff=999-&scrolloff<CR>
-" 
-" " Look up in online French dictionary
-" nmap <leader>wr viw"hy:!open "http://wordreference.com/enfr/<c-r>h"<cr><cr>
-" 
-" " toggle undo tree
-" nnoremap <leader>g :GundoToggle<CR>
-" 
-" " word count
-" nnoremap <leader>wc g<c-g>
-" 
-" 
-" " ----------------------------------------------------------------------------
-" "  Remapping
-" " ----------------------------------------------------------------------------
-" 
-" " replace using current selection
-" vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
-" 
-" " find using current selection
-" vnoremap f "hy/<C-r>h<cr>
-" 
-" " Substitute
-" nnoremap <leader>s :%s//g<left><left>
-" vnoremap <leader>s :s//g<left><left>
-" 
+" if !has('gui_running')
+"     colorscheme gruvbox
+"     let g:airline_theme='gruvbox'
+" endif
+
+set background=light
+let g:pencil_neutral_headings = 1
+colorscheme pencil
+
+
+" Map toggling of background colour to <F5>
+call togglebg#map("<F5>")
+nnoremap <F4> :set lines=1000<cr>
+nnoremap <F3> :set fullscreen!<cr>:echo ""<cr>
+
+set autoindent       " automatic indent new lines
+set cindent      " be smart about it: actually, use filetype
+inoremap # X<BS>#
+set wrap     " wrap lines
+set nojs
+set lbr
+set smarttab       " fuck tabs
+set com=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,b:-
+set virtualedit=block    " allow virtual edit in visual block ..
+set nofoldenable     " don't automatically close all folds initially
+set foldmethod=syntax    " how to determine folds
+set listchars=tab:▸\ ,eol:¬,precedes:<,extends:>
+set conceallevel=0
+
+" ----------------------------------------------------------------------------
+"  Leader Mappings
+" ----------------------------------------------------------------------------
+
+" lead with , and use '\' for the original functionality
+let mapleader = ","
+let maplocalleader = "\\"
+nnoremap <M-;> ,
+" nnoremap ; ;
+
+" create vsplit and switch to it
+noremap <leader>w <C-w>v<C-w>l
+
+" Shortcut to rapidly toggle `set list`
+noremap <leader>l :set list!<CR>
+
+" use NERDTree on ,d
+" Plus more nerdtree goodies
+" noremap <leader>d :execute 'NERDTreeToggle ' . getcwd()<CR>
+noremap <leader>d :NERDTreeTabsToggle<CR>
+noremap <leader>D :NERDTreeFocusToggle<CR>
+let NERDTreeIgnore = ['\.pyc$']
+let g:nerdtree_tabs_open_on_gui_startup = 0
+let g:NERDTreeMinimalUI = 1
+
+" copy default register to clipboard
+noremap <leader>c :let @+=@"<cr>:echo "copied!"<cr>
+noremap <leader>v :let @"=@+<cr>:echo "pasted!"<cr>
+
+" new scratch buffer on
+nnoremap <leader><Tab> :Sscratch<CR>
+
+" toggle spelling
+nnoremap <leader>Sp :setlocal spell!<cr>
+
+" quick delete buffer
+nnoremap <leader>bd :bd<CR>
+nnoremap <leader>bD :bd!<CR>
+" exit a buffer or split
+nnoremap <leader>q :q<CR>
+
+" Find merge conflict markers
+nnoremap <silent> <leader>Cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
+" select all
+noremap <Leader>a ggVG
+
+" editing vim config
+nnoremap <D-<>       :tabe ~/.vimrc<cr>
+nnoremap <leader>Vs  :so   ~/.vimrc<cr>
+nnoremap <leader>Ve  :tabe ~/.vimrc<cr>
+nnoremap <leader>VVe :tabe ~/.vim/vundlerc.vim<cr>
+
+" toggle typewriter mode
+nnoremap <Leader>zz :let &scrolloff=999-&scrolloff<CR>
+
+" Look up in online French dictionary
+nnoremap <leader>wr viw"hy:!open "http://wordreference.com/enfr/<c-r>h"<cr><cr>
+
+" Look up in Mac dictionary
+nnoremap <leader>K viw"hy:!open "dict://<c-r>h"<cr><cr>
+
+" toggle undo tree
+nnoremap <leader>g :GundoToggle<CR>
+
+" word count
+nnoremap <leader>wc :!wordcount %<cr>
+
+" errors
+" nnoremap <leader>j :cnext<cr>zz
+" nnoremap <leader>k :cprev<cr>zz
+
+" ----------------------------------------------------------------------------
+"  Remapping
+" ----------------------------------------------------------------------------
+
+" replace using current selection
+vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
+
+" find using current selection
+vnoremap <C-f> "hy/<C-r>h<cr>
+
+" Substitute
+nnoremap <leader>s :%s//g<left><left>
+nnoremap <leader>S :%s/\C\v/gc<left><left>
+vnoremap <leader>s :s//g<left><left>
+
 " nnoremap <Space> <C-d>
 " nnoremap <S-Space> <C-u>
-" 
-" " reflow paragraph with Q in normal and visual mode
-" nnoremap Q m`gqap``
-" vnoremap Q gq
-" 
-" " sane movement with wrap turned on
-" nnoremap j gj
-" nnoremap k gk
-" vnoremap j gj
-" vnoremap k gk
-" nnoremap <Down> gj
-" nnoremap <Up> gk
-" vnoremap <Down> gj
-" vnoremap <Up> gk
-" inoremap <Down> <C-o>gj
-" inoremap <Up> <C-o>gk
-" 
-" " also for EOL, etc
-" nnoremap $ g$
-" nnoremap 0 g0
-" nnoremap A g$a
-" nnoremap I g0i
-" 
-" " make Y behave like other capitals
-" map Y y$
-" 
-" " Increment & decrement
-" nnoremap + <C-a>
-" nnoremap - <C-x>
-" 
-" vmap gd "_dP
-" 
-" " don't let plugins override this one
+
+" reflow paragraph with Q in normal and visual mode
+" & approximately get back to where we were
+nnoremap Q m`gqap``
+vnoremap Q gq
+
+" wheel
+let g:wheel#map#up   = '<D-k>'
+let g:wheel#map#down = '<D-j>'
+let g:wheel#map#mouse = 0
+
+" also for EOL, etc
+nnoremap $ g$
+nnoremap 0 g0
+nnoremap A g$a
+nnoremap I g0i
+
+" make Y behave like other capitals
+map Y y$
+
+" Increment & decrement
+nnoremap + <C-a>
+nnoremap - <C-x>
+
+" replace selection with " register
+vmap gd "_dP
+
+" don't let plugins override this one
 " vmap s s
-" 
-" vnoremap < <gv
-" vnoremap > >gv
-" 
-" map <M-Tab> :bn<CR>
-" map <M-S-Tab> :bp<CR>
-" 
-" " TextMate-like indentation, less movement required
-" imap <D-]> <C-t>
-" imap <D-[> <C-d>
-" 
-" imap <C-a> <C-o>diw
-" 
-" " Use Mac OS X style accents, works for (at least) French.
-" imap <M-e> <C-k>'
-" imap <M-`> <C-k>`
-" imap <M-i> <C-k>^
-" imap <M-u> <C-k>:
-" imap <M-c> <C-k>,c
-" imap <M-S-c> <C-k>,C
-" 
-" " Split lines
-" nnoremap gs i<cr><esc>
-" 
-" " Quickreturn
-" inoremap <c-cr> <esc>A<cr>
-" inoremap <s-cr> <esc>A;<cr>
-" 
-" " Map <F8> to toggle paste mode, turn paste off when we leave
-" set pastetoggle=<F8>
-" au! InsertLeave * set nopaste
-" 
-" " Use <C-s> to save
-" nnoremap <C-s> :w<cr>
-" 
-" " Open CtrlP buffer explorer with ,b
-" nnoremap <C-b> :CtrlPBuffer<cr>
-" " Open MRU files
-" nnoremap <C-M-P> :CtrlPMRUFiles<cr>
-" 
-" nmap <silent> <Leader>rb :w !ruby<CR>
-" 
-" " ----------------------------------------------------------------------------
-" "  Commands ------------------------------------------------------------------
-" " ----------------------------------------------------------------------------
-" 
-" " Allow saving of files as sudo when I forgot to start vim using sudo.
-" cmap w!! %!sudo tee > /dev/null %
-" 
-" " Make :Q work just as well
-" command! Q q
-" 
-" " Set language quickly
-" command! FR setlocal spl=fr
-" command! EN setlocal spl=en_au
-" 
-" " ----------------------------------------------------------------------------
-" " Events
-" " ----------------------------------------------------------------------------
-" 
-" 
-" " ----------------------------------------------------------------------------
-" "  UI
-" " ----------------------------------------------------------------------------
-" 
-" set ruler		   " show the cursor position all the time
-" set noshowcmd		   " don't display incomplete commands
-" set nolazyredraw	   " turn off lazy redraw
-" set number		   " line numbers
-" set wildmenu		   " turn on wild menu
-" set wildmode=list:longest,full
-" " set ch=2		     " command line height
-" set backspace=2		   " allow backspacing over everything in insert mode
-" set whichwrap+=<,>,h,l,[,] " backspace and cursor keys wrap to
-" set shortmess=filtIoOA	   " Shorten messages
-" set report=0		   " tell us about changes
-" set nostartofline	   " don't jump to the start of line when scrolling
-" set scrolloff=0		   " scroll early, give us a bit of context
-" set autoread		   " automatically read changes in files from other
-" 			   " applications
-" 
-" set splitright splitbelow  " when :[v]split-ting, go to the right/down
-" " set statusline=%F\ %m\ %{fugitive#statusline()}\ %y%=%l,%c\ %P
-" 
-" " autocmd vimenter * if !argc() | NERDTree | endif
-" " if no arguments passed to VIM, open up NERDTree.
-" "
-" if has("mouse")
-"   set mouse=a
-" endif
-" 
-" " ----------------------------------------------------------------------------
-" " Visual Cues
-" " ----------------------------------------------------------------------------
-" 
-" set showmatch		   " brackets/braces that is
-" set mat=1			   " duration to show matching brace (1/10 sec)
-" set incsearch		   " do incremental searching
-" set laststatus=2	   " always show the status line
-" set noshowmode
-" set ignorecase		   " ignore case when searching
-" set nohlsearch		   " don't highlight searches
-" nnoremap <leader>hl :set hlsearch!<cr>
-" set visualbell		   " shut the fuck up
-" set title
-" set hidden
-" set spl=en_au
-" 
-" " ---------------------------------------------------------------------------
-" " Strip all trailing whitespace in file
-" " ---------------------------------------------------------------------------
-" 
-" function! StripWhitespace ()
-" exec ':%s/ \+$//gc'
-" endfunction
-" map <leader>ws :call StripWhitespace ()<CR>
-" 
-" " ---------------------------------------------------------------------------
-" " Filetypes
-" " ---------------------------------------------------------------------------
-" 
-" autocmd! FileType objc setlocal shiftwidth=4 tabstop=4
-" 
-" compiler ruby	      " Enable compiler support for ruby
-" 
-" runtime macros/matchit.vim
-" 
-" " ---------------------------------------------------------------------------
-" " Plugin Configuration
-" " ---------------------------------------------------------------------------
-" 
-" " for pandoc speed
-" let g:pandoc_no_empty_implicits = 1
-" let g:pandoc_no_spans = 1
-" let g:pandoc_no_folding = 1
-" 
-" let g:neocomplcache_enable_at_startup = 1
-" " let g:neocomplcache_force_overwrite_completefunc=1
-" let g:clang_complete_auto = 1
-" let g:neocomplcache_use_vimproc = 1
-" 
-" " <CR>: close popup and save indent.
-" " inoremap <expr><CR>  neocomplcache#smart_close_popup() . "\<CR>"
-" 
-" " <C-h>, <BS>: close popup and delete backword char.
-" " inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-" " inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-" " inoremap <expr><C-y>  neocomplcache#close_popup()
-" " inoremap <expr><C-e>  neocomplcache#cancel_popup()
-" 
-" let g:vimclojure#HighlightBuiltins = 1
-" let g:vimclojure#ParenRainbow = 1
-" 
-" " Paredit
-" let g:paredit_electric_return = 1
-" 
-" " Powerline
-" python import sys; sys.path.append("/usr/local/lib/python2.7/site-packages/")
-" set rtp+=~/.vim/bundle/powerline/powerline/bindings/vim
-" let g:Powerline_symbols = "compatible"
-" let g:Powerline_theme = "default"
-" " let g:Powerline_colorscheme = "default"
-" 
-" " Airline
-" let g:airline_left_sep=''
-" let g:airline_right_sep=''
-" 
-" " Startify
-let g:startify_bookmarks = [ '~/.vimrc', '~/.vim/vundlerc.vim' ]
+
+" repeated indent and outdent lines in selection
+vnoremap < <gv
+vnoremap > >gv
+
+" like tab movement, but for buffers
+map <M-Tab> :bn<CR>
+map <M-S-Tab> :bp<CR>
+
+map <space> :bnext<cr>
+map <backspace> :bprev<cr>
+nnoremap <CR><CR> <CR>
+nnoremap <CR> :
+
+" TextMate-style indentation, less movement required
+imap <D-]> <C-t>
+imap <D-[> <C-d>
+
+" obvious
+imap <C-a> <C-o>diw
+
+" Use Mac OS X style accents, works for (at least) French.
+imap <M-e> <C-k>'
+imap <M-`> <C-k>`
+imap <M-i> <C-k>^
+imap <M-u> <C-k>:
+imap <M-c> <C-k>,c
+imap <M-S-c> <C-k>,C
+
+" Split lines
+nnoremap gs i<cr><esc>
+
+" Quickreturn
+inoremap <c-cr> <esc>A<cr>
+inoremap <s-cr> <esc>A;<cr>
+" retrospective semicolon
+nnoremap <s-cr> A;<cr><esc>
+nnoremap <m-cr> m`A;<esc>``
+nnoremap <m-;>  m`A;<esc>``
+
+" Use <C-s> to save
+nnoremap <C-s> :w<cr>
+
+" Open CtrlP buffer explorer with C-b
+nnoremap <C-b> :CtrlPBuffer<cr>
+
+" Open MRU files
+nnoremap <C-M-P> :CtrlPMRUFiles<cr>
+
+nmap <silent> <Leader>rb :w !ruby<CR>
+
+" ----------------------------------------------------------------------------
+"  Commands ------------------------------------------------------------------
+" ----------------------------------------------------------------------------
+
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! %!sudo tee > /dev/null %
+
+" Make :Q work just as well
+command! Q q
+
+" Set language quickly
+command! FR setlocal spl=fr
+command! EN setlocal spl=en_au
+
+" ----------------------------------------------------------------------------
+"  Spelling ------------------------------------------------------------------
+" ----------------------------------------------------------------------------
+
+" do an inline spell correction
+nnoremap z! wgea<c-x><c-s>
+
+" z[ corrects the last incorrect (red underline) word with 1z=.
+" repeatable: z[... corrects the last four.
+
+nmap z[ <Plug>CorrectLastSpellError
+nmap <Plug>CorrectLastSpellError m`[S"syiw1z="zyiw``
+\:silent! call repeat#set("\<Plug>CorrectLastSpellError", -1)<CR>
+\:echo "<C-r>s -> <C-r>z"<CR>
+
+nmap z{ <Plug>CorrectAnyLastSpellError
+nmap <Plug>CorrectAnyLastSpellError m`[s"syiw1z="zyiw``
+\:silent! call repeat#set("\<Plug>CorrectAnyLastSpellError", -1)<CR>
+\:echo "<C-r>s -> <C-r>z"<CR>
+
+nmap g[ <Plug>OkayLastSpellError
+nmap <Plug>OkayLastSpellError m`[Szg``
+\:silent! call repeat#set("\<Plug>OkayLastSpellError", -1)<CR>
+\:echo ""<CR>
+
+nmap [g <Plug>IgnoreLastSpellError
+nmap <Plug>IgnoreLastSpellError m`[SzG``
+\:silent! call repeat#set("\<Plug>IgnoreLastSpellError", -1)<CR>
+\:echo ""<CR>
+
+nmap z] <Plug>CorrectNextSpellError
+nmap <Plug>CorrectNextSpellError m`]S"syiw1z="zyiw``
+\:silent! call repeat#set("\<Plug>CorrectNextSpellError", -1)<CR>
+\:echo "<C-r>s -> <C-r>z"<CR>
+
+nmap z{ <Plug>CorrectAnyNextSpellError
+nmap <Plug>CorrectAnyNextSpellError m`]s"syiw1z="zyiw``
+\:silent! call repeat#set("\<Plug>CorrectAnyNextSpellError", -1)<CR>
+\:echo "<C-r>s -> <C-r>z"<CR>
+
+nmap g] <Plug>OkayNextSpellError
+nmap <Plug>OkayNextSpellError m`]Szg``
+\:silent! call repeat#set("\<Plug>OkayNextSpellError", -1)<CR>
+\:echo ""<CR>
+
+nmap ]g <Plug>IgnoreNextSpellError
+nmap <Plug>IgnoreNextSpellError m`]SzG``
+\:silent! call repeat#set("\<Plug>IgnoreNextSpellError", -1)<CR>
+\:echo ""<CR>
+
+nnoremap <F2> :call CycleLang()<CR>
+
+fun! CycleLang()
+    let langs = ['', 'en_au', 'fr']
+
+    let i = index(langs, &spl)
+    let j = (i+1)%len(langs)
+    let &l:spl = langs[j] " letlocal
+
+    if empty(&spl)
+        echo "nospell"
+        setlocal nospell
+    else
+        echo "spelling: ".&spl
+        setlocal spell
+    endif
+endfun
+
+" ----------------------------------------------------------------------------
+"  UI ------------------------------------------------------------------------
+" ----------------------------------------------------------------------------
+
+set ruler                       " show the cursor position all the time
+set noshowcmd                   " don't display incomplete commands
+" set nolazyredraw                " turn off lazy redraw
+set number                      " line numbers
+set wildmenu                    " turn on wild menu
+set wildmode=list:longest,full
+set backspace=2                 " allow backspacing over everything in insert mode
+set whichwrap+=<,>,h,l,[,]      " backspace and cursor keys wrap to
+set shortmess=filtIoOA          " Shorten messages
+set report=0                    " tell us about changes
+set nostartofline               " don't jump to the start of line when scrolling
+set scrolloff=1                 " scroll early, give us a bit of context
+set autoread                    " automatically read changes in files from other
+                                    " applications
+
+set splitright splitbelow  " when :[v]split-ting, go to the right/down
+
+" autocmd vimenter * if !argc() | NERDTree | endif
+" if no arguments passed to VIM, open up NERDTree.
+
+if has("mouse")
+    set mouse=a
+endif
+
+" ----------------------------------------------------------------------------
+" Visual Cues
+" ----------------------------------------------------------------------------
+
+set showmatch           " brackets/braces that is
+set mat=1               " duration to show matching brace (1/10 sec)
+set incsearch           " do incremental searching
+set laststatus=2        " always show the status line
+set noshowmode
+set ignorecase          " ignore case when searching
+set nohlsearch          " don't highlight searches
+set visualbell          " shut the fuck up
+set title
+set hidden
+set spl=en_au
+
+" ---------------------------------------------------------------------------
+" Strip all trailing whitespace in file
+" ---------------------------------------------------------------------------
+
+function! StripWhitespace ()
+exec ':%s/ \+$//gc'
+endfunction
+map <leader>ws :call StripWhitespace ()<CR>
+map <leader>wS :AirlineToggleWhitespace<CR>
+
+" ---------------------------------------------------------------------------
+" Filetypes
+" ---------------------------------------------------------------------------
+
+autocmd FileType ruby compiler ruby       " Enable compiler support for ruby
+
+runtime macros/matchit.vim
+
+let g:golang_goroot = "/usr/local/go/"
+" autocmd FileType go compiler golang
+
+au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
+au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
+
+" ---------------------------------------------------------------------------
+" Plugin Configuration
+" ---------------------------------------------------------------------------
+
+" javascript and JSX syntax
+
+let g:jsx_ext_required = 0
+
+" for pandoc speed
+let g:pandoc#syntax#style#emphases = 1
+let g:pandoc#syntax#style#underline_special = 0
+let g:pandoc#syntax#conceal#use = 0
+" let g:pantondoc_folding_fold_yaml = 1
+" stop making esc slow!
+let g:pandoc#modules#disabled = ["bibliographies"]
+let g:pandoc_use_embeds_in_codeblocks_for_langs = ["ruby", "haskell", "python",
+                                                  \ "go", "c", "scala", "clojure"]
+
+" splitjoin
+nnoremap <silent> J :<C-u>call <SID>try('SplitjoinJoin',  'J')<CR>
+nnoremap <silent> gs :<C-u>call <SID>try('SplitjoinSplit', "i\015")<CR>
+
+function! s:try(cmd, default)
+  if exists(':' . a:cmd) && !v:count
+    let tick = b:changedtick
+    execute a:cmd
+    if tick == b:changedtick
+      execute join(['normal!', a:default])
+    endif
+  else
+    execute join(['normal! ', v:count, a:default], '')
+  endif
+endfunction
+
+" dash.vim
+
+nmap <expr> K <SID>doc("\<Plug>DashSearch")
+nmap <expr> <Leader>k <SID>doc("\<Plug>DashGlobalSearch")
+
+function! s:doc(cmd)
+  if &keywordprg =~# '^man' && exists(':Dash')
+    return a:cmd
+  endif
+  return 'K'
+endfunction
+
+let g:vimclojure#HighlightBuiltins = 1
+let g:vimclojure#ParenRainbow = 1
+
+" Startify
+
+let g:startify_bookmarks = [
+            \ '~/.vimrc',
+            \ '~/.vim/vundlerc.vim',
+            \ '~/.gvimrc',
+            \ '~/Dropbox/Writing/nv/Movies.txt',
+            \ '/tmp/750words'
+\ ]
+
+let g:startify_files_number = 5
+
 let g:startify_custom_header = [
+\'',
+\'',
 \'            _________                                      __________       .__   _____ ',
 \'            \_   ___ \  ___________  _____ _____    ____   \______   \ ____ |  |_/ ____\ ',
 \'            /    \  \/ /  _ \_  __ \/     \\__  \ _/ ___\   |       _// __ \|  |\   __\ ',
 \'            \     \___(  <_> )  | \/  Y Y  \/ __ \\  \___   |    |   \  ___/|  |_|  |   ',
 \'             \______  /\____/|__|  |__|_|  (____  /\___  >  |____|_  /\___  >____/__|   ',
-\'                    \/                   \/     \/     \/          \/     \/            ', '', '' ]
-" 
-" " Tagbar
-" " nmap <f8> :TagbarToggle<CR>
-" 
-" " CtrlP
-" let g:ctrlp_extensions = ['tag']
-" 
-" " Distraction Free Writing
-" let g:fullscreen_font = "Adobe Source Code Pro:h14"
-" 
-" " ---------------------------------------------------------------------------
-" " Vimbits
-" " ---------------------------------------------------------------------------
-" 
-" " Easy split navigation
-" noremap <C-h> <C-w>h
-" noremap <C-j> <C-w>j
-" noremap <C-k> <C-w>k
-" noremap <C-l> <C-w>l
-" 
-" " Insert one character
-" " nnoremap <C-i> :exec "normal i".nr2char(getchar())."\e"<CR>
-" " nnoremap <C-i>a :exec "normal a".nr2char(getchar())."\e"<CR>
-" 
-" " Better command-line editing (:O emacs mode!)
-" cnoremap <C-j> <t_kd>
-" cnoremap <C-k> <t_ku>
-" cnoremap <C-a> <Home>
-" cnoremap <C-e> <End>
-" 
-" " automatically reload vimrc when it's saved
-" " au BufWritePost .vimrc so ~/.vimrc
-" " au BufWritePost ~/.vim/vundlerc.vim so ~/.vim/vundlerc.vim
-" 
-" " Maps Alt-[h,j,k,l] to resizing a window split
+\'                    \/                   \/     \/     \/          \/     \/            ',
+\'',
+\'' ]
+
+" CtrlP
+let g:ctrlp_extensions = ['tag']
+" Use Silver Searcher for finding files
+" It uses .gitignore
+" But don't let it index $HOME!
+" let g:ctrlp_user_command = ['.git/',    'cd %s && git ls-files -co --exclude-standard',
+"                           \ 'cd %s && find . -type f']
+                 " 2: ['.git/', 'cd %s && git ls-files -co --exclude-standard']
+let g:ctrlp_user_command = {
+    \ 'types': { 1: ['Desktop/', 'find %s -type f -maxdepth 2'],
+    \            2: ['.git/', 'ag %s -l --nocolor -g ""']
+    \ },
+    \ 'fallback': 'ag %s -l --nocolor -g ""'
+\ }
+
+" delimitMate
+
+" delimitMate_apostrophes = ''
+" delimitMate_autoclose = 1
+" delimitMate_balance_matchpairs = 0
+" delimitMate_eol_marker = ''
+" delimitMate_excluded_ft = ''
+" delimitMate_excluded_regions = 'Comment'
+let g:delimitMate_expand_cr = 2
+let g:delimitMate_expand_space = 1
+let g:delimitMate_jump_expansion = 1
+let g:delimitMate_matchpairs = '(:),{:},[:]'
+" delimitMate_nesting_quotes = []
+" delimitMate_quotes = '" '' `'
+
+" Syntastic checking
+let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
+nnoremap <leader>e :SyntasticCheck<CR> :SyntasticToggleMode<CR>
+
+
+" ---------------------------------------------------------------------------
+" Vimbits
+" ---------------------------------------------------------------------------
+
+" Easy split navigation
+noremap <C-h> <C-w>h
+noremap <C-j> <C-w>j
+noremap <C-k> <C-w>k
+noremap <C-l> <C-w>l
+
+" Better command-line editing (:O emacs mode!)
+cnoremap <C-j> <t_kd>
+cnoremap <C-k> <t_ku>
+cnoremap <C-a> <Home>
+cnoremap <C-e> <End>
+
+" Maps Alt-[h,j,k,l] to resizing a window split
 " map <silent> <A-h> <C-w>5<
 " map <silent> <A-l> <C-w>5>
 " map <silent> <A-j> <C-W>5-
 " map <silent> <A-k> <C-W>5+
-" 
-" " Accordion style
-" map <silent> <S-A-h> <C-w>h<C-w><bar>
-" map <silent> <S-A-l> <C-w>l<C-w><bar>
-" map <silent> <S-A-j> <C-w>j<C-w>_
-" map <silent> <S-A-k> <C-w>k<C-w>_
-" map <silent> <S-A-k> <C-w>k<C-w>_
-" 
-" " All windows in equal space
-" map <silent> <S-Space> <C-w>=
-" 
-" " Maximize window
-" map <silent> <C-Space> <C-w><bar><C-w>_
-" 
-" set winminheight=0
-" 
-" " ---------------------------------------------------------------------------
-" " Random Definitions
-" " ---------------------------------------------------------------------------
-" 
-" function! NextIndent(exclusive, fwd, lowerlevel, skipblanks)
-"   let line = line('.')
-"   let column = col('.')
-"   let lastline = line('$')
-"   let indent = indent(line)
-"   let stepvalue = a:fwd ? 1 : -1
-"   while (line > 0 && line <= lastline)
-"     let line = line + stepvalue
-"     if ( ! a:lowerlevel && indent(line) == indent ||
-"           \ a:lowerlevel && indent(line) < indent)
-"       if (! a:skipblanks || strlen(getline(line)) > 0)
-"         if (a:exclusive)
-"           let line = line - stepvalue
-"         endif
-"         exe line
-"         exe "normal " column . "|"
-"         return
-"       endif
-"     endif
-"   endwhile
-" endfunction
-" 
-" " Moving back and forth between lines of same or lower indentation.
-" nnoremap <silent> [l :call NextIndent(0, 0, 0, 1)<CR>
-" nnoremap <silent> ]l :call NextIndent(0, 1, 0, 1)<CR>
-" nnoremap <silent> [L :call NextIndent(0, 0, 1, 1)<CR>
-" nnoremap <silent> ]L :call NextIndent(0, 1, 1, 1)<CR>
-" vnoremap <silent> [l <Esc>:call NextIndent(0, 0, 0, 1)<CR>m'gv''
-" vnoremap <silent> ]l <Esc>:call NextIndent(0, 1, 0, 1)<CR>m'gv''
-" vnoremap <silent> [L <Esc>:call NextIndent(0, 0, 1, 1)<CR>m'gv''
-" vnoremap <silent> ]L <Esc>:call NextIndent(0, 1, 1, 1)<CR>m'gv''
-" onoremap <silent> [l :call NextIndent(0, 0, 0, 1)<CR>
-" onoremap <silent> ]l :call NextIndent(0, 1, 0, 1)<CR>
-" onoremap <silent> [L :call NextIndent(1, 0, 1, 1)<CR>
-" onoremap <silent> ]L :call NextIndent(1, 1, 1, 1)<CR>
-" 
-" 
-" " ---------------------------------------------------------------------------
-" " Indentation
-" " ---------------------------------------------------------------------------
-" 
-" autocmd! Filetype html setlocal ts=2 sw=2 sts=2 expandtab
-" autocmd! Filetype css setlocal ts=4 sw=4 sts=4 expandtab
-" autocmd! Filetype scss setlocal ts=4 sw=4 sts=4 expandtab
-" autocmd! Filetype less setlocal ts=4 sw=4 sts=4 expandtab
-" autocmd! Filetype jst setlocal ts=2 sw=2 sts=2 expandtab
-" autocmd! Filetype xml setlocal ts=2 sw=2 sts=2 expandtab
-" autocmd! Filetype ruby setlocal ts=2 sw=2 sts=2 expandtab
-" autocmd! Filetype eruby setlocal ts=2 sw=2 sts=2 expandtab
-" autocmd! Filetype javascript setlocal ts=4 sw=4 sts=4 expandtab
-" autocmd! Filetype coffee setlocal ts=2 sw=2 sts=2 expandtab
-" autocmd! Filetype haskell setlocal ts=4 sw=4 noexpandtab
-" autocmd! Filetype objc setlocal ts=4 sw=4 sts=4 expandtab
-" autocmd! Filetype python setlocal ts=4 sw=4 sts=4 expandtab
-" autocmd! Filetype markdown setlocal ts=4 sw=4 expandtab fo-=c
-" 
-" " markdown: 
-" 
-" " Marked.app preview
-" noremap <leader>mm :!mark %<cr><cr>
-" 
-" autocmd! FileType markdown let b:surround_109 = "<< \r >>"
-" autocmd! FileType markdown set cinwords=
-" 
-" au! FileType markdown syn sync fromstart
-" 
-" function! DistractionFreeWriting()
-" 	" colorscheme iawriter
-" 	" set background=light
-" 	set gfn=Cousine:h14                " font to use
-" 	set linespace=4
-" 	set lines=100 columns=90            " size of the editable area
-" 	set textwidth=90		   " same as cols
-" 	set laststatus=0                   " don't show status line
-" 	set noruler                        " don't show ruler
-" 	set nonumber
-" 	set fullscreen                     " go to fullscreen editing mode
-" 	set linebreak                      " break the lines on words
-" endfunction
-" 
-" function! NormalWriting()
-" 	" colorscheme solarized
-" 	" set background=dark
-" 	set gfn=Pragmata\ TT:h14           " font to normally
-" 	set linespace=0
-" 	set lines=100 columns=100           " size of the editable area
-" 	set textwidth=0	 		   " same as cols
-" 	set laststatus=1                   " don't show status line
-" 	set ruler                          " don't show ruler
-" 	set number
-" 	set nofullscreen                   " go to fullscreen editing mode
-" 	set linebreak                      " break the lines on words
-" endfunction
-" 
-" command! Writer :call DistractionFreeWriting()
-" command! WriterNormal :call NormalWriting()
-" 
-" inoremap <silent> <Bar>   <Bar><Esc>:call AlignIt()<CR>a
-"  
-" function! AlignIt()
-"   let p = '^\s*|\s.*\s|\s*$'
-"   if exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
-"     let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
-"     let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
-"     Tabularize/|/l1
-"     normal! 0
-"     call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
-"   endif
-" endfunction
-" 
-" vnoremap <leader>t :call <SID>table()<cr>
-" function! s:table() range
-"    exe "'<,'>Tab /|"
-"    let hsepline= substitute(getline("."),'[^|]','-','g')
-"    exe "norm! o" .  hsepline
-"    exe "'<,'>s/-|/ |/g"
-"    exe "'<,'>s/|-/| /g"
-"    exe "'<,'>s/^| \\|\\s*|$\\||//g"
-" endfunction
-" 
-" command! -range=% Rst :'<,'>!pandoc -f markdown -t rst
-" 
-" nnoremap <leader>pr :!/Users/cormac/dotfiles/bin/markdown2pdf % --draft; open %:r.pdf<cr>
-" 
-" let g:seek_enable_jumps = 1
-" 
-" if ! has('gui_running')
-"     set ttimeoutlen=10
-"     augroup FastEscape
-"         autocmd!
-"         au InsertEnter * set timeoutlen=0
-"         au InsertLeave * set timeoutlen=1000
-"     augroup END
+
+noremap <silent> <A-k> :ObviousResizeUp<CR>
+noremap <silent> <A-j> :ObviousResizeDown<CR>
+noremap <silent> <A-h> :ObviousResizeLeft<CR>
+noremap <silent> <A-l> :ObviousResizeRight<CR>
+noremap <silent> <A-S-k> :ObviousResizeUp 5<CR>
+noremap <silent> <A-S-j> :ObviousResizeDown 5<CR>
+noremap <silent> <A-S-h> :ObviousResizeLeft 5<CR>
+noremap <silent> <A-S-l> :ObviousResizeRight 5<CR>
+
+" Accordion style
+map <silent> <C-A-h> <C-w>h<C-w><bar>
+map <silent> <C-A-l> <C-w>l<C-w><bar>
+map <silent> <C-A-j> <C-w>j<C-w>_
+map <silent> <C-A-k> <C-w>k<C-w>_
+map <silent> <C-A-k> <C-w>k<C-w>_
+
+" All windows in equal space
+map <silent> <S-Space> <C-w>=
+
+" Maximize window
+map <silent> <S-Space> <C-w><bar><C-w>_
+
+set winminheight=0
+
+" vim-surround
+
+" vim-sneak overrides vim-surround functionality, so:
+xmap gs <Plug>VSurround
+autocmd FileType pandoc   let b:surround_99 = "[//]: # (\r)"
+" vim-sneak
+
+" 2-character Sneak (default)
+nmap s <Plug>Sneak_s
+nmap S <Plug>Sneak_S
+" visual-mode
+xmap s <Plug>Sneak_s
+xmap S <Plug>Sneak_S
+
+noremap <leader>; ,
+
+" explicit repeat (as opposed to automatic 'clever-s' repeat)
+" nmap ; <Plug>SneakNext
+" nmap <leader>; <Plug>SneakPrevious
+" xmap ; <Plug>VSneakNext
+" xmap <leader>; <Plug>VSneakPrevious
+
+" 1-character _inclusive_ Sneak (for enhanced 'f')
+nmap f <Plug>Sneak_f
+nmap F <Plug>Sneak_F
+" visual-mode
+xmap f <Plug>Sneak_f
+xmap F <Plug>Sneak_F
+" operator-pending-mode
+omap f <Plug>Sneak_f
+omap F <Plug>Sneak_F
+
+" 1-character _exclusive_ Sneak (for enhanced 't')
+nmap t <Plug>Sneak_t
+nmap T <Plug>Sneak_T
+" visual-mode
+xmap t <Plug>Sneak_t
+xmap T <Plug>Sneak_T
+" operator-pending-mode
+omap t <Plug>Sneak_t
+omap T <Plug>Sneak_T
+
+" ---------------------------------------------------------------------------
+" Indentation
+" ---------------------------------------------------------------------------
+
+" defaults
+set ts=4 sw=4 sts=4 expandtab
+
+" specifics
+augroup FILETYPES
+autocmd!
+autocmd Filetype html       setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype liquid     setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype css        setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype scss       setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype less       setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype jst        setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype xml        setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype ruby,eruby setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype javascript setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype coffee     setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype haskell    setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype c          setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype objc       setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype python     setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype markdown   setlocal ts=2 sw=2 sts=2 expandtab fo-=c
+autocmd Filetype pandoc     setlocal ts=4 sw=4 sts=4 expandtab fo-=c
+autocmd Filetype scala      setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype go         setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype vim        setlocal ts=4 sw=4 sts=4 expandtab com+=":\""
+autocmd Filetype clojure    setlocal ts=2 sw=2 sts=2 expandtab
+augroup END
+
+" ---------------------------------------------------------------------------
+" Omni Completion & Neocomplete
+" ---------------------------------------------------------------------------
+
+map <leader>nc :NeoCompleteToggle<cr>
+
+" Use smartcase.
+let g:neocomplete#enable_smart_case = 1
+let g:neocomplete#enable_at_startup = 0
+let g:clang_complete_auto = 1
+let g:neocomplete#use_vimproc = 1
+
+" Enable heavy omni completion
+" if !exists('g:neocomplete#sources#omni#input_patterns')
+"     let g:neocomplete#sources#omni#input_patterns = {}
 " endif
-" 
+
+autocmd FileType go setlocal omnifunc=go#complete#Complete
+autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
+autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
+autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
+
+" imap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+" function! s:my_cr_function()
+"     return pumvisible() ? neocomplete#close_popup() : "\<CR>"
+" endfunction
+" use <tab> for triggering manual completion
+function! s:check_back_space()
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~ '\s'
+endfunction
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
+                   \ <SID>check_back_space() ? "\<TAB>" :
+                   \ neocomplete#start_manual_complete()
+
+" <C-h>, <BS>: close popup and delete backword char.
+" imap <expr><C-h>  neocomplete#smart_close_popup()."\<C-h>"
+" imap <expr><BS>   neocomplete#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplete#close_popup()
+inoremap <expr><C-e>  neocomplete#cancel_popup()
+" Plugin key-mappings.
+inoremap <expr><C-g>     neocomplete#undo_completion()
+inoremap <expr><C-l>     neocomplete#complete_common_string()
+
+" ---------------------------------------------------------------------------
+" Snippets / UltiSnips
+" ---------------------------------------------------------------------------
+
+let g:UltiSnipsExpandTrigger="<C-CR>"
+let g:UltiSnipsJumpForwardTrigger="<C-tab>"
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+" ---------------------------------------------------------------------------
+" Formatting
+" ---------------------------------------------------------------------------
+
+" c: auto-format comments,
+" r: return inserts comment char
+" o: o-command comment char
+" q: gq on comments,
+" l: don't break really long lines in insert mode
+" n: wrap to first char in body of a numbered list entry
+" j: delete comment chars when joining lines
+" 1: wraps before 1-letter words,
+
+set formatoptions=croqlnj1
+" set formatlistpat=\\v^\\s*(\\d+|[a-z])[\\]:.)}]\\s*
+" set formatlistpat=^\\s*[0-9a-z][\\]\\:.)}]\\s*
+" set formatlistpat=\\v^\\s*(\\d+\|[a-z])[\\]:\\.\\)}]\\s*
+" ( ( 2. | a. | ii. ) | *  )
+set formatlistpat=\\v^\\s*((\\d+\|[a-z]\|)[\\]:\\.\\)}]\|\\*[\\t\ ])\\s*
+
+" copyable text from hard-wrapped document
+command! -range=% SoftWrap
+            \ <line2>put _ |
+            \ <line1>,<line2>g/.\+/ .;-/^$/ join |normal $x
+
+function! Prose()
+
+    if !exists("b:pbuild_args")
+        let b:pbuild_args = "-l 1 -p 8 -s 11pt"
+    endif
+
+    if !exists("b:toggled_ws_once") || b:toggled_ws_once == 0
+        " silent exec :AirlineToggleWhitespace
+    endif
+    let b:toggled_ws_once = 1
+
+    " speed up syntax highlighting
+    syn  sync minlines=45
+    syn  match myExCapitalWords +\<[A-Z]\+\>+ contains=@NoSpell
+    setl smartindent autoindent
+    setl cinwords=
+
+    " t: auto-format paragraphs of text
+    " -l
+    " -r, so enter doesn't insert bullets prematurely
+    " -o, so essentially manually insert bullets.
+    setl formatoptions=tcroqlnj1
+    " same as above
+    set formatlistpat=\\v^\\s*((\\d+\|[a-z]\|)[\\]:\\.\\)}]\|\\*[\\t\ ])\\s*
+    setl textwidth=80
+    silent exec "NeoCompleteLock"
+
+    " for cool lists using fo~=o/c
+    " setlocal com+=:*
+    " setlocal com+=:\-
+
+    " Set undo points at important text operations.
+    inoremap <buffer> . .<c-g>u
+    inoremap <buffer> ! !<c-g>u
+    inoremap <buffer> ? ?<c-g>u
+    inoremap <buffer> , ,<c-g>u
+    inoremap <buffer> ; ;<c-g>u
+    inoremap <buffer> : :<c-g>u
+    inoremap <buffer> <c-u> <c-g>u<c-u>
+    inoremap <buffer> <c-w> <c-g>u<c-w>
+
+    " sane movement with wrap turned on
+    nnoremap <buffer> j gj
+    nnoremap <buffer> k gk
+    vnoremap <buffer> j gj
+    vnoremap <buffer> k gk
+    nnoremap <buffer> <Down> gj
+    nnoremap <buffer> <Up> gk
+    vnoremap <buffer> <Down> gj
+    vnoremap <buffer> <Up> gk
+    inoremap <buffer> <Down> <C-o>gj
+    inoremap <buffer> <Up> <C-o>gk
+
+    " Marked.app
+    noremap <buffer> <leader>mm :!mark %<cr><cr>
+
+    " for pandoc building using pbuild
+    nnoremap <leader>pr :exec "!/Users/cormac/bin/pbuild short ".b:pbuild_args." % &"<cr><cr>
+    nnoremap <leader>pR :exec "!/Users/cormac/bin/pbuild short ".b:pbuild_args." %"<cr>
+
+    " use convention of **bold** and _italic_
+    let b:surround_105 = "_\r_" " i
+    let b:surround_73 = "*\r*"  " I
+    vmap <D-b> gs*gvgs*
+    vmap <D-i> gs_
+    nmap <D-b> ysiw*lysiw*
+    nmap <D-i> ysiw_
+    imap <D-i> __<left>
+    imap <D-b> ****<left><left>
+
+    setl nocindent
+    setl nosmartindent
+    setl autoindent
+
+endfunction
+
+augroup PAREDIT
+    autocmd!
+    autocmd Filetype clojure execute Paredit()
+augroup END
+
+command! Paredit execute Paredit()
+
+function! Paredit()
+    nunmap <silent> <p
+    nunmap <silent> <P
+    nunmap <silent> >p
+    nunmap <silent> >P
+    let g:paredit_shortmaps = 1
+    let g:paredit_electric_return = 1
+endfunction
+
+augroup PROSE
+    autocmd!
+    autocmd Filetype markdown   execute Prose()
+    autocmd Filetype none       execute Prose()
+    autocmd Filetype pandoc     execute Prose()
+augroup END
+
+" reloading settings from Prose()
+command! Prose execute Prose()
+nnoremap <leader>PR m`:execute Prose()<cr>``
+
+if has('gui_running')
+    " Distraction Free Writing
+    " let g:fullscreen_font = "Source\ Code\ Pro:h14"
+
+    function! ToggleDistractionFree()
+        if exists("s:distraction_free") == 0
+            let s:distraction_free = 0
+        endif
+        if (s:distraction_free == 0)
+            " let s:initial_font = &guifont
+            " exec 'set guifont=' . g:fullscreen_font
+            " set linespace=4
+            set lines=100 columns=90           " size of the editable area
+            set textwidth=80                   " space for hard-wrap oddities
+            " set laststatus=0                   " don't show status line
+            set noruler                        " don't show ruler
+            set nonumber
+            set fullscreen                     " go to fullscreen editing mode
+            let s:distraction_free = 1
+        else
+            " let &guifont = s:initial_font      " regular font
+            " set linespace=0
+            set lines=100 columns=100          " size of the editable area
+            set textwidth=0                    " same as cols
+            " set laststatus=2                   " don't show status line
+            set ruler                          " don't show ruler
+            set number
+            set nofullscreen                   " go to fullscreen editing mode
+            let s:distraction_free = 0
+        endif
+    endfunction
+
+    command! Writer :call ToggleDistractionFree()
+else
+    command! Writer <nop>
+endif
+
+" ---------------------------------------------------------------------------
+" Miscellaneous
+" ---------------------------------------------------------------------------
+
+" Pandoc table mode, automatic aligning using Tabularize
+
+autocmd Filetype pandoc inoremap <silent> <Bar> <Bar><Esc>:call AlignPandocTables()<CR>a
+
+function! AlignPandocTables()
+    let p = '^\s*|\s.*\s|\s*$'
+    if  exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
+
+        let column = strlen(substitute(getline('.')[0:col('.')],'[^|]','','g'))
+        let position = strlen(matchstr(getline('.')[0:col('.')],'.*|\s*\zs.*'))
+        Tabularize/|/l1
+        normal! 0
+        call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
+    endif
+endfunction
+
+let g:seek_enable_jumps = 1
+
+if !has('gui_running')
+    set ttimeoutlen=10
+    augroup FastEscape
+        autocmd!
+        au InsertEnter * set timeoutlen=0
+        au InsertLeave * set timeoutlen=1000
+    augroup END
+endif
+
+" quick word count function, for statusline.
+
+function! WordCount()
+    let currentmode = mode()
+    if !exists("g:lastmode_wc")
+        let g:lastmode_wc = currentmode
+    endif
+
+    " echo g:lastmode_wc." -> ".currentmode
+
+    " if we modify file, open a new buffer, be in visual ever, or switch modes
+    " since last run, we recompute.
+    if &modified || !exists("b:wordcount") || g:lastmode_wc =~? 'v' || currentmode =~? 'v' || (currentmode != g:lastmode_wc && g:lastmode_wc !~? 'i')
+        " echo "ran ".g:lastmode_wc." -> ".currentmode
+        if !exists("b:wordcount")
+            let b:wordcount = 0
+        endif
+        let g:lastmode_wc = currentmode
+        let l:old_position = getpos('.')
+        let l:old_status = v:statusmsg
+        execute "silent normal g\<c-g>"
+        if v:statusmsg == "--No lines in buffer--"
+            let b:wordcount = 0
+        elseif v:statusmsg == "No matching autocommands"
+            " Do nothing please. This works around UltiSnips weirdness
+        else
+            let s:split_wc = split(v:statusmsg)
+            if index(s:split_wc, "Selected") < 0
+                " echom "s:split_wc <<<<<<<<<<<<<"
+                " echom join(s:split_wc, " ")
+                let b:wordcount = str2nr(s:split_wc[11])
+            else
+                let b:wordcount = str2nr(s:split_wc[5])
+            endif
+            let v:statusmsg = l:old_status
+        endif
+        call setpos('.', l:old_position)
+        return b:wordcount
+    else
+        let g:lastmode_wc = currentmode
+        return b:wordcount
+    endif
+endfunction
+
+" Airline
+let b:toggled_ws_once = 1
+let g:airline_left_sep  = ''
+let g:airline_right_sep = ''
+let g:airline_section_y = '%{WordCount()}w'
+let g:airline#extensions#whitespace#enabled = 0
+
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<'
+\ . synIDattr(synID(line("."),col("."),0),"name") . "> lo<"
+\ . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
+
+" Split a sentence in two at the cursor
+
+nmap gS :call SplitSentence()<cr>
+function! SplitSentence()
+    let s:line   = getline(".")
+    let s:index  = col(".") - 1
+    let s:cursor = s:line[s:index]
+
+    let s:prev   = s:line[s:index - 1]
+    let s:next   = s:line[s:index + 1]
+
+    let s:non_punc = "[\"'\])}]"
+    let s:non_punc_space = "[\"'\])} ,;!?.]"
+    let s:word   = "[A-Za-z]"
+
+    if     s:cursor =~ "[!?.]"
+        normal! g2U
+        return
+    elseif s:cursor =~ "[:;,]"
+        normal! r.llgUlh
+    elseif s:cursor =~ " "
+        normal! h
+        call SplitSentence()
+    elseif s:cursor =~ s:non_punc
+        if s:next == " " && s:prev =~ s:non_punc_space
+            " normal! l
+            " exec ":insert ."
+            " normal llgUlh"
+        endif
+    elseif s:cursor =~ s:word
+        if s:prev == " " && (s:next =~ s:non_punc_space || s:next =~ s:word)
+            " word after splitting point, recurse
+            normal hh
+            call SplitSentence()
+
+        elseif s:prev =~ s:word && s:next =~ " "
+            " normal! l
+            " exec "insert ."
+            " normal llgUlh"
+        endif
+    endif
+endfunction
+
+iabbrev ïï ✓
+iabbrev nbsp &#8203;
+inoremap <D-6> [^]<left>
+
+" delete footnotes and -blockquotes-
+" let @f = ':%g/\v^(\[\^\d+\]|\> )/d'
+let @f = ':%g/\v^\[\^\d+\]/d'
+
+" increment footnotes in region
+vmap <leader>fa <Plug>IncrementFootnotes
+vmap <silent> <Plug>IncrementFootnotes :sno/[^\(\d\+\)]/\='[^'.(submatch(1)+1).']'/g<CR>
+\:silent! call repeat#set("gv\<Plug>IncrementFootnotes", -1)<CR>
+
+" decrement footnotes in region
+vmap <leader>fz <Plug>DecrementFootnotes
+vmap <silent> <Plug>DecrementFootnotes :sno/[^\(\d\+\)]/\='[^'.(submatch(1)-1).']'/g<CR>
+\:silent! call repeat#set("gv\<Plug>DecrementFootnotes", -1)<CR>
+
