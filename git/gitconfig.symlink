@@ -1,0 +1,99 @@
+
+[user]
+	name = Cormac Relf
+	email = cormacrelf@me.com
+[include]
+	path = ~/.gitconfig.local
+[core]
+	editor = mvim -f
+	excludesfile = ~/.gitignore_global
+[color "sh"]
+	dirty = red
+	workdir = blue bold
+	branch = yellow reverse
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+[mergetool "sourcetree"]
+	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
+[alias]
+	ign = ls-files -o -i --exclude-standard
+	bi = bisect
+	co = checkout
+	c = commit
+	d = diff
+	dt = difftool
+	mt = mergetool
+	ca = commit -a
+	cam = commit -am
+	cm = commit -m
+	s = status -sb
+	cl = clone
+	st = status
+	b = branch
+	p = push
+	pl = pull
+	cp = cherry-pick
+	a = add
+	me = merge
+	pom = push origin master
+	phm = push heroku master
+	hist = log --pretty=format:\"%h %ad | %s%d [%an]\" --graph --date=short
+	l = log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	la = log --all --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative
+	last = log --graph --pretty=format:'%Cred%h%Creset %an: %s - %Creset %C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative --max-count=1:
+	type = cat-file -t
+	dump = cat-file -p
+	root = !pwd
+[color]
+	ui = auto
+	sh = auto
+[color "branch"]
+	current = yellow reverse
+	local = yellow
+	remote = green
+[color "diff"]
+	meta = yellow bold
+	frag = magenta bold
+	old = red bold
+	new = green bold
+[color "status"]
+	added = yellow
+	changed = green
+	untracked = cyan
+[color "diff"]
+	whitespace = red reverse
+[core]
+	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+[credential]
+	helper = osxkeychain
+[difftool "Kaleidoscope"]
+	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
+[diff]
+	tool = Kaleidoscope
+[difftool]
+	prompt = false
+[mergetool "Kaleidoscope"]
+	cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" --snapshot \"$REMOTE\" --snapshot
+	trustExitCode = true
+[mergetool]
+	prompt = false
+[merge]
+	tool = Kaleidoscope
+[help]
+	autocorrect = 1
+[rerere]
+	enabled = true
+[push]
+	default = simple
+[filter "media"]
+	clean = git-media-clean %f
+	smudge = git-media-smudge %f
+[filter "hawser"]
+	clean = git hawser clean %f
+	smudge = git hawser smudge %f
+	required = true
+[filter "lfs"]
+	clean = git-lfs clean %f
+	smudge = git-lfs smudge %f
+	required = true
