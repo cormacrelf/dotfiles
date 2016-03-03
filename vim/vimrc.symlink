@@ -35,9 +35,9 @@ au BufEnter /tmp/crontab.* setl backupcopy=yes
 "     let g:airline_theme='gruvbox'
 " endif
 
-set background=light
+set background=dark
 let g:pencil_neutral_headings = 1
-colorscheme pencil
+colorscheme gruvbox
 
 
 " Map toggling of background colour to <F5>
