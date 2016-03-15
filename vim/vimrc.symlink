@@ -38,6 +38,7 @@ au BufEnter /tmp/crontab.* setl backupcopy=yes
 set background=dark
 let g:pencil_neutral_headings = 1
 colorscheme gruvbox
+set term=screen-256color
 
 
 " Map toggling of background colour to <F5>
