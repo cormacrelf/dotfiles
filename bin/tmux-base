@@ -1,0 +1,6 @@
+#!/bin/bash
+if tmux ls | grep base; then
+	tmux -CC attach -t base
+else
+	tmux -CC new -s base
+fi
