@@ -62,3 +62,11 @@ if [ "$(command -v fasd)" -nt "$fasd_cache" -o ! -s "$fasd_cache"  ]; then
 fi
 source "$fasd_cache"
 unset fasd_cache
+
+
+. /Users/cormac/torch/install/bin/torch-activate
+
+
+. /Users/cormac/torch/install/bin/torch-activate
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
