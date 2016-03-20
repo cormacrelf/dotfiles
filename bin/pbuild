@@ -1,0 +1,217 @@
+#!/bin/bash
+
+ProgName=$(basename $0)
+
+sub_help(){
+    echo "Usage: $ProgName <subcommand> <file.md>"
+    echo "Subcommands:"
+    echo "    short   Build a plain document with small headers."
+    echo "    toc     Build a plain document with a table of contents."
+    echo "    paper   Build a full academic paper."
+    echo "    word    Build a .docx representation."
+}
+
+###############################
+########## Constants ##########
+###############################
+
+## Markdown extension (e.g. md, markdown, mdown).
+MEXT="md"
+
+## Location of Pandoc support files.
+PREFIX="/Users/cormac/.pandoc"
+
+## Location of your working bibliography file
+BIB="/Users/cormac/Dropbox/Mendeley/library.bib"
+
+## CSL stylesheet (located in the csl folder of the PREFIX directory).
+CSL="aglc"
+
+## Latex engine
+ENGINE="xelatex"
+
+## Latex Template
+TEMPLATE="$PREFIX/templates/xelatex.template"
+MODERNTEMPLATE="$PREFIX/templates/xelatex-modern.template"
+LONGTEMPLATE="$PREFIX/kjhealy/xelatex.template"
+
+## Extensions
+EXTENSIONS="+citations+simple_tables+table_captions+yaml_metadata_block+fenced_code_blocks+fancy_lists+startnum+example_lists+line_blocks+footnotes+inline_notes+inline_code_attributes+superscript+subscript+tex_math_dollars+raw_tex"
+
+# Short doc arguments
+
+mainfont="Adobe Garamond Pro"
+sansfont="Neue Haas Unica Pro"
+monofont="Input Mono"
+fontsize="11pt"
+linespace="1.24" # 1.4 spaced (1.6 = double)
+parindent="0pt"
+parskip="10pt"
+
+# -V margin:'2.5cm' \
+
+make_shortargs(){ SHORTARGS="\
+-V geometry:'a4paper, top=2.5cm, bottom=2.5cm, left=4cm, right=4cm' \
+-V papersize:'a4paper' \
+-V mainfont:'$mainfont' \
+-V sansfont:'$sansfont' \
+-V monofont:'$monofont' \
+-V fontsize:'$fontsize' \
+-V linespace:'$linespace' \
+-V parindent:'$parindent' \
+-V parskip:'$parskip' \
+--highlight-style haddock \
+--latex-engine xelatex"
+}
+
+make_tocargs(){
+    make_shortargs
+    SHORTARGS="$SHORTARGS --toc"
+}
+
+###############################
+########## Commands ###########
+###############################
+
+sub_short(){
+	for file in "$@"
+	do
+		INPUT="$file"
+		OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
+        make_shortargs
+        echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$TEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
+	done
+    return 0
+}
+
+sub_modern(){
+	for file in "$@"
+	do
+		INPUT="$file"
+		OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
+        mainfont="Neue Haas Unica Pro"
+        make_shortargs
+        echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$MODERNTEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
+	done
+    return 0
+}
+
+sub_toc(){
+	for file in "$@"
+	do
+		INPUT="$file"
+		OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
+        make_tocargs
+        echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$TEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
+	done
+    return 0
+}
+
+sub_tex(){
+	for file in "$@"
+	do
+		INPUT="$file"
+		OUTPUT="`echo $file | cut -f 1 -d .`.latex"
+        make_shortargs
+        echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$TEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -t latex -o $OUTPUT $INPUT" | /bin/bash
+	done
+    return 0
+}
+
+sub_word(){
+	for file in "$@"
+	do
+		INPUT="$file"
+		OUTPUT="`echo $file | cut -f 1 -d .`.docx"
+        make_shortargs
+		echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$TEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
+	done
+}
+
+sub_paper(){
+	for file in "$@"
+	do
+		INPUT="$file"
+		OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
+        make_shortargs
+		echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$LONGTEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
+	done
+}
+
+sub_papertex(){
+	for file in "$@"
+	do
+		INPUT="$file"
+		OUTPUT="`echo $file | cut -f 1 -d .`.latex"
+        make_shortargs
+        echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$LONGTEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -t latex -o $OUTPUT $INPUT" | /bin/bash
+	done
+    return 0
+}
+#########################################
+########## Subcommand control ###########
+#########################################
+
+gobble_args(){
+    flags_read=0
+    while true; do
+        arg=$1
+        case $arg in
+            "-h" | "--help")
+                sub_help
+                let "flags_read+=1"
+                shift
+                ;;
+            "-l" | "--linespace")
+                linespace=$2
+                let "flags_read+=2"
+                shift
+                shift
+                ;;
+            "-p" | "--parskip")
+                parksip=$2
+                let "flags_read+=2"
+                shift
+                shift
+                ;;
+            "-s" | "--fontsize")
+                fontsize=$2
+                let "flags_read+=2"
+                shift
+                shift
+                ;;
+            *)
+                break
+                ;;
+        esac
+    done
+    return $flags_read
+}
+
+# pre-subcommand arguments
+gobble_args $@
+shift $?
+
+subcommand=$1
+case $subcommand in
+    "" | "-h" | "--help")
+        sub_help
+        exit 0
+        ;;
+    *)
+        # take subcommand, leaving just args
+        shift
+        ;;
+esac
+
+# post-subcommand, pre-filelist arguments
+gobble_args $@
+shift $?
+
+sub_${subcommand} $@
+if (( $?==127 )); then
+    echo "Error: '$subcommand' is not a known subcommand." >&2
+    echo "Run '$ProgName --help' for a list of known subcommands." >&2
+    exit 1
+fi
+
