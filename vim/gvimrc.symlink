@@ -18,22 +18,12 @@ set linespace=3
 
 set antialias
 
-" colorscheme birdsofparadise
-" colorscheme apprentice
-" exec "AirlineTheme apprentice"
-" exec "AirlineTheme gruvbox"
-
-" let g:writer_guifont="Inconsolata-dz:h16"
+colorscheme gotham
+let g:airline_theme = "gotham"
 
 set lines=58
 set columns=1000
 set guioptions=egmt
-
-" let g:fullscreen_colorscheme = "iawriter"
-" let g:fullscreen_font = "Cousine:h14"
-" let g:normal_colorscheme = "solarized"
-" let g:normal_font="Pragmata\ TT:h14"
-
 
 if has('gui_macvim')
   nnoremap <silent> <SwipeLeft> :macaction _cycleWindowsBackwards:<CR>

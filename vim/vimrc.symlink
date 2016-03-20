@@ -37,9 +37,11 @@ au BufEnter /tmp/crontab.* setl backupcopy=yes
 
 set background=dark
 let g:pencil_neutral_headings = 1
-colorscheme gruvbox
-set term=screen-256color
-
+colorscheme gotham256
+let g:airline_theme='gotham256'
+if !has("nvim")
+    set term=screen-256color
+endif
 
 " Map toggling of background colour to <F5>
 call togglebg#map("<F5>")
@@ -429,6 +431,9 @@ let g:vimclojure#ParenRainbow = 1
 
 " Startify
 
+" Solve problems with ctrlp and nerdtree splitting
+autocmd User Startified setlocal buftype=
+
 let g:startify_bookmarks = [
             \ '~/.vimrc',
             \ '~/.vim/vundlerc.vim',
@@ -521,7 +526,6 @@ noremap <silent> <A-S-l> :ObviousResizeRight 5<CR>
 map <silent> <C-A-h> <C-w>h<C-w><bar>
 map <silent> <C-A-l> <C-w>l<C-w><bar>
 map <silent> <C-A-j> <C-w>j<C-w>_
-map <silent> <C-A-k> <C-w>k<C-w>_
 map <silent> <C-A-k> <C-w>k<C-w>_
 
 " All windows in equal space
