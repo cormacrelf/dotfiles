@@ -1,41 +1,44 @@
 #!/bin/bash
 
-ProgName=$(basename $0)
+pbuild=$(basename $0)
 
 sub_help(){
-    echo "Usage: $ProgName <subcommand> <file.md>"
+    echo "Usage: $pbuild <subcommand> <file.md>"
     echo "Subcommands:"
     echo "    short   Build a plain document with small headers."
     echo "    toc     Build a plain document with a table of contents."
-    echo "    paper   Build a full academic paper."
-    echo "    word    Build a .docx representation."
+    echo "    tex     Build a plain document, but only output generated latex."
+    echo "    word    Build a .docx representation. Use --reference-docx <ref> to change styles."
+    echo "    paper   Build a full academic paper. (disabled for now)"
 }
 
 ###############################
 ########## Constants ##########
 ###############################
 
-## Markdown extension (e.g. md, markdown, mdown).
-MEXT="md"
+DEBUG_OUT="/dev/stderr"
 
-## Location of Pandoc support files.
-PREFIX="/Users/cormac/.pandoc"
+# Location of Pandoc support files.
+PREFIX="$HOME/.pandoc"
 
-## Location of your working bibliography file
-BIB="/Users/cormac/Dropbox/Mendeley/library.bib"
+# Location of your working bibliography file
+BIB="$HOME/Dropbox/Mendeley/library.bib"
 
-## CSL stylesheet (located in the csl folder of the PREFIX directory).
+# CSL stylesheet (located in the csl folder of the PREFIX directory).
 CSL="aglc"
 
-## Latex engine
+# Latex engine
 ENGINE="xelatex"
 
-## Latex Template
-TEMPLATE="$PREFIX/templates/xelatex.template"
+# Latex Template
+TEMPLATE="default.latex"
 MODERNTEMPLATE="$PREFIX/templates/xelatex-modern.template"
 LONGTEMPLATE="$PREFIX/kjhealy/xelatex.template"
 
-## Extensions
+# For word docs
+REFERENCE_DOCX="" # default location is $PREFIX/reference.docx, override with pbuild --reference-docx <loc>
+
+# Markdown Extensions
 EXTENSIONS="+citations+simple_tables+table_captions+yaml_metadata_block+fenced_code_blocks+fancy_lists+startnum+example_lists+line_blocks+footnotes+inline_notes+inline_code_attributes+superscript+subscript+tex_math_dollars+raw_tex"
 
 # Short doc arguments
@@ -50,104 +53,119 @@ parskip="10pt"
 
 # -V margin:'2.5cm' \
 
-make_shortargs(){ SHORTARGS="\
--V geometry:'a4paper, top=2.5cm, bottom=2.5cm, left=4cm, right=4cm' \
--V papersize:'a4paper' \
--V mainfont:'$mainfont' \
--V sansfont:'$sansfont' \
--V monofont:'$monofont' \
--V fontsize:'$fontsize' \
--V linespace:'$linespace' \
--V parindent:'$parindent' \
--V parskip:'$parskip' \
---highlight-style haddock \
---latex-engine xelatex"
+make_shortargs(){ SHORTARGS="
+--variable=\"geometry:a4paper,top=2.5cm,bottom=2.5cm,left=4cm,right=4cm\"
+--variable=\"papersize:a4paper\"
+--variable=\"mainfont:${mainfont}\"
+--variable=\"sansfont:$sansfont\"
+--variable=\"monofont:$monofont\"
+--variable=\"fontsize:$fontsize\"
+--variable=\"linespace:$linespace\"
+--variable=\"parindent:$parindent\"
+--variable=\"parskip:$parskip\"
+--highlight-style=haddock"
 }
 
-make_tocargs(){
-    make_shortargs
-    SHORTARGS="$SHORTARGS --toc"
+PANDOC_BINARY="/usr/local/bin/pandoc"
+PANDOC_BIB="--filter=pandoc-citeproc --csl=$PREFIX/csl/${CSL}.csl --biblio=$BIB" # not in use
+PANDOC_CMD="$PANDOC_BINARY -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE" # --data-dir='$PREFIX'"
+
+make_pandoc_cmd () {
+    ###
+    ### Needs a few args: $1=template, $2=
+    ### 
+    echo "$PANDOC_CMD --template=$1"
 }
 
 ###############################
 ########## Commands ###########
 ###############################
 
-sub_short(){
-	for file in "$@"
-	do
-		INPUT="$file"
+foreach_file() {
+    sub=$1
+    error=0
+    shift
+    for file in "$@"; do
+        INPUT="$file"
 		OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
-        make_shortargs
-        echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$TEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
-	done
-    return 0
+        $sub $file
+        ret=$?
+        if (( $ret==127 )); then
+            error=127
+            return $error
+        elif (( $ret!=0 )); then
+            error=1
+        fi
+        # each sub will get the original filename as $1
+    done
+    return $error
+}
+
+sub_short() {
+    make_shortargs
+    cmd="$PANDOC_CMD --template=default $SHORTARGS -o $OUTPUT $INPUT"
+    echo $cmd | tee $DEBUG_OUT | bash
+    return $?
 }
 
 sub_modern(){
-	for file in "$@"
-	do
-		INPUT="$file"
-		OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
-        mainfont="Neue Haas Unica Pro"
-        make_shortargs
-        echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$MODERNTEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
-	done
-    return 0
+    mainfont="Neue Haas Unica Pro"
+    make_shortargs
+    cmd="$PANDOC_CMD --template=default $SHORTARGS -o $OUTPUT $INPUT"
+    echo $cmd | tee $DEBUG_OUT | bash
+    return $?
 }
 
 sub_toc(){
-	for file in "$@"
-	do
-		INPUT="$file"
-		OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
-        make_tocargs
-        echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$TEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
-	done
-    return 0
+    make_shortargs
+    cmd="$PANDOC_CMD --template=default $SHORTARGS --toc -o $OUTPUT $INPUT"
+    echo $cmd | tee $DEBUG_OUT | bash
+    return $?
 }
 
 sub_tex(){
-	for file in "$@"
-	do
-		INPUT="$file"
-		OUTPUT="`echo $file | cut -f 1 -d .`.latex"
-        make_shortargs
-        echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$TEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -t latex -o $OUTPUT $INPUT" | /bin/bash
-	done
-    return 0
+    file=$1
+    OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
+    make_shortargs
+    cmd="$PANDOC_CMD --template=default $SHORTARGS -t latex -o $OUTPUT $INPUT"
+    echo $cmd | tee $DEBUG_OUT | bash
+    return $?
 }
 
 sub_word(){
-	for file in "$@"
-	do
-		INPUT="$file"
-		OUTPUT="`echo $file | cut -f 1 -d .`.docx"
-        make_shortargs
-		echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$TEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
-	done
+    file=$1
+    OUTPUT="`echo $file | cut -f 1 -d .`.docx"
+    make_shortargs
+    if [ -n "$REFERENCE_DOCX" ]; then
+        cmd="$PANDOC_CMD --reference-docx=\"$REFERENCE_DOCX\" $SHORTARGS -o $OUTPUT $INPUT"
+    else
+        cmd="$PANDOC_CMD $SHORTARGS -o $OUTPUT $INPUT"
+    fi
+    echo $cmd | tee $DEBUG_OUT | bash
+    return $?
 }
 
-sub_paper(){
-	for file in "$@"
-	do
-		INPUT="$file"
-		OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
-        make_shortargs
-		echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$LONGTEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
-	done
-}
+# sub_paper(){
+# 	for file in "$@"
+# 	do
+# 		INPUT="$file"
+# 		OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
+#         make_shortargs
+# 		echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$LONGTEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
+# 	done
+# }
 
-sub_papertex(){
-	for file in "$@"
-	do
-		INPUT="$file"
-		OUTPUT="`echo $file | cut -f 1 -d .`.latex"
-        make_shortargs
-        echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$LONGTEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -t latex -o $OUTPUT $INPUT" | /bin/bash
-	done
-    return 0
-}
+# sub_papertex(){
+# 	for file in "$@"
+# 	do
+# 		INPUT="$file"
+# 		OUTPUT="`echo $file | cut -f 1 -d .`.latex"
+#         make_shortargs
+#         echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$LONGTEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -t latex -o $OUTPUT $INPUT" | /bin/bash
+# 	done
+#     return 0
+# }
+
 #########################################
 ########## Subcommand control ###########
 #########################################
@@ -159,26 +177,32 @@ gobble_args(){
         case $arg in
             "-h" | "--help")
                 sub_help
-                let "flags_read+=1"
-                shift
+                exit 0
                 ;;
             "-l" | "--linespace")
                 linespace=$2
                 let "flags_read+=2"
-                shift
-                shift
+                shift 2
                 ;;
             "-p" | "--parskip")
-                parksip=$2
+                parskip=$2
                 let "flags_read+=2"
-                shift
-                shift
+                shift 2
                 ;;
-            "-s" | "--fontsize")
+            "--reference-docx")
+                REFERENCE_DOCX=$2
+                let "flags_read+=2"
+                shift 2
+                ;;
+            "-f" | "--fontsize")
                 fontsize=$2
                 let "flags_read+=2"
-                shift
-                shift
+                shift 2
+                ;;
+            "-s" | "--silent")
+                DEBUG_OUT="/dev/null"
+                let "flags_read+=1"
+                shift 1
                 ;;
             *)
                 break
@@ -208,10 +232,12 @@ esac
 gobble_args $@
 shift $?
 
-sub_${subcommand} $@
-if (( $?==127 )); then
+# sub_${subcommand} $@
+foreach_file sub_${subcommand} $@
+ret=$?
+if (( $ret==127 )); then
     echo "Error: '$subcommand' is not a known subcommand." >&2
-    echo "Run '$ProgName --help' for a list of known subcommands." >&2
+    echo "Run '$pbuild --help' for a list of known subcommands." >&2
     exit 1
 fi
-
+exit $ret
