@@ -45,6 +45,8 @@
 	type = cat-file -t
 	dump = cat-file -p
 	root = !pwd
+	ds = diff stash@{0}
+	ds-own = diff stash@{0}^!
 [color]
 	ui = auto
 	sh = auto
@@ -65,6 +67,7 @@
 	whitespace = red reverse
 [core]
 	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
+	untrackedCache = true
 [credential]
 	helper = osxkeychain
 [difftool "Kaleidoscope"]

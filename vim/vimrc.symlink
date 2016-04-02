@@ -25,6 +25,7 @@ endif
 set noswapfile
 au BufEnter /tmp/crontab.* setl backupcopy=yes
 
+
 " ----------------------------------------------------------------------------
 "  Text Formatting
 " ----------------------------------------------------------------------------
@@ -37,10 +38,14 @@ au BufEnter /tmp/crontab.* setl backupcopy=yes
 
 set background=dark
 let g:pencil_neutral_headings = 1
+" override the colorscheme to 24-bit in nvim/gvim's respective configs.
+" both source this first, so it makes sense that way.
 colorscheme gotham256
 let g:airline_theme='gotham256'
-if !has("nvim")
+if !(has("nvim") || has("gui"))
     set term=screen-256color
+else
+    set updatetime=250
 endif
 
 " Map toggling of background colour to <F5>
@@ -221,6 +226,7 @@ nnoremap <m-;>  m`A;<esc>``
 
 " Use <C-s> to save
 nnoremap <C-s> :w<cr>
+nnoremap <M-s> :w<cr>
 
 " Open CtrlP buffer explorer with C-b
 nnoremap <C-b> :CtrlPBuffer<cr>
@@ -974,3 +980,4 @@ vmap <leader>fz <Plug>DecrementFootnotes
 vmap <silent> <Plug>DecrementFootnotes :sno/[^\(\d\+\)]/\='[^'.(submatch(1)-1).']'/g<CR>
 \:silent! call repeat#set("gv\<Plug>DecrementFootnotes", -1)<CR>
 
+map <F10> :echo "hi<" . synIDattr(synID(line("."),col("."),1),"name") . '> trans<' . synIDattr(synID(line("."),col("."),0),"name") . "> lo<" . synIDattr(synIDtrans(synID(line("."),col("."),1)),"name") . ">"<CR>
