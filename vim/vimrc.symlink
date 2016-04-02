@@ -968,7 +968,8 @@ inoremap <D-6> [^]<left>
 
 " delete footnotes and -blockquotes-
 " let @f = ':%g/\v^(\[\^\d+\]|\> )/d'
-let @f = ':%g/\v^\[\^\d+\]/d'
+let @f = ':%g/\v^\[\^[a-zA-Z0-9\_\-]+\]/d:%s/\v\[\^[a-zA-Z0-9\-\_]{0,}\]//g'
+let @v = ':%v/\v^\[\^[a-zA-Z0-9\_\-]+\]/d:%s/\v\[\^[a-zA-Z0-9\-\_]{0,}\]//g'
 
 " increment footnotes in region
 vmap <leader>fa <Plug>IncrementFootnotes
