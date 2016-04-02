@@ -1,0 +1,5 @@
+#!/bin/sh
+
+brew rm macvim
+brew install macvim --HEAD --with-python --with-lua --with-cscope
+brew linkapps macvim --appdir=/Applications
