@@ -1,28 +1,18 @@
 # shortcut to this dotfiles path is $DOT
 export DOT=$HOME/.dotfiles
 
-# oh-my-zsh required shortcut
-export ZSH=$HOME/.oh-my-zsh
-
-# customize omz
-plugins=(virtualenv pip golang go dirhistory python cp npm mercurial git osx gem cloudapp brew ruby pod clang history-substring-search zsh-syntax-highlighting)
-
-ZSH_THEME="minimal"
-
 setopt extended_glob
-
-source $ZSH/oh-my-zsh.sh
 
 export DEFAULT_USER="cormac"
 
-# DYLD_FALLBACK_LIBRARY_PATH=/usr/X11/lib
-# export DYLD_FALLBACK_LIBRARY_PATH=""
-
 # your project folder that we can `c [tab]` to
-export code=~/Dropbox/Code
+export code=$HOME/git
 
 # source every .zsh file in this rep
-for config_file ($DOT/**/*^lib/*.zsh) source $config_file
+for config_file ($DOT/**/*^lib/*.zsh); do
+    # echo $config_file
+    source $config_file
+done
 
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
@@ -46,23 +36,7 @@ done
 # prompt clean
 
 # pretty start
-# /usr/local/bin/archey -c
-
-# More Path stuff
-
-export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin
-
-eval "$(rbenv init -)"
-
-# eval "$(fasd --init posix-alias zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp)"
-
-fasd_cache="$HOME/.fasd-init-bash"
-if [ "$(command -v fasd)" -nt "$fasd_cache" -o ! -s "$fasd_cache"  ]; then
-  fasd --init zsh-hook zsh-ccomp zsh-ccomp-install zsh-wcomp >| "$fasd_cache"
-fi
-source "$fasd_cache"
-unset fasd_cache
-
+/usr/local/bin/archey -c
 
 # . /Users/cormac/torch/install/bin/torch-activate
 

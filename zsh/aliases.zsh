@@ -21,3 +21,5 @@ eval "$(thefuck --alias)"
 alias FUCK='fuck'
 
 alias curl-resume="curl -C - -L"
+
+alias vim="nvim"
