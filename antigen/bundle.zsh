@@ -10,6 +10,7 @@ fi
 source $ANTIGEN_ZSH
 
 antigen use oh-my-zsh
+
 antigen bundle git
 antigen bundle brew
 antigen bundle pip
@@ -22,5 +23,9 @@ antigen bundle osx
 antigen bundle gem
 antigen bundle history-substring-search
 antigen bundle zsh-users/zsh-syntax-highlighting
+
+antigen theme oskarkrawczyk/honukai-iterm-zsh honukai
+# antigen theme cormacrelf/blunt-zsh blunt
+
 antigen apply
 
