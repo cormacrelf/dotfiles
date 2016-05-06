@@ -75,6 +75,7 @@ cask 'dropbox'
 cask 'tunnelblick'
 cask 'gitup'
 cask 'hex-fiend'
+cask 'slack'
 
 cask 'java'
 brew 'scala'
