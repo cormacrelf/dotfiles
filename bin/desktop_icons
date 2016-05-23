@@ -1,0 +1,34 @@
+#!/bin/sh
+# By Craig Hockenberry (http://furbo.org)
+# https://gist.github.com/chockenberry/a6a06a73cce44e29808b22d458cafdcb
+
+defaults read com.apple.finder CreateDesktop > /dev/null 2>&1
+enabled=$?
+
+if [ "$1" = "off" ]; then
+	if [ $enabled -eq 1 ]; then
+		defaults write com.apple.finder CreateDesktop false
+		osascript -e 'tell application "Finder" to quit'
+		open -a Finder
+		echo "Desktop icons are now turned off"
+	else
+		echo "Desktop icons are already off"
+	fi
+elif [ "$1" = "on" ]; then
+	if [ $enabled -eq 1 ]; then
+		echo "Desktop icons are already on"
+	else
+		defaults delete com.apple.finder CreateDesktop
+		osascript -e 'tell application "Finder" to quit'
+		open -a Finder
+		echo "Desktop icons now turned on"
+	fi
+elif [ "$1" = "status" ]; then
+	if [ $enabled -eq 1 ]; then
+		echo "Desktop icons are on"
+	else
+		echo "Desktop icons are off"
+	fi
+else
+	echo "usage: `basename $0` ( on | off | status )"
+fi
