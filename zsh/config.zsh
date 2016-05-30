@@ -1,4 +1,8 @@
-eval `gdircolors $DOT/zsh/dircolors.ansi-dark`
+if hash gdircolors 2>/dev/null; then
+    eval `gdircolors $DOT/zsh/dircolors.ansi-dark`
+elif hash dircolors 2>/dev/null; then
+    eval `dircolors $DOT/zsh/dircolors.ansi-dark`
+fi
 
 fpath=($DOT/zsh/functions $fpath)
 

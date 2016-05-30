@@ -36,7 +36,9 @@ done
 # prompt clean
 
 # pretty start
-/usr/local/bin/archey -c
+if hash archey 2>&/dev/null; then
+    archey -c
+fi
 
 # . /Users/cormac/torch/install/bin/torch-activate
 

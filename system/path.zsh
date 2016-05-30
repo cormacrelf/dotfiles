@@ -1,7 +1,9 @@
 export PATH=".:bin:$HOME/bin:/usr/local/share/npm/bin:$HOME/.cabal/bin:/usr/local/bin:/usr/local/sbin:$HOME/Library/Haskell/bin:$DOT/bin:$PATH"
 
 # GNU coreutils
-export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+if hash brew 2>/dev/null; then
+    export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
+fi
 
 export GOPATH="$HOME/go"
 
