@@ -23,3 +23,5 @@ alias FUCK='fuck'
 alias curl-resume="curl -C - -L"
 
 alias vim="nvim"
+
+alias statm="stat -c '%a %n'"
