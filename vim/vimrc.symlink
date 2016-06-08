@@ -67,8 +67,8 @@ set nojs                                           " don't J-join sentences with
 set linebreak                                      " word boundaries 
 set smarttab                                       " fuck tabs
 set virtualedit=block                              " allow virtual edit in visual-block mode
-" set nofoldenable                                   " don't automatically close all folds initially
-" set foldmethod=syntax                              " how to determine folds
+set nofoldenable                                   " don't automatically close all folds initially
+set foldmethod=syntax                              " how to determine folds
 set conceallevel=0
 
 " }}}
@@ -383,28 +383,24 @@ set shortmess=filtIoOA              " Shorten messages
 set report=0                        " tell us about changes
 set nostartofline                   " don't jump to the start of line when scrolling
 set scrolloff=1                     " scroll early, give us a bit of context
-set autoread                        " automatically read changes in files from other
-                                    " applications
+set autoread                        " automatically read changes in files from other applications
 set splitright splitbelow           " when :[v]split-ting, go to the right/down
-
-" if no arguments passed to VIM, open up NERDTree.
-" autocmd vimenter * if !argc() | NERDTree | endif
-
-if has("mouse")
-    set mouse=a
-endif
-
-set showmatch           " brackets/braces that is
-set mat=1               " duration to show matching brace (1/10 sec)
-set incsearch           " do incremental searching
-set laststatus=2        " always show the status line
-set noshowmode          " don't show INSERT in the status line
-set ignorecase          " ignore case when searching
-set nohlsearch          " don't highlight searches
-set visualbell          " shut the fuck up
+set showmatch                       " brackets/braces that is
+set mat=1                           " duration to show matching brace (1/10 sec)
+set incsearch                       " do incremental searching
+set laststatus=2                    " always show the status line
+set noshowmode                      " don't show INSERT in the status line
+set ignorecase                      " ignore case when searching
+set nohlsearch                      " don't highlight searches
+set visualbell                      " shut the fuck up
 set title
 set titlestring=vim:\ %f\ %a%r%m
-set hidden
+set hidden                          " allow hidden buffers with edits
+set updatetime=250                  " short updates for gitgutter
+
+if has("mouse")
+    set mouse=a                     " for noobs
+endif
 
 " }}}
 " Functions {{{
