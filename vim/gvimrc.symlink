@@ -24,6 +24,13 @@ let g:airline_theme = "gotham"
 set lines=58
 set columns=1000
 set guioptions=egmt
+set listchars=tab:▸\ ,eol:¬,precedes:«,extends:»
+set ttimeoutlen=10
+augroup FastEscape
+    autocmd!
+    au InsertEnter * set timeoutlen=0
+    au InsertLeave * set timeoutlen=1000
+augroup END
 
 if has('gui_macvim')
   nnoremap <silent> <SwipeLeft> :macaction _cycleWindowsBackwards:<CR>
@@ -31,7 +38,7 @@ if has('gui_macvim')
   set macmeta
   macmenu &Tools.Make key=<nop>
   set fuoptions=background:Normal    " macvim specific setting for 
-				     " editor's background colour
+				                     " editor's background colour
 endif
 
 " automatically reload vimrc when it's saved
@@ -45,7 +52,7 @@ nmap <c-s-tab> :tabprevious<cr>
 imap <c-s-tab> <c-o>:tabprevious<cr>
 vmap <c-s-tab> <c-o>:tabprevious<cr>
 
-" C-# switches to tab
+" Cmd-# switches to tab
 nmap <d-1> 1gt
 nmap <d-2> 2gt
 nmap <d-3> 3gt
