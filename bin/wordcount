@@ -1,1 +1,2 @@
-wc -w $@ |awk '{$1=$1}1' | cut -d " " -f 1
+#!/bin/sh
+wc -w $@ | awk '{$1=$1}1' | cut -d " " -f 1
