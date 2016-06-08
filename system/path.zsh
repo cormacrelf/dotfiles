@@ -5,9 +5,13 @@ if hash brew 2>/dev/null; then
     export PATH="$(brew --prefix coreutils)/libexec/gnubin:$PATH"
 fi
 
+# Golang
 export GOPATH="$HOME/go"
-
 export PATH="$PATH:$GOPATH/bin"
+
+# Rust/`cargo install`
+export PATH="$PATH:$HOME/.cargo/bin"
+export RUST_SRC_PATH="$HOME/lib/rust/src"
 
 export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
 
