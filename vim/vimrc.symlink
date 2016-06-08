@@ -4,12 +4,11 @@ set shell=/bin/bash
 let $PATH = expand("~/bin").":".expand("~/dotfiles/bin/").":".expand("~/.cabal/bin/").":".expand("/usr/local/bin").":".$PATH
 
 set nocompatible
-filetype off
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-so ~/.vim/vundlerc.vim
-call vundle#end()
+filetype off
+call plug#begin()
+so ~/.plug.vim
+call plug#end()
 
 filetype plugin indent on
 syntax on

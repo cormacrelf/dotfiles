@@ -1,8 +1,10 @@
-" Source the ~/.vimrc, for compat reasons.
-
 set nocompatible
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+set termguicolors
+
+" Source the ~/.vimrc, for compat reasons.
 source ~/.vimrc
+
 colorscheme gotham
 let g:airline_theme = "gotham"
 runtime! plugin/python_setup.vim
@@ -17,7 +19,3 @@ tnoremap <A-l> <C-\><C-n><C-w>l
 " nnoremap <A-k> <C-w>k
 " nnoremap <A-l> <C-w>l
 
-command! MoveFiles silent execute "read !find . -maxdepth 1 -type f -not -path '*/\\.*' | cut -sd / -f 2-" | Mvall | execute "normal ggdd"
-command! MoveAll silent execute "read !ls" | Mvall | execute "normal ggdd"
-command! -bar Mvall silent execute "setf sh | %s/.*/mv -i '&' '&'/g"
-command! -bar Shall execute "%!sh"
