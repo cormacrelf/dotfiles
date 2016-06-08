@@ -403,6 +403,7 @@ set ignorecase          " ignore case when searching
 set nohlsearch          " don't highlight searches
 set visualbell          " shut the fuck up
 set title
+set titlestring=vim:\ %f\ %a%r%m
 set hidden
 
 " }}}
@@ -497,6 +498,8 @@ augroup END
 
 " }}}
 " Plugin Mapping {{{
+
+let g:AutoPairsShortcutToggle = ''
 
 " splitjoin
 nnoremap <silent> J :<C-u>call <SID>try('SplitjoinJoin',  'J')<CR>

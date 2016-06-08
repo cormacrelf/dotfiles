@@ -13,13 +13,13 @@ Plug 'tpope/vim-liquid'
 Plug 'groenewege/vim-less'
 Plug 'fatih/vim-go'
 Plug 'derekwyatt/vim-scala'
-Plug 'lambdatoast/elm.vim'
 Plug 'wting/rust.vim'
 Plug 'cespare/vim-toml'
 Plug 'elixir-lang/vim-elixir'
 " Plug 'othree/yajs.vim'
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
+
 
 " Clojure / Paredit
 Plug 'guns/vim-clojure-static', { 'for': ['clojure'] }

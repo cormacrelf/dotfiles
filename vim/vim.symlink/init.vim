@@ -9,6 +9,8 @@ colorscheme gotham
 let g:airline_theme = "gotham"
 runtime! plugin/python_setup.vim
 
+set titlestring=nvim:\ %f\ %a%r%m
+
 tnoremap <Esc> <C-\><C-n>
 tnoremap <A-h> <C-\><C-n><C-w>h
 tnoremap <A-j> <C-\><C-n><C-w>j
