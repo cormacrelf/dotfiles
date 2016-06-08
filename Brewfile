@@ -1,7 +1,14 @@
+# vim: ft=ruby
 cask_args appdir: '/Applications'
 
 tap 'caskroom/cask'
 tap 'homebrew/bundle'
+tap 'neovim/neovim'
+brew 'mas'
+
+brew 'git' # first in case we want to install --HEAD
+
+brew 'neovim/neovim/neovim'
 
 brew 'ack'
 brew 'bsdiff'
@@ -16,7 +23,6 @@ brew 'erlang'
 brew 'fasd'
 brew 'ffmpeg'
 brew 'gist'
-brew 'git'
 brew 'gnupg'
 brew 'gnupg2'
 brew 'gnutls'
@@ -29,7 +35,7 @@ brew 'lame'
 brew 'leiningen'
 brew 'lua'
 brew 'luajit'
-brew 'macvim', args: ['--HEAD', '--with-python', '--with-cscope', '--with-lua']
+brew 'macvim'
 brew 'mercurial'
 brew 'moreutils'
 brew 'movgrab'
@@ -69,7 +75,7 @@ cask 'google-chrome'
 cask 'firefox'
 cask 'vlc'
 cask 'steam'
-cask 'utorrent'
+cask 'transmission'
 cask 'adobe-creative-cloud'
 cask 'alfred'
 cask 'bittorrent-sync'
@@ -81,3 +87,9 @@ cask 'slack'
 
 cask 'java'
 brew 'scala'
+
+mas '1Password', id: 443987910
+mas 'PCalc'    , id: 403504866
+mas 'Things'   , id: 407951449
+mas 'Dash'     , id: 449589707
+
