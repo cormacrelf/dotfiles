@@ -2,6 +2,8 @@ set nocompatible
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 set termguicolors
 
+set rtp+=$HOME/.vim
+
 " Source the ~/.vimrc, for compat reasons.
 source ~/.vimrc
 
