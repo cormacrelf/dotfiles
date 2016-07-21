@@ -1,3 +1,8 @@
+" Neovim
+Plug 'blueyed/neomake'
+Plug 'tpope/vim-dispatch'
+Plug 'radenling/vim-dispatch-neovim'
+
 " Language-specific
 Plug 'kana/vim-filetype-haskell'
 Plug 'bitc/vim-hdevtools'
@@ -45,17 +50,18 @@ Plug 'wellle/targets.vim'
 Plug 'kien/ctrlp.vim'
 Plug 'vim-airline/vim-airline'
 " Plug 'bling/vim-bufferline'
-Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeTabsToggle' }
+Plug 'scrooloose/nerdtree'
 Plug 'jistr/vim-nerdtree-tabs', { 'on':  'NERDTreeTabsToggle' }
 Plug 'mileszs/ack.vim', { 'on': 'Ack' }
 Plug 'rking/ag.vim', { 'on': 'Ag' }
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
-" Plug 'mhinz/vim-startify'
+Plug 'mhinz/vim-startify'
 Plug 'tasklist.vim', { 'on': 'TaskList' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'talek/obvious-resize'
 Plug 'reedes/vim-wheel' " d-j, d-k
+Plug 'moll/vim-bbye' " Bdelete
 " Plug 'jeaye/color_coded'
 " Plug 'tpope/vim-vinegar'
 " Plug 'kana/vim-tabpagecd'
@@ -90,7 +96,7 @@ endfunction
 " Completion, Snippets and Insert Mode
 Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
 Plug 'jiangmiao/auto-pairs'
-Plug 'tpope/vim-endwise'
+" Plug 'tpope/vim-endwise'
 Plug 'mattn/emmet-vim'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'

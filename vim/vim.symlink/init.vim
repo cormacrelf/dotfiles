@@ -1,11 +1,20 @@
 set nocompatible
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-set termguicolors
 
-set rtp+=$HOME/.vim
+" Equivalent but termguicolors is only in HEAD neovim (and vim)
+let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+if has('termguicolors')
+    set termguicolors
+endif
+
+set rtp+=$HOME/.vim " so that we still have autoloads from Vim
 
 " Source the ~/.vimrc, for compat reasons.
 source ~/.vimrc
+
+" Neovim overrides
+
+nunmap <leader>Vs
+nnoremap <leader>Vs :so ~/.config/nvim/init.vim<cr>
 
 colorscheme gotham
 let g:airline_theme = "gotham"

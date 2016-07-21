@@ -14,7 +14,7 @@ syntax on
 " do this first so any yank mappings still cache
 call yankstack#setup()
 
-set shell=/bin/bash
+set shell=/usr/local/bin/zsh
 let $PATH = expand("~/bin").":".expand("~/dotfiles/bin/").":".expand("~/.cabal/bin/").":".expand("/usr/local/bin").":".$PATH
 
 set thesaurus+=$HOME/lib/mthesaur.txt
@@ -138,8 +138,8 @@ nnoremap <leader><Tab> :Sscratch<CR>
 nnoremap <leader>Sp :setlocal spell!<cr>
 
 " quick delete buffer
-nnoremap <leader>bd :bd<CR>
-nnoremap <leader>bD :bd!<CR>
+nnoremap <leader>bd :Bdelete<CR>
+nnoremap <leader>bD :Bdelete!<CR>
 " exit a buffer or split
 nnoremap <leader>q :q<CR>
 
@@ -151,7 +151,9 @@ noremap <Leader>a ggVG
 " editing vim config
 nnoremap <D-<>       :tabe ~/.vimrc<cr>
 nnoremap <leader>Vs  :so   ~/.vimrc<cr>
-nnoremap <leader>Ve  :tabe ~/.vimrc<cr>
+nnoremap <leader>Ve  :e ~/.vimrc<cr>
+nnoremap <leader>Vn  :e ~/.config/nvim/init.vim<cr>
+nnoremap <leader>Vp  :e ~/.plug.vim<cr>
 nnoremap <leader>VVe :tabe ~/.vim/vundlerc.vim<cr>
 
 " toggle typewriter mode
@@ -172,6 +174,8 @@ nnoremap <leader>wc :!wordcount %<cr>
 " errors
 " nnoremap <leader>j :cnext<cr>zz
 " nnoremap <leader>k :cprev<cr>zz
+
+nnoremap <leader>m :Neomake! cargo<cr>
 
 " }}}
 " Window Mappings {{{
@@ -222,6 +226,9 @@ map <silent> <S-Space> <C-w>=
 map <silent> <S-Space> <C-w><bar><C-w>_
 
 set winminheight=0
+
+map <m-tab> :tabnext<cr>
+map <m-c-y> :tabprev<cr>
 
 " }}}
 " Remapping {{{
@@ -442,7 +449,7 @@ function! WordCount()
             let s:split_wc = split(v:statusmsg)
             if index(s:split_wc, "Selected") < 0
                 " echom "s:split_wc <<<<<<<<<<<<<"
-                " echom join(s:split_wc, " ")
+                echom join(s:split_wc, " ")
                 let b:wordcount = str2nr(s:split_wc[11])
             else
                 let b:wordcount = str2nr(s:split_wc[5])
@@ -471,8 +478,17 @@ runtime macros/matchit.vim
 let g:golang_goroot = "/usr/local/go/"
 " autocmd FileType go compiler golang
 
+" haskell
 au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
 au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
+
+let g:neomake_enabled_makers = []
+let g:neomake_open_list = 2
+let g:neomake_verbose = 2
+
+" rust
+au FileType rust let b:AutoPairs = { '(': ')', '{': '}', '[': ']', '"': '"' }
+let g:neomake_rust_enabled_makers = ['cargo']
 
 command! Paredit execute Paredit()
 
@@ -556,23 +572,21 @@ let g:startify_bookmarks = [
 \ ]
 let g:startify_files_number = 5
 let g:startify_custom_header = [
-\'',
-\'',
-\'  _________                                      __________       .__   _____ ',
-\'  \_   ___ \  ___________  _____ _____    ____   \______   \ ____ |  |_/ ____\ ',
-\'  /    \  \/ /  _ \_  __ \/     \\__  \ _/ ___\   |       _// __ \|  |\   __\ ',
-\'  \     \___(  <_> )  | \/  Y Y  \/ __ \\  \___   |    |   \  ___/|  |_|  |   ',
-\'   \______  /\____/|__|  |__|_|  (____  /\___  >  |____|_  /\___  >____/__|   ',
-\'          \/                   \/     \/     \/          \/     \/            ',
-\'',
-\'' ]
+\"                                     _ ___ ",
+\"   ___ ___ ___ _____ ___ ___ ___ ___| |  _|",
+\"  |  _| . |  _|     | .'|  _|  _| -_| |  _|",
+\"  |___|___|_| |_|_|_|__,|___|_| |___|_|_|  ",
+\"                                           "]
 
 " Airline
 let b:toggled_ws_once = 1
 let g:airline_left_sep  = ''
 let g:airline_right_sep = ''
-let g:airline_section_y = '%{WordCount()}w'
+" let g:airline_section_y = '%{WordCount()}w'
 let g:airline#extensions#whitespace#enabled = 0
+call airline#parts#define_function('wordcount', 'WordCount')
+call airline#parts#define_condition('wordcount', 'exists("b:wc_enabled") && b:wc_enabled == 1')
+let g:airline_section_y = airline#section#create(['ffenc', ' ', 'wordcount'])
 
 
 " CtrlP
@@ -607,11 +621,6 @@ nmap S <Plug>Sneak_S
 " visual-mode
 xmap s <Plug>Sneak_s
 xmap S <Plug>Sneak_S
-"
-" Snippets / UltiSnips
-let g:UltiSnipsExpandTrigger="<C-CR>"
-let g:UltiSnipsJumpForwardTrigger="<C-tab>"
-let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
 " vim-sneak
 
@@ -646,25 +655,44 @@ omap T <Plug>Sneak_T
 
 let g:ycm_rust_src_path = $HOME.'/lib/rust/src'
 
-" Use smartcase.
-let g:neocomplete#enable_smart_case = 1
-let g:neocomplete#enable_at_startup = 0
-let g:clang_complete_auto = 1
-let g:neocomplete#use_vimproc = 1
-
 autocmd FileType go setlocal omnifunc=go#complete#Complete
 autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
 autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
 autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
 
-" use <tab> for triggering manual completion
-function! s:check_back_space()
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~ '\s'
+" Snippets / UltiSnips
+let g:UltiSnipsSnippetDirectories=["UltiSnips", "my-ultisnips"]
+let g:UltiSnipsSnippetsDir = $HOME.'/.vim/my-ultisnips'
+" let g:UltiSnipsExpandTrigger="<C-CR>"
+" let g:UltiSnipsJumpForwardTrigger="<C-tab>"
+" let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
+
+function! g:UltiSnips_Complete()
+    call UltiSnips#ExpandSnippet()
+    if g:ulti_expand_res == 0
+        if pumvisible()
+            return "\<C-n>"
+        else
+            call UltiSnips#JumpForwards()
+            if g:ulti_jump_forwards_res == 0
+               return "\<TAB>"
+            endif
+        endif
+    endif
+    return ""
 endfunction
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" :
-                   \ <SID>check_back_space() ? "\<TAB>" :
-                   \ neocomplete#start_manual_complete()
+
+fun! Ultisnips_Remap()
+    exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+endf
+
+au InsertEnter * call Ultisnips_Remap()
+let g:UltiSnipsJumpForwardTrigger="<tab>"
+let g:UltiSnipsListSnippets="<c-e>"
+" this mapping Enter key to <C-y> to chose the current highlight item 
+" and close the selection list, same as other IDEs.
+" CONFLICT with some plugins like tpope/Endwise
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " }}}
 " Prose Formatting {{{
@@ -691,6 +719,8 @@ command! -range=% SoftWrap
             \ <line1>,<line2>g/.\+/ .;-/^$/ join |normal $x
 
 function! Prose()
+
+    let b:wc_enabled = 1
 
     if !exists("b:pbuild_args")
         let b:pbuild_args = ""
@@ -761,8 +791,8 @@ function! Prose()
     inoremap <D-6> [^]<left>
 
     " for pandoc building using pbuild
-    nnoremap <leader>pr :exec "!/Users/cormac/bin/pbuild short ".b:pbuild_args." % &"<cr><cr>
-    nnoremap <leader>pR :exec "!/Users/cormac/bin/pbuild short ".b:pbuild_args." %"<cr>
+    nnoremap <leader>pr :Dispatch !pbuild short %<cr>
+    " nnoremap <leader>pR :Dispatch "!pbuild short %"<cr>
 
     " use convention of **bold** and _italic_
     let b:surround_105 = "_\r_" " i
