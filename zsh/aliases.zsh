@@ -19,3 +19,5 @@ alias fucking='fuck' # fucking bleep
 alias curl-resume="curl -C - -L"
 
 alias statm="stat -c '%a %n'"
+
+alias g=git

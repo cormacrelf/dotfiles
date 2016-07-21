@@ -1,0 +1,12 @@
+# commment lines like bash
+
+zsh-users/zsh-history-substring-search
+zsh-users/zsh-syntax-highlighting
+zsh-users/zsh-autosuggestions
+djui/alias-tips
+
+# themes
+
+oskarkrawczyk/honukai-iterm-zsh
+# cormacrelf/blunt-zsh
+

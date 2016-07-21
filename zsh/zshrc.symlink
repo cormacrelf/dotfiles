@@ -3,8 +3,6 @@ export DOT=$HOME/.dotfiles
 
 setopt extended_glob
 
-export DEFAULT_USER="cormac"
-
 # your project folder that we can `c [tab]` to
 export code=$HOME/git
 
@@ -18,7 +16,7 @@ done
 # want in your public, versioned repo.
 if [[ -a ~/.localrc ]]
 then
-  source ~/.localrc
+    source ~/.localrc
 fi
 
 # initialize autocomplete here, otherwise functions won't be loaded
@@ -31,15 +29,9 @@ do
   source $file
 done
 
-# autoload -U promptinit && promptinit
-# prompt pure
-# prompt clean
-
 # pretty start
 if hash archey 2>&/dev/null; then
     archey -c
 fi
-
-# . /Users/cormac/torch/install/bin/torch-activate
 
 # test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
