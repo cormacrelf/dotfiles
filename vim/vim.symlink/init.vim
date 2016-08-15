@@ -6,6 +6,8 @@ if has('termguicolors')
     set termguicolors
 endif
 
+let g:python_host_prog='/usr/local/bin/python3'
+
 set rtp+=$HOME/.vim " so that we still have autoloads from Vim
 
 " Source the ~/.vimrc, for compat reasons.

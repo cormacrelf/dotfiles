@@ -18,6 +18,7 @@ Plug 'tpope/vim-liquid'
 Plug 'groenewege/vim-less'
 Plug 'fatih/vim-go'
 Plug 'derekwyatt/vim-scala'
+" Plug 'jeaye/color_coded', { 'for': ['c'] }
 Plug 'wting/rust.vim'
 Plug 'cespare/vim-toml'
 Plug 'elixir-lang/vim-elixir'
@@ -51,7 +52,7 @@ Plug 'kien/ctrlp.vim'
 Plug 'vim-airline/vim-airline'
 " Plug 'bling/vim-bufferline'
 Plug 'scrooloose/nerdtree'
-Plug 'jistr/vim-nerdtree-tabs', { 'on':  'NERDTreeTabsToggle' }
+Plug 'jistr/vim-nerdtree-tabs'
 Plug 'mileszs/ack.vim', { 'on': 'Ack' }
 Plug 'rking/ag.vim', { 'on': 'Ag' }
 Plug 'tpope/vim-fugitive'

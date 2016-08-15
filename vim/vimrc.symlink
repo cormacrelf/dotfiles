@@ -92,7 +92,7 @@ autocmd Filetype ruby,eruby setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype javascript setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype coffee     setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype haskell    setlocal ts=4 sw=4 sts=4 expandtab
-autocmd Filetype c          setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype c          setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype objc       setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype python     setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype markdown   setlocal ts=2 sw=2 sts=2 expandtab fo-=c
@@ -175,7 +175,7 @@ nnoremap <leader>wc :!wordcount %<cr>
 " nnoremap <leader>j :cnext<cr>zz
 " nnoremap <leader>k :cprev<cr>zz
 
-nnoremap <leader>m :Neomake! cargo<cr>
+nnoremap <leader>m :exec "Neomake! ".get(b:, 'neomake_makers', "")<cr>
 
 " }}}
 " Window Mappings {{{
@@ -494,10 +494,10 @@ command! Paredit execute Paredit()
 
 function! Paredit()
     " allow > and < to fling braces
-    nunmap <silent> <p
-    nunmap <silent> <P
-    nunmap <silent> >p
-    nunmap <silent> >P
+    nunmap <buffer> <silent> <p
+    nunmap <buffer> <silent> <P
+    nunmap <buffer> <silent> >p
+    nunmap <buffer> <silent> >P
     let g:paredit_shortmaps = 1
     let g:paredit_electric_return = 1
 endfunction
@@ -508,6 +508,15 @@ augroup PAREDIT
     autocmd Filetype lisp    execute Paredit()
     autocmd Filetype cljs    execute Paredit()
 augroup END
+
+function! Listacular()
+    " <c-.> marks as 'done', sends to start of done section
+    nnoremap <buffer> <C-.> m`dd/^x<cr>P0rx``
+    " <c-,> moves to top of list and marks as not done just in case
+    nnoremap <buffer> <C-,> m`ddggP0r-``
+endfunction
+
+autocmd! BufNewFile,BufRead $HOME/Dropbox/Listacular/* execute Listacular()
 
 " }}}
 " Plugin Mapping {{{
@@ -653,6 +662,8 @@ omap T <Plug>Sneak_T
 " }}}
 " Omni Completeion and YouCompleteMe {{{
 
+nnoremap <leader>jd :YcmCompleter GoTo<cr>
+
 let g:ycm_rust_src_path = $HOME.'/lib/rust/src'
 
 autocmd FileType go setlocal omnifunc=go#complete#Complete
@@ -791,7 +802,7 @@ function! Prose()
     inoremap <D-6> [^]<left>
 
     " for pandoc building using pbuild
-    nnoremap <leader>pr :Dispatch !pbuild short %<cr>
+    nnoremap <leader>pr :Dispatch! pbuild short %<cr>
     " nnoremap <leader>pR :Dispatch "!pbuild short %"<cr>
 
     " use convention of **bold** and _italic_
