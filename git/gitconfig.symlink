@@ -2,6 +2,7 @@
 [user]
 	name = Cormac Relf
 	email = cormacrelf@me.com
+	signingkey = 75A25B12
 [include]
 	path = ~/.gitconfig.local
 [core]
