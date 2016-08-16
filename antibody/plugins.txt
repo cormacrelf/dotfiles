@@ -1,12 +1,18 @@
-# commment lines like bash
+# vim: ft=sh :
+# hash comments will be stripped
 
+# plugins
+
+robbyrussell/oh-my-zsh
 zsh-users/zsh-history-substring-search
 zsh-users/zsh-syntax-highlighting
 zsh-users/zsh-autosuggestions
-djui/alias-tips
+jreese/zsh-titles
+# djui/alias-tips
 
-# themes
+# themes (only use one)
 
-oskarkrawczyk/honukai-iterm-zsh
+tylerreckart/hyperzsh
+# oskarkrawczyk/honukai-iterm-zsh
 # cormacrelf/blunt-zsh
 
