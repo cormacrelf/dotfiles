@@ -449,7 +449,7 @@ function! WordCount()
             let s:split_wc = split(v:statusmsg)
             if index(s:split_wc, "Selected") < 0
                 " echom "s:split_wc <<<<<<<<<<<<<"
-                echom join(s:split_wc, " ")
+                " echom join(s:split_wc, " ")
                 let b:wordcount = str2nr(s:split_wc[11])
             else
                 let b:wordcount = str2nr(s:split_wc[5])
