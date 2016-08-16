@@ -45,19 +45,13 @@ set background=dark
 let g:pencil_neutral_headings = 1
 " override the colorscheme to 24-bit in nvim/gvim's respective configs.
 " both source this first, so it makes sense that way.
-colorscheme gotham256
-let g:airline_theme='gotham256'
 if !(has("nvim") || has("gui_running"))
     set term=screen-256color
+    colorscheme gotham256
+    let g:airline_theme='gotham256'
 else
     " set updatetime=250
 endif
-
-" Map toggling of background colour to <F5>
-map <silent><f5> :ToggleBG<cr>
-nnoremap <F4> :set lines=1000<cr>
-nnoremap <F3> :set fullscreen!<cr>:echo ""<cr>
-
 
 set autoindent                                     " automatic indent new lines
 set cindent                                        " be smart about it: actually, use filetype

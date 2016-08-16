@@ -1,5 +1,3 @@
-set nocompatible
-
 " Equivalent but termguicolors is only in HEAD neovim (and vim)
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 if has('termguicolors')
@@ -18,8 +16,10 @@ source ~/.vimrc
 nunmap <leader>Vs
 nnoremap <leader>Vs :so ~/.config/nvim/init.vim<cr>
 
-colorscheme gotham
-let g:airline_theme = "gotham"
+set background=dark
+" let g:two_firewatch_italics=1
+colorscheme two-firewatch
+let g:airline_theme = "twofirewatch"
 runtime! plugin/python_setup.vim
 
 set titlestring=nvim:\ %f\ %a%r%m

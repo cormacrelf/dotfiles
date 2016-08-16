@@ -11,15 +11,15 @@
 " set guifont=Cousine:h14
 " set guifont=Hack:h13
 " set linespace=1
-set guifont=Input:h11
+set guifont=Hack:h11
 set linespace=3
 " set gfn=Source\ Code\ Pro\ for\ Powerline:h13
 " set linespace=1
 
 set antialias
 
-colorscheme gotham
-let g:airline_theme = "gotham"
+colorscheme two-firewatch
+let g:airline_theme = "twofirewatch"
 
 set lines=58
 set columns=1000
