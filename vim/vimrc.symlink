@@ -42,7 +42,6 @@ au BufEnter /tmp/crontab.* setl backupcopy=yes
 " endif
 
 set background=dark
-let g:pencil_neutral_headings = 1
 " override the colorscheme to 24-bit in nvim/gvim's respective configs.
 " both source this first, so it makes sense that way.
 if !(has("nvim") || has("gui_running"))
@@ -52,6 +51,8 @@ if !(has("nvim") || has("gui_running"))
 else
     " set updatetime=250
 endif
+
+call togglebg#map("<F4>")
 
 set autoindent                                     " automatic indent new lines
 set cindent                                        " be smart about it: actually, use filetype
@@ -95,6 +96,8 @@ autocmd Filetype scala      setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype go         setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype vim        setlocal ts=4 sw=4 sts=4 expandtab com+=":\""
 autocmd Filetype clojure    setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype ada        setlocal ts=3 sw=3 sts=3 expandtab
+autocmd Filetype makefile   setlocal ts=4 sw=4 sts=4 noexpandtab
 augroup END
 
 " }}}
@@ -170,6 +173,7 @@ nnoremap <leader>wc :!wordcount %<cr>
 " nnoremap <leader>k :cprev<cr>zz
 
 nnoremap <leader>m :exec "Neomake! ".get(b:, 'neomake_makers', "")<cr>
+nnoremap <leader>M :exec "Neomake ".get(b:, 'neomake_file', "")<cr>
 
 " }}}
 " Window Mappings {{{
@@ -508,6 +512,7 @@ function! Listacular()
     nnoremap <buffer> <C-.> m`dd/^x<cr>P0rx``
     " <c-,> moves to top of list and marks as not done just in case
     nnoremap <buffer> <C-,> m`ddggP0r-``
+    setl textwidth=0
 endfunction
 
 autocmd! BufNewFile,BufRead $HOME/Dropbox/Listacular/* execute Listacular()
@@ -746,13 +751,15 @@ function! Prose()
     setl nosmartindent
     setl autoindent
 
+    set noshowmatch
+
     " t: auto-format paragraphs of text
     " -l
     " -r, so enter doesn't insert bullets prematurely
     " -o, so essentially manually insert bullets.
     setl formatoptions=tcroqlnj1
     " same as above
-    setl formatlistpat=\\v^\\s*((\\d+\|[a-z]\|)[\\]:\\.\\)}]\|\\*[\\t\ ])\\s*
+    " setl formatlistpat=\\v^\\s*((\\d+\|[a-z]\|)[\\]:\\.\\)}]\|\\*[\\t\ ])\\s*
     setl textwidth=80
     " markdown comments
     setl com=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,b:-

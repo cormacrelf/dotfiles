@@ -29,6 +29,14 @@ do
   source $file
 done
 
+# make sure this is after system/env.zsh is sourced
+if hash nvim 2>/dev/null; then
+    export EDITOR="nvim"
+else
+    export EDITOR="vim"
+fi
+export VISUAL="$EDITOR"
+
 # pretty start
 if hash archey 2>&/dev/null; then
     archey -c

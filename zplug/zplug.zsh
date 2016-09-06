@@ -15,11 +15,16 @@ export DISABLE_AUTO_UPDATE="true"
 export ZSH=$ZPLUG_HOME/repos/robbyrussell/oh-my-zsh
 export ZSH_THEME=""
 
+# plugins
 zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh", nice:-1
 zplug "jreese/zsh-titles"
-zplug "unixorn/tumult.plugin.zsh"
+zplug "unixorn/tumult.plugin.zsh" # osx
+zplug "peterhurford/git-it-on.zsh" # term->github
+zplug "supercrabtree/k" # ls for git
+zplug "chrissicool/zsh-256color"
+
+# themes
 zplug "oskarkrawczyk/honukai-iterm-zsh"
-zplug "peterhurford/git-it-on.zsh"
 # zplug "tylerreckart/hyperzsh"
 # zplug "cormacrelf/blunt-zsh"
 
