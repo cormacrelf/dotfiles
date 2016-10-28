@@ -55,7 +55,7 @@ EXTENSIONS="+citations+simple_tables+table_captions+yaml_metadata_block+fenced_c
 # -V margin:'2.5cm' \
 
 make_shortargs(){ SHORTARGS="
---variable=\"geometry:a4paper,top=2.5cm,bottom=2.5cm,left=4cm,right=4cm\"
+--variable=\"geometry:a4paper,top=2.5cm,bottom=2.5cm,left=3cm,right=3cm\"
 --variable=\"papersize:a4paper\"
 --variable=\"mainfont:${mainfont}\"
 --variable=\"sansfont:$sansfont\"
@@ -64,7 +64,10 @@ make_shortargs(){ SHORTARGS="
 --variable=\"linespace:$linespace\"
 --variable=\"parindent:$parindent\"
 --variable=\"parskip:$parskip\"
---highlight-style=haddock"
+--highlight-style=haddock
+$algbysection
+$alphaalgs
+$noalgnumbering"
 }
 
 PANDOC_BINARY="/usr/local/bin/pandoc"
@@ -199,6 +202,21 @@ gobble_args(){
                 fontsize=$2
                 let "flags_read+=2"
                 shift 2
+                ;;
+            "--alpha-algs")
+                alphaalgs="--variable=\"alphaalgs:1\""
+                let "flags_read+=1"
+                shift 1
+                ;;
+            "--no-alg-numbering")
+                noalgnumbering="--variable=\"noalgnumbering:1\""
+                let "flags_read+=1"
+                shift 1
+                ;;
+            "--alg-by-section")
+                algbysection="--variable=\"algbysection:1\""
+                let "flags_read+=1"
+                shift 1
                 ;;
             "-s" | "--silent")
                 DEBUG_OUT="/dev/null"

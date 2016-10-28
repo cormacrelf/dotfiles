@@ -14,6 +14,30 @@ $endif$
 \usepackage{fixltx2e} % provides \textsubscript
 % use microtype if available
 
+\usepackage{braket}
+
+% algorithmicx
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+$if(alphaalgs)$
+\renewcommand{\thealgorithm}{\alph{algorithm}} 
+$endif$
+$if(noalgnumbering)$
+\renewcommand{\thealgorithm}{} 
+$endif$
+$if(algbysection)$
+    \makeatletter
+    \@addtoreset{algorithm}{section}% algorithm counter resets every section
+    \makeatother
+    \renewcommand{\thealgorithm}{\arabic{section}.\arabic{algorithm}} 
+    $if(alphaalgs)$
+    \renewcommand{\thealgorithm}{\arabic{section}.\alph{algorithm}} 
+    $endif$
+    $if(noalgnumbering)$
+    \renewcommand{\thealgorithm}{\arabic{section}} 
+    $endif$
+$endif$
+
 % plotting libs
 \usepackage{pgfplots}
 \usepackage{tikz}
@@ -234,6 +258,9 @@ $if(institute)$
 \institute{$for(institute)$$institute$$sep$ \and $endfor$}
 $endif$
 \date{$date$}
+
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
 
 \begin{document}
 $if(title)$
