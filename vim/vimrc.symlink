@@ -670,9 +670,12 @@ omap T <Plug>Sneak_T
 
 nnoremap <leader>jd :YcmCompleter GoTo<cr>
 
-let g:ycm_filetype_whitelist = { 'javascript': 1 }
+" let g:ycm_filetype_whitelist = { 'javascript': 1 }
 
-let g:ycm_rust_src_path = $RUST_SRC_PATH
+" this uses the default toolchain
+" let g:ycm_rust_src_path = $RUST_SRC_PATH
+" but this uses the active toolchain
+let g:ycm_rust_src_path = system("echo -n $(dirname $(dirname $(rustup which rustc)))") . "/lib/rustlib/src/rust/src"
 
 autocmd FileType go setlocal omnifunc=go#complete#Complete
 autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 

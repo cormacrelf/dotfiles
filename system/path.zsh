@@ -1,4 +1,4 @@
-export PATH=".:bin:$HOME/bin:/usr/local/share/npm/bin:$HOME/.cabal/bin:/usr/local/bin:/usr/local/sbin:$HOME/Library/Haskell/bin:$DOT/bin:$PATH"
+export PATH="$HOME/bin:$HOME/.cabal/bin:/usr/local/bin:/usr/local/sbin:$DOT/bin:$PATH"
 
 # GNU coreutils
 if hash brew 2>/dev/null; then
@@ -9,9 +9,10 @@ fi
 export GOPATH="$HOME/go"
 export PATH="$PATH:$GOPATH/bin"
 
-# Rust/`cargo install`
+# Rust/cargo
 export PATH="$PATH:$HOME/.cargo/bin"
-export RUST_SRC_PATH="/usr/local/src/rust/src"
+export RUST_DEFAULT_TOOLCHAIN=$(rustup toolchain list | grep default | cut -d' ' -f1)
+export RUST_SRC_PATH="$HOME/.multirust/toolchains/$RUST_DEFAULT_TOOLCHAIN/lib/rustlib/src/rust/src"
 
 export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
 

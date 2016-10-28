@@ -6,7 +6,7 @@ setopt extended_glob
 # your project folder that we can `c [tab]` to
 export code=$HOME/git
 
-# source every .zsh file in this rep
+# source every .zsh file in this repo
 for config_file ($DOT/**/*^lib/*.zsh); do
     # echo $config_file
     source $config_file
