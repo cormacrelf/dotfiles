@@ -16,7 +16,8 @@ export ZSH=$ZPLUG_HOME/repos/robbyrussell/oh-my-zsh
 export ZSH_THEME=""
 
 # plugins
-zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh", nice:-1
+# zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh", nice:-1
+zplug "lib/*", from:oh-my-zsh, nice:0
 zplug "jreese/zsh-titles"
 zplug "unixorn/tumult.plugin.zsh" # osx
 zplug "peterhurford/git-it-on.zsh" # term->github
