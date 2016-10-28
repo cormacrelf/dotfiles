@@ -672,7 +672,7 @@ nnoremap <leader>jd :YcmCompleter GoTo<cr>
 
 let g:ycm_filetype_whitelist = { 'javascript': 1 }
 
-let g:ycm_rust_src_path = $HOME.'/lib/rust/src'
+let g:ycm_rust_src_path = $RUST_SRC_PATH
 
 autocmd FileType go setlocal omnifunc=go#complete#Complete
 autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
