@@ -1,5 +1,5 @@
 " Neovim
-Plug 'blueyed/neomake'
+Plug 'neomake/neomake'
 Plug 'tpope/vim-dispatch'
 Plug 'radenling/vim-dispatch-neovim'
 
@@ -63,6 +63,8 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'talek/obvious-resize'
 Plug 'reedes/vim-wheel' " d-j, d-k
 Plug 'moll/vim-bbye' " Bdelete
+Plug 'osyo-manga/vim-over' " :s preview
+Plug 'haya14busa/incsearch.vim'
 " Plug 'jeaye/color_coded'
 " Plug 'tpope/vim-vinegar'
 " Plug 'kana/vim-tabpagecd'
@@ -75,12 +77,13 @@ Plug 'moll/vim-bbye' " Bdelete
 Plug 'godlygeek/tabular'
 Plug 'tommcdo/vim-lion'           " glip= gLii,
 Plug 'maxbrunsfeld/vim-yankstack'
-Plug 'tpope/vim-commentary'
+Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 Plug 'matchit.zip'
 Plug 'AndrewRadev/splitjoin.vim'
 Plug 'justinmk/vim-sneak' " s<char><char>
+" Plug 'tpope/vim-commentary'
 " Plug 'Lokaltog/vim-easymotion'
 " Plug 'tpope/vim-ragtag'
 
@@ -109,7 +112,7 @@ Plug 'honza/vim-snippets'
 Plug 'whatyouhide/vim-gotham'
 Plug 'ewilazarus/preto'
 Plug 'romainl/Apprentice'
-Plug 'cormacrelf/gruvbox'
+Plug 'morhetz/gruvbox'
 Plug 'dracula/vim'
 Plug 'vim-scripts/chlordane.vim'
 Plug 'rakr/vim-two-firewatch'

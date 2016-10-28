@@ -84,7 +84,7 @@ autocmd Filetype less       setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype jst        setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype xml        setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype ruby,eruby setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype javascript setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype coffee     setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype haskell    setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype c          setlocal ts=4 sw=4 sts=4 expandtab
@@ -487,6 +487,7 @@ let g:neomake_verbose = 2
 " rust
 au FileType rust let b:AutoPairs = { '(': ')', '{': '}', '[': ']', '"': '"' }
 let g:neomake_rust_enabled_makers = ['cargo']
+au FileType rust let b:neomake_makers = "cargo"
 
 command! Paredit execute Paredit()
 
@@ -546,6 +547,12 @@ function! s:doc(cmd)
   endif
   return 'K'
 endfunction
+
+" incsearch.vim
+
+map /  <Plug>(incsearch-forward)
+map ?  <Plug>(incsearch-backward)
+map g/ <Plug>(incsearch-stay)
 
 " }}}
 " Plugin Configuration {{{
@@ -662,6 +669,8 @@ omap T <Plug>Sneak_T
 " Omni Completeion and YouCompleteMe {{{
 
 nnoremap <leader>jd :YcmCompleter GoTo<cr>
+
+let g:ycm_filetype_whitelist = { 'javascript': 1 }
 
 let g:ycm_rust_src_path = $HOME.'/lib/rust/src'
 

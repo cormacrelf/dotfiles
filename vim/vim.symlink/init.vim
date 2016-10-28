@@ -18,8 +18,8 @@ nnoremap <leader>Vs :so ~/.config/nvim/init.vim<cr>
 
 set background=dark
 " let g:two_firewatch_italics=1
-colorscheme two-firewatch
-let g:airline_theme = "twofirewatch"
+colorscheme gotham
+let g:airline_theme = "gotham"
 runtime! plugin/python_setup.vim
 
 set titlestring=nvim:\ %f\ %a%r%m
