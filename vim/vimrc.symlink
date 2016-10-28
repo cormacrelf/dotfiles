@@ -113,7 +113,7 @@ nnoremap <M-;> ,
 noremap <leader>w <C-w>v<C-w>l
 
 " Shortcut to rapidly toggle `set list`
-noremap <leader>l :set list!<CR>
+" noremap <leader>l :set list!<CR>
 
 " use NERDTree on ,d
 " Plus more nerdtree goodies
@@ -126,10 +126,14 @@ let g:NERDTreeMinimalUI = 1
 
 " copy default register to clipboard
 noremap <leader>c :let @+=@"<cr>:echo "copied!"<cr>
-noremap <leader>v :let @"=@+<cr>:echo "pasted!"<cr>
+noremap <leader>C :let @"=@+<cr>:echo "pasted!"<cr>
+
+" next/prev buffer!
+nnoremap <leader><Tab> :bn<cr>
+nnoremap <leader><S-Tab> :bp<cr>
 
 " new scratch buffer on
-nnoremap <leader><Tab> :Sscratch<CR>
+nnoremap <leader><S-s><c> :Sscratch<CR>
 
 " toggle spelling
 nnoremap <leader>Sp :setlocal spell!<cr>
@@ -137,11 +141,13 @@ nnoremap <leader>Sp :setlocal spell!<cr>
 " quick delete buffer
 nnoremap <leader>bd :Bdelete<CR>
 nnoremap <leader>bD :Bdelete!<CR>
+
 " exit a buffer or split
 nnoremap <leader>q :q<CR>
 
 " Find merge conflict markers
 nnoremap <silent> <leader>Cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
+
 " select all
 noremap <Leader>a ggVG
 
@@ -157,13 +163,20 @@ nnoremap <leader>VVe :tabe ~/.vim/vundlerc.vim<cr>
 nnoremap <Leader>zz :let &scrolloff=999-&scrolloff<CR>
 
 " Look up in online French dictionary
-nnoremap <leader>wr viw"hy:!open "http://wordreference.com/enfr/<c-r>h"<cr><cr>
+" nnoremap <leader>wr viw"hy:!open "http://wordreference.com/enfr/<c-r>h"<cr><cr>
 
 " Look up in Mac dictionary
 nnoremap <leader>K viw"hy:!open "dict://<c-r>h"<cr><cr>
 
 " toggle undo tree
-nnoremap <leader>g :UndotreeToggle<CR>
+nnoremap <leader>u :UndotreeToggle<CR>
+
+" vim-grepper!
+nnoremap <leader>g :Grepper -tool rg<cr>
+nnoremap <leader>G :Grepper -tool rg -cword -noprompt<cr>
+command! -nargs=* Rg :Grepper -tool rg -noswitch<cr>
+nnoremap <leader>L :let @/="\\<".expand("<cword>")."\\>"<cr>:lvim! /\C<c-r>//j %<cr>
+nnoremap <leader>l :lw<cr>
 
 " word count
 nnoremap <leader>wc :!wordcount %<cr>
@@ -172,6 +185,7 @@ nnoremap <leader>wc :!wordcount %<cr>
 " nnoremap <leader>j :cnext<cr>zz
 " nnoremap <leader>k :cprev<cr>zz
 
+" the magic of this is, if b:neomake_* is empty, it runs the default one(s).
 nnoremap <leader>m :exec "Neomake! ".get(b:, 'neomake_makers', "")<cr>
 nnoremap <leader>M :exec "Neomake ".get(b:, 'neomake_file', "")<cr>
 
@@ -618,6 +632,13 @@ let g:ctrlp_user_command = {
     \ },
     \ 'fallback': 'ag %s -l --nocolor -g ""'
 \ }
+
+" vim-grepper
+let g:grepper = {
+    \ 'tools': ['rg', 'git', 'grep'],
+    \ 'open':  1,
+    \ 'jump':  0,
+    \ }
 
 if executable('rg')
     set grepprg=rg\ --no-heading\ --vimgrep
