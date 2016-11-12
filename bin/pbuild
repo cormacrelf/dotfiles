@@ -55,7 +55,7 @@ EXTENSIONS="+citations+simple_tables+table_captions+yaml_metadata_block+fenced_c
 # -V margin:'2.5cm' \
 
 make_shortargs(){ SHORTARGS="
---variable=\"geometry:a4paper,top=2.5cm,bottom=2.5cm,left=3cm,right=3cm\"
+--variable=\"geometry:a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm\"
 --variable=\"papersize:a4paper\"
 --variable=\"mainfont:${mainfont}\"
 --variable=\"sansfont:$sansfont\"

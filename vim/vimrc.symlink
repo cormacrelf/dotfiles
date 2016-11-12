@@ -583,7 +583,8 @@ let g:pandoc#syntax#conceal#use = 0
 " stop making esc slow!
 let g:pandoc#modules#disabled = ["bibliographies"]
 let g:pandoc_use_embeds_in_codeblocks_for_langs = ["ruby", "haskell", "python",
-                                                  \ "go", "c", "scala", "clojure"]
+                                                  \ "go", "c", "scala", "clojure",
+                                                  \ "rust", "javascript" ]
 
 let g:vimclojure#HighlightBuiltins = 1
 let g:vimclojure#ParenRainbow = 1
