@@ -38,8 +38,10 @@ fi
 export VISUAL="$EDITOR"
 
 # pretty start
-if hash archey 2>&/dev/null; then
-    archey -c -o -p
-fi
+# if hash archey 2>&/dev/null; then
+#     archey -c -o -p
+# fi
 
 # test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh

@@ -13,3 +13,8 @@ alias curl-resume="curl -C - -L"
 alias statm="stat -c '%a %n'"
 alias g=git
 alias weather="ansiweather -l Canberra -a false"
+
+alias bs "brew services"
+alias bsr="brew services restart"
+alias bss="brew services start"
+alias bsx="brew services stop"
