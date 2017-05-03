@@ -47,7 +47,7 @@ set background=dark
 if !(has("nvim") || has("gui_running"))
     set term=screen-256color
     colorscheme gotham256
-    let g:airline_theme='gotham256'
+    let g:airline_theme='gotham'
 else
     " set updatetime=250
 endif
@@ -58,6 +58,7 @@ set autoindent                                     " automatic indent new lines
 set cindent                                        " be smart about it: actually, use filetype
                                                    " don't muck up indenting with #
 inoremap # X<BS>#
+set cursorline
 set wrap                                           " wrap lines so no h-scrolling required
 set nojs                                           " don't J-join sentences with double spaces
 set linebreak                                      " word boundaries 
@@ -87,7 +88,7 @@ autocmd Filetype ruby,eruby setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype coffee     setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype haskell    setlocal ts=4 sw=4 sts=4 expandtab
-autocmd Filetype c          setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype c          setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype objc       setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype python     setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype markdown   setlocal ts=2 sw=2 sts=2 expandtab fo-=c
@@ -131,9 +132,6 @@ noremap <leader>C :let @"=@+<cr>:echo "pasted!"<cr>
 " next/prev buffer!
 nnoremap <leader><Tab> :bn<cr>
 nnoremap <leader><S-Tab> :bp<cr>
-
-" new scratch buffer on
-nnoremap <leader><S-s><c> :Sscratch<CR>
 
 " toggle spelling
 nnoremap <leader>Sp :setlocal spell!<cr>
@@ -276,11 +274,14 @@ nnoremap I g0i
 map Y y$
 
 " Increment & decrement
-nnoremap + <C-a>
-nnoremap - <C-x>
+" nnoremap + <C-a>
+" nnoremap - <C-x>
 
 " replace selection with " register
 vmap gd "_dP
+
+" visually select the block of characters you added last time you were in INSERT mode.
+nnoremap gV `[v`]h
 
 " repeated indent and outdent lines in selection
 vnoremap < <gv
@@ -293,7 +294,7 @@ nnoremap gs i<cr><esc>
 nnoremap <m-cr> m`A;<esc>``
 
 " Use <C-s> and <M-s> to save
-nnoremap <C-s> :w<cr>
+" nnoremap <C-s> :w<cr>
 nnoremap <M-s> :w<cr>
 
 " Open CtrlP buffer explorer with C-b
@@ -410,7 +411,8 @@ set mat=1                           " duration to show matching brace (1/10 sec)
 set incsearch                       " do incremental searching
 set laststatus=2                    " always show the status line
 set noshowmode                      " don't show INSERT in the status line
-set ignorecase                      " ignore case when searching
+set ignorecase
+set smartcase                       " auto case sensitivity when searching
 set nohlsearch                      " don't highlight searches
 set visualbell                      " shut the fuck up
 set title
@@ -483,16 +485,14 @@ endfunction
 " as vim should do, per the POSIX standard
 let g:is_posix = 1
 
-autocmd FileType ruby compiler ruby       " Enable compiler support for ruby
-
 runtime macros/matchit.vim
 
 let g:golang_goroot = "/usr/local/go/"
 " autocmd FileType go compiler golang
 
 " haskell
-au FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
-au FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
+autocmd FileType haskell nnoremap <buffer> <F1> :HdevtoolsType<CR>
+autocmd FileType haskell nnoremap <buffer> <silent> <F2> :HdevtoolsClear<CR>
 
 let g:neomake_enabled_makers = []
 let g:neomake_open_list = 2
@@ -507,12 +507,14 @@ command! Paredit execute Paredit()
 
 function! Paredit()
     " allow > and < to fling braces
-    nunmap <buffer> <silent> <p
-    nunmap <buffer> <silent> <P
-    nunmap <buffer> <silent> >p
-    nunmap <buffer> <silent> >P
-    let g:paredit_shortmaps = 1
-    let g:paredit_electric_return = 1
+    " nunmap <buffer> <silent> <p
+    " nunmap <buffer> <silent> <P
+    " nunmap <buffer> <silent> >p
+    " nunmap <buffer> <silent> >P
+    nunmap <leader>Sp
+    let g:paredit_shortmaps = 0
+    let g:paredit_electric_return = 0
+    setlocal ts=2 sw=2 sts=2 expandtab
 endfunction
 
 augroup PAREDIT
@@ -538,19 +540,19 @@ autocmd! BufNewFile,BufRead $HOME/Dropbox/Listacular/* execute Listacular()
 let g:AutoPairsShortcutToggle = ''
 
 " splitjoin
-nnoremap <silent> J :<C-u>call <SID>try('SplitjoinJoin',  'J')<CR>
-nnoremap <silent> gs :<C-u>call <SID>try('SplitjoinSplit', "i\015")<CR>
-function! s:try(cmd, default)
-  if exists(':' . a:cmd) && !v:count
-    let tick = b:changedtick
-    execute a:cmd
-    if tick == b:changedtick
-      execute join(['normal!', a:default])
-    endif
-  else
-    execute join(['normal! ', v:count, a:default], '')
-  endif
-endfunction
+" nnoremap <silent> J :<C-u>call <SID>try('SplitjoinJoin',  'J')<CR>
+" nnoremap <silent> gs :<C-u>call <SID>try('SplitjoinSplit', "i\015")<CR>
+" function! s:try(cmd, default)
+"   if exists(':' . a:cmd) && !v:count
+"     let tick = b:changedtick
+"     execute a:cmd
+"     if tick == b:changedtick
+"       execute join(['normal!', a:default])
+"     endif
+"   else
+"     execute join(['normal! ', v:count, a:default], '')
+"   endif
+" endfunction
 
 " dash.vim
 nmap <expr> K <SID>doc("\<Plug>DashSearch")
@@ -564,12 +566,24 @@ endfunction
 
 " incsearch.vim
 
-map /  <Plug>(incsearch-forward)
-map ?  <Plug>(incsearch-backward)
-map g/ <Plug>(incsearch-stay)
+" map /  <Plug>(incsearch-forward)
+" map ?  <Plug>(incsearch-backward)
+" map g/ <Plug>(incsearch-stay)
+
+nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+nnoremap <silent> <F12> :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
+
 
 " }}}
 " Plugin Configuration {{{
+
+" Language servers
+
+let g:LanguageClient_serverCommands = {
+    \ 'rust': ['rustup', 'run', 'nightly', 'cargo', 'run', '--release', '--manifest-path=/opt/rls/Cargo.toml'],
+    \ 'javascript': ['/opt/javascript-typescript-langserver/lib/language-server-stdio.js'],
+    \ }
 
 " javascript and JSX syntax
 
@@ -695,7 +709,7 @@ omap T <Plug>Sneak_T
 " }}}
 " Omni Completeion and YouCompleteMe {{{
 
-nnoremap <leader>jd :YcmCompleter GoTo<cr>
+" nnoremap <leader>jd :YcmCompleter GoTo<cr>
 
 " let g:ycm_filetype_whitelist = { 'javascript': 1 }
 
@@ -735,13 +749,13 @@ fun! Ultisnips_Remap()
     exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
 endf
 
-au InsertEnter * call Ultisnips_Remap()
-let g:UltiSnipsJumpForwardTrigger="<tab>"
-let g:UltiSnipsListSnippets="<c-e>"
+" au InsertEnter * call Ultisnips_Remap()
+" let g:UltiSnipsJumpForwardTrigger="<tab>"
+" let g:UltiSnipsListSnippets="<c-e>"
 " this mapping Enter key to <C-y> to chose the current highlight item 
 " and close the selection list, same as other IDEs.
 " CONFLICT with some plugins like tpope/Endwise
-inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " }}}
 " Prose Formatting {{{

@@ -1,5 +1,6 @@
 " Equivalent but termguicolors is only in HEAD neovim (and vim)
 let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+let $NVIM_TUI_ENABLE_CURSOR_SHAPE=2
 if has('termguicolors')
     set termguicolors
 endif
@@ -17,7 +18,7 @@ nunmap <leader>Vs
 nnoremap <leader>Vs :so ~/.config/nvim/init.vim<cr>
 
 set background=dark
-" let g:two_firewatch_italics=1
+let g:two_firewatch_italics=1
 colorscheme gotham
 let g:airline_theme = "gotham"
 runtime! plugin/python_setup.vim

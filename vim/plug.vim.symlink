@@ -6,10 +6,6 @@ Plug 'radenling/vim-dispatch-neovim'
 " Language-specific
 Plug 'kana/vim-filetype-haskell'
 Plug 'bitc/vim-hdevtools'
-Plug 'juvenn/mustache.vim'
-Plug 'kchmck/vim-coffee-script'
-Plug 'tpope/vim-rails'
-Plug 'tpope/vim-rake'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
@@ -19,19 +15,20 @@ Plug 'groenewege/vim-less'
 Plug 'fatih/vim-go'
 Plug 'derekwyatt/vim-scala'
 " Plug 'jeaye/color_coded', { 'for': ['c'] }
-Plug 'wting/rust.vim'
+Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
 Plug 'elixir-lang/vim-elixir'
 " Plug 'othree/yajs.vim'
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'mxw/vim-jsx', { 'for': ['javascript', 'javascript.jsx'] }
+Plug 'maxmellon/vim-jsx-pretty', { 'for': ['javascript', 'javascript.jsx'] }
 
 
 " Clojure / Paredit
 Plug 'guns/vim-clojure-static', { 'for': ['clojure'] }
 Plug 'tpope/vim-classpath', { 'for': ['clojure'] }
 Plug 'tpope/vim-fireplace', { 'for': ['clojure'] }
-Plug 'paredit.vim', { 'for': ['clojure'] }
+Plug 'guns/vim-sexp', { 'for': ['clojure'] }
+" Plug 'paredit.vim', { 'for': ['clojure'] }
 " Plug 'VimClojure'
 " Plug 'tpope/vim-foreplay'
 
@@ -49,23 +46,24 @@ Plug 'wellle/targets.vim'
 
 " Navigation, behaviour
 Plug 'kien/ctrlp.vim'
+Plug 'tpope/vim-vinegar'
 Plug 'vim-airline/vim-airline'
-" Plug 'bling/vim-bufferline'
-Plug 'scrooloose/nerdtree'
-Plug 'jistr/vim-nerdtree-tabs'
 Plug 'mhinz/vim-grepper'
 Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
+" Plug 'airblade/vim-gitgutter'
 Plug 'mhinz/vim-startify'
 Plug 'tasklist.vim', { 'on': 'TaskList' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'talek/obvious-resize'
-Plug 'reedes/vim-wheel' " d-j, d-k
 Plug 'moll/vim-bbye' " Bdelete
-Plug 'osyo-manga/vim-over' " :s preview
-Plug 'haya14busa/incsearch.vim'
+" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+" Plug 'junegunn/fzf.vim'
+" Plug 'scrooloose/nerdtree'
+" Plug 'jistr/vim-nerdtree-tabs'
+" Plug 'reedes/vim-wheel' " d-j, d-k
+" Plug 'osyo-manga/vim-over' " :s preview
+" Plug 'haya14busa/incsearch.vim'
 " Plug 'jeaye/color_coded'
-" Plug 'tpope/vim-vinegar'
 " Plug 'kana/vim-tabpagecd'
 " Plug 'terryma/vim-multiple-cursors'
 " Plug 'chrisbra/NrrwRgn'
@@ -80,8 +78,8 @@ Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 Plug 'matchit.zip'
-Plug 'AndrewRadev/splitjoin.vim'
 Plug 'justinmk/vim-sneak' " s<char><char>
+" Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'tpope/vim-commentary'
 " Plug 'Lokaltog/vim-easymotion'
 " Plug 'tpope/vim-ragtag'
@@ -97,12 +95,15 @@ function! BuildYCM(info)
 endfunction
 
 " Completion, Snippets and Insert Mode
-Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+" Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }t
+Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
+" Plug 'roxma/nvim-completion-manager'
+Plug 'Shougo/echodoc.vim'
 Plug 'jiangmiao/auto-pairs'
 " Plug 'tpope/vim-endwise'
 Plug 'mattn/emmet-vim'
 Plug 'SirVer/ultisnips'
-Plug 'honza/vim-snippets'
+" Plug 'honza/vim-snippets'
 " Plug 'Shougo/neocomplete.vim'
 " Plug 'scrooloose/syntastic'
 
