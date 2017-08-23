@@ -44,6 +44,7 @@ Plug 'fsharp/vim-fsharp', {
 Plug 'leafgarland/typescript-vim', { 'for': ['typescript'] }
 Plug 'hashivim/vim-terraform'
 Plug 'PProvost/vim-ps1' " Powershell
+Plug 'ch4r/nginx.conf'
 
 
 " Clojure / Paredit

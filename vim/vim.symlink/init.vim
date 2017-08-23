@@ -1,6 +1,6 @@
 " Source ~/.vimrc, vim-plug {{{
 if has('win32') || has ('win64')
-  let $VIM_HOME = ~/AppData/Local/nvim
+  let $VIM_HOME = $HOME."/AppData/Local/nvim"
 else
   let $VIM_HOME = $HOME."/.config/nvim"
 endif

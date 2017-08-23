@@ -11,6 +11,15 @@ if $VIM_HOME == ''
 endif
 
 let $VIM_INIT = $VIM_HOME."/init.vim"
+if has("win32") || has("win64") || has("win16")
+    "I do other stuff in here...
+    imap <c-v> <c-o>:set paste<cr><c-r>+<c-o>:set nopaste<cr>
+    "Then only inside this if block for windows, I test the shell value
+    "On windows, if called from cygwin or msys, the shell needs to be changed to cmd.exe
+    if &shell=~#'bash$'
+        set shell=$COMSPEC " sets shell to correct path for cmd.exe
+    endif
+endif
 
 filetype off
 call plug#begin($VIM_HOME.'/plugged')
@@ -22,12 +31,7 @@ filetype plugin indent on
 syntax on
 
 " do this first so any yank mappings still cache
-" call yankstack#setup()
-
-if executable('/usr/local/bin/zsh')
-  set shell=/usr/local/bin/zsh
-  let $PATH = expand("~/bin").":".expand("~/dotfiles/bin/").":".expand("~/.cabal/bin/").":".expand("/usr/local/bin").":".$PATH
-endif
+call yankstack#setup()
 
 set thesaurus+=$HOME/lib/mthesaur.txt
 
@@ -62,7 +66,7 @@ call togglebg#map("<F4>")
 
 set autoindent                                     " automatic indent new lines
 set cindent                                        " be smart about it: actually, use filetype
-                                                   " don't muck up indenting with #
+" don't muck up indenting with #
 inoremap # X<BS>#
 set wrap                                           " wrap lines so no h-scrolling required
 set nojs                                           " don't J-join sentences with double spaces
@@ -302,7 +306,7 @@ nnoremap gs i<cr><esc>
 nnoremap <m-cr> m`A;<esc>``
 
 " Use <C-s> and <M-s> to save
-" nnoremap <C-s> :w<cr>
+nnoremap <C-s> :w<cr>
 nnoremap <M-s> :w<cr>
 
 " Open CtrlP buffer explorer with C-b
@@ -422,7 +426,7 @@ set noshowmode                      " don't show INSERT in the status line
 set ignorecase
 set smartcase                       " auto case sensitivity when searching
 set nohlsearch                      " don't highlight searches
-set visualbell                      " shut the fuck up
+set novisualbell                      " shut the fuck up
 set title
 set titlestring=vim:\ %f\ %a%r%m
 set hidden                          " allow hidden buffers with edits
