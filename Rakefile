@@ -33,6 +33,26 @@ task :install do
     `ln -s "$PWD/#{linkable}" "#{target}"`
   end
 
+  def manual_symlink(relpath, targetname)
+    target = "#{ENV["HOME"]}/" + targetname
+    write = false
+    if File.exists?(target) || File.symlink?(target)
+      print "overwrite ~/#{targetname}? type yes: "
+      input = STDIN.gets.chomp
+      if input == "yes"
+        FileUtils.rm_rf(target) 
+        write = true
+      end
+    else
+      write = true
+    end
+    `ln -s "$PWD/#{relpath}" #{target}` if write
+  end
+
+  manual_symlink "vim/vim.symlink/vimrc.vim", ".vimrc"
+  manual_symlink "vim/vim.symlink/gvimrc.vim", ".gvimrc"
+  manual_symlink "vim/vim.symlink", ".config/nvim"
+
   pandoc_templates = Dir.glob("./pandoc/templates/*")
 
   skip_all = false

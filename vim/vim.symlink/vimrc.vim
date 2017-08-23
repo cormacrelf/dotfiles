@@ -1,45 +1,51 @@
-" vim: foldenable foldmethod=marker foldlevel=0
 " Basics {{{
 
 set nocompatible
 
+if $VIM_HOME == ''
+    if has('win32') || has ('win64" ')
+        let $VIM_HOME = ~/AppData/Local/nvim
+    else
+        let $VIM_HOME = $HOME."/.vim"
+    endif
+endif
+
+let $VIM_INIT = $VIM_HOME."/init.vim"
+
 filetype off
-call plug#begin('~/.vim/plugged')
-so ~/.plug.vim
+call plug#begin($VIM_HOME.'/plugged')
+    let $VIM_PLUG = $VIM_HOME."/plug.vim"
+    so $VIM_PLUG
 call plug#end()
 
 filetype plugin indent on
 syntax on
 
 " do this first so any yank mappings still cache
-call yankstack#setup()
+" call yankstack#setup()
 
-set shell=/usr/local/bin/zsh
-let $PATH = expand("~/bin").":".expand("~/dotfiles/bin/").":".expand("~/.cabal/bin/").":".expand("/usr/local/bin").":".$PATH
+if executable('/usr/local/bin/zsh')
+  set shell=/usr/local/bin/zsh
+  let $PATH = expand("~/bin").":".expand("~/dotfiles/bin/").":".expand("~/.cabal/bin/").":".expand("/usr/local/bin").":".$PATH
+endif
 
 set thesaurus+=$HOME/lib/mthesaur.txt
 
-if filereadable("~/.vim/private.vim")
+if filereadable($VIM_HOME."/private.vim")
     so ~/.vim/private.vim
 endif
 
 set modeline
-set modelines=5
+set modelines=3
 set noswapfile
 
 " }}}
 " Autocommands {{{
 
-au BufEnter /tmp/crontab.* setl backupcopy=yes
+autocmd BufEnter /tmp/crontab.* setl backupcopy=yes
 
 " }}}
 " Text Formatting {{{
-
-" set background=dark
-" if !has('gui_running')
-"     colorscheme gruvbox
-"     let g:airline_theme='gruvbox'
-" endif
 
 set background=dark
 " override the colorscheme to 24-bit in nvim/gvim's respective configs.
@@ -58,7 +64,6 @@ set autoindent                                     " automatic indent new lines
 set cindent                                        " be smart about it: actually, use filetype
                                                    " don't muck up indenting with #
 inoremap # X<BS>#
-set cursorline
 set wrap                                           " wrap lines so no h-scrolling required
 set nojs                                           " don't J-join sentences with double spaces
 set linebreak                                      " word boundaries 
@@ -72,7 +77,7 @@ set conceallevel=0
 " Indentation {{{
 
 " defaults
-set ts=4 sw=4 sts=4 expandtab
+set ts=2 sw=2 sts=2 expandtab
 
 " specifics
 augroup FILETYPES
@@ -132,6 +137,8 @@ noremap <leader>C :let @"=@+<cr>:echo "pasted!"<cr>
 " next/prev buffer!
 nnoremap <leader><Tab> :bn<cr>
 nnoremap <leader><S-Tab> :bp<cr>
+nnoremap <leader>t :tabnext<cr>
+nnoremap <leader><s-t> :tabprev<cr>
 
 " toggle spelling
 nnoremap <leader>Sp :setlocal spell!<cr>
@@ -154,8 +161,7 @@ nnoremap <D-<>       :tabe ~/.vimrc<cr>
 nnoremap <leader>Vs  :so   ~/.vimrc<cr>
 nnoremap <leader>Ve  :e ~/.vimrc<cr>
 nnoremap <leader>Vn  :e ~/.config/nvim/init.vim<cr>
-nnoremap <leader>Vp  :e ~/.plug.vim<cr>
-nnoremap <leader>VVe :tabe ~/.vim/vundlerc.vim<cr>
+nnoremap <leader>Vp  :e $VIM_PLUG<cr>
 
 " toggle typewriter mode
 nnoremap <Leader>zz :let &scrolloff=999-&scrolloff<CR>
@@ -170,6 +176,8 @@ nnoremap <leader>K viw"hy:!open "dict://<c-r>h"<cr><cr>
 nnoremap <leader>u :UndotreeToggle<CR>
 
 " vim-grepper!
+nmap gG <plug>(GrepperOperator)
+xmap gG <plug>(GrepperOperator)
 nnoremap <leader>g :Grepper -tool rg<cr>
 nnoremap <leader>G :Grepper -tool rg -cword -noprompt<cr>
 command! -nargs=* Rg :Grepper -tool rg -noswitch<cr>
@@ -244,7 +252,7 @@ map <m-c-y> :tabprev<cr>
 " Remapping {{{
 
 " start replace s/// using current selection
-vnoremap <C-r> "hy:%s/<C-r>h//gc<left><left><left>
+vnoremap <leader><F2> "hy:%s/<C-r>h//gc<left><left><left>
 
 " find using current selection
 vnoremap <C-f> "hy/<C-r>h<cr>
@@ -570,23 +578,10 @@ endfunction
 " map ?  <Plug>(incsearch-backward)
 " map g/ <Plug>(incsearch-stay)
 
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-nnoremap <silent> <F12> :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
-
-
 " }}}
 " Plugin Configuration {{{
 
-" Language servers
-
-let g:LanguageClient_serverCommands = {
-    \ 'rust': ['rustup', 'run', 'nightly', 'cargo', 'run', '--release', '--manifest-path=/opt/rls/Cargo.toml'],
-    \ 'javascript': ['/opt/javascript-typescript-langserver/lib/language-server-stdio.js'],
-    \ }
-
 " javascript and JSX syntax
-
 let g:jsx_ext_required = 0
 
 " for pandoc speed
@@ -709,6 +704,11 @@ omap T <Plug>Sneak_T
 " }}}
 " Omni Completeion and YouCompleteMe {{{
 
+set shortmess+=c " suppress annoying # matches found thing
+" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+let g:deoplete#enable_at_startup = 1
+
 " nnoremap <leader>jd :YcmCompleter GoTo<cr>
 
 " let g:ycm_filetype_whitelist = { 'javascript': 1 }
@@ -716,38 +716,33 @@ omap T <Plug>Sneak_T
 " this uses the default toolchain
 " let g:ycm_rust_src_path = $RUST_SRC_PATH
 " but this uses the active toolchain
-let g:ycm_rust_src_path = system("echo -n $(dirname $(dirname $(rustup which rustc)))") . "/lib/rustlib/src/rust/src"
-
-autocmd FileType go setlocal omnifunc=go#complete#Complete
-autocmd FileType ruby,eruby let g:rubycomplete_buffer_loading = 1 
-autocmd FileType ruby,eruby let g:rubycomplete_classes_in_global = 1
-autocmd FileType ruby,eruby let g:rubycomplete_rails = 1
+" let g:ycm_rust_src_path = system("echo -n $(dirname $(dirname $(rustup which rustc)))") . "/lib/rustlib/src/rust/src"
 
 " Snippets / UltiSnips
-let g:UltiSnipsSnippetDirectories=["UltiSnips", "my-ultisnips"]
-let g:UltiSnipsSnippetsDir = $HOME.'/.vim/my-ultisnips'
+" let g:UltiSnipsSnippetDirectories=["UltiSnips", "my-ultisnips"]
+" let g:UltiSnipsSnippetsDir = $HOME.'/.vim/my-ultisnips'
 " let g:UltiSnipsExpandTrigger="<C-CR>"
 " let g:UltiSnipsJumpForwardTrigger="<C-tab>"
 " let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
 
-function! g:UltiSnips_Complete()
-    call UltiSnips#ExpandSnippet()
-    if g:ulti_expand_res == 0
-        if pumvisible()
-            return "\<C-n>"
-        else
-            call UltiSnips#JumpForwards()
-            if g:ulti_jump_forwards_res == 0
-               return "\<TAB>"
-            endif
-        endif
-    endif
-    return ""
-endfunction
-
-fun! Ultisnips_Remap()
-    exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
-endf
+" function! g:UltiSnips_Complete()
+"     call UltiSnips#ExpandSnippet()
+"     if g:ulti_expand_res == 0
+"         if pumvisible()
+"             return "\<C-n>"
+"         else
+"             call UltiSnips#JumpForwards()
+"             if g:ulti_jump_forwards_res == 0
+"                return "\<TAB>"
+"             endif
+"         endif
+"     endif
+"     return ""
+" endfunction
+"
+" fun! Ultisnips_Remap()
+"     exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
+" endf
 
 " au InsertEnter * call Ultisnips_Remap()
 " let g:UltiSnipsJumpForwardTrigger="<tab>"
