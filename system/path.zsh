@@ -17,5 +17,5 @@ export RUST_SRC_PATH="$HOME/.multirust/toolchains/$RUST_DEFAULT_TOOLCHAIN/lib/ru
 export MANPATH="/usr/local/man:/usr/local/mysql/man:/usr/local/git/man:$MANPATH"
 
 export PATH="$PATH:/Applications/Postgres.app/Contents/Versions/latest/bin"
-export PATH="$PATH:/Developer/NVIDIA/CUDA-7.5/bin"
+export PATH="/Developer/NVIDIA/CUDA-8.0/bin:$PATH"
 

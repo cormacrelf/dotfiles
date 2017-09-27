@@ -18,11 +18,13 @@ export ZSH_THEME=""
 # plugins
 # zplug "robbyrussell/oh-my-zsh", use:"lib/*.zsh", nice:-1
 zplug "lib/*", from:oh-my-zsh, nice:0
+zplug "plugins/dirhistory/dirhistory.plugin.zsh", from:oh-my-zsh, nice:0
 zplug "jreese/zsh-titles"
 zplug "unixorn/tumult.plugin.zsh" # osx
 zplug "peterhurford/git-it-on.zsh" # term->github
 zplug "supercrabtree/k" # ls for git
 zplug "chrissicool/zsh-256color"
+zplug "changyuheng/zsh-interactive-cd"
 
 # themes
 zplug "oskarkrawczyk/honukai-iterm-zsh"
