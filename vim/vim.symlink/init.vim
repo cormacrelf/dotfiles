@@ -30,7 +30,8 @@ set path+=src " for using gf on app/models/blah where app is really src/app
 " }}}
 " colorscheme, appearance {{{
 
-" let g:two_firewatch_italics=0
+set termguicolors
+
 " colorscheme two-firewatch
 " let g:airline_theme = "twofirewatch"
 " set background=dark
@@ -38,13 +39,16 @@ colorscheme gruvbox
 let g:airline_theme = "gruvbox"
 set background=dark
 
+" let ayucolor="light"  " for light version of theme
+" let ayucolor="mirage" " for mirage version of theme
+let ayucolor="dark"   " for dark version of theme
+colorscheme ayu
+let g:airline_theme = "twofirewatch"
+"
 so $VIM_HOME/hybrid-spelling.vim
 
 set titlestring=nvim:\ %f\ %a%r%m
 
-if has('termguicolors')
-    set termguicolors
-endif
 if has('guicursor')
     set guicursor
 endif
@@ -84,8 +88,8 @@ augroup END
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'javascript': ['javascript-typescript-stdio.cmd'],
-    \ 'typescript': ['javascript-typescript-stdio.cmd'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'typescript': ['javascript-typescript-stdio']
     \ }
     " \ 'typescript': ['typescript-language-server.cmd', '--stdio']
 

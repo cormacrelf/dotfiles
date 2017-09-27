@@ -9,6 +9,10 @@ Plug 'mattn/emmet-vim'
 "
 " Only in Neovim
 
+Plug 'Yggdroot/indentLine'
+Plug 'ayu-theme/ayu-vim'
+Plug 'beigebrucewayne/hacked_ayu.vim'
+
 if has('nvim')
     " Plug 'roxma/nvim-completion-manager'
     Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
