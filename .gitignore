@@ -7,3 +7,4 @@ vim/vim.symlink/plugged/*
 
 vim/vim.symlink/sessions/*
 vim/vim.symlink/private.vim
+vim/vim.symlink/rplugin.vim

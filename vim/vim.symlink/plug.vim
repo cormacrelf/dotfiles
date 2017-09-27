@@ -42,6 +42,8 @@ Plug 'fsharp/vim-fsharp', {
       \ 'do':  'make fsautocomplete',
       \}
 Plug 'leafgarland/typescript-vim', { 'for': ['typescript'] }
+" Plug 'HerringtonDarkholme/yats.vim', { 'for': ['typescript'] }
+Plug 'Quramy/vim-js-pretty-template', {'for': ['javascript', 'typescript']}
 Plug 'hashivim/vim-terraform'
 Plug 'PProvost/vim-ps1' " Powershell
 Plug 'ch4r/nginx.conf'
@@ -85,6 +87,7 @@ Plug 'jistr/vim-nerdtree-tabs'
 Plug 'reedes/vim-wheel' " d-j, d-k
 Plug 'osyo-manga/vim-over' " :s preview
 Plug 'chrisbra/NrrwRgn' " :NR, :wq
+Plug 'editorconfig/editorconfig-vim'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " Plug 'junegunn/fzf.vim'
 " Plug 'haya14busa/incsearch.vim'
@@ -126,7 +129,6 @@ Plug 'morhetz/gruvbox'
 Plug 'dracula/vim'
 Plug 'vim-scripts/chlordane.vim'
 Plug 'rakr/vim-two-firewatch'
-Plug 'Rykka/colorv.vim'
 Plug 'w0ng/vim-hybrid'
 Plug 'sjl/badwolf'
 Plug 'chriskempson/base16-vim'

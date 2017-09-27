@@ -3,8 +3,8 @@
 set nocompatible
 
 if $VIM_HOME == ''
-    if has('win32') || has ('win64" ')
-        let $VIM_HOME = ~/AppData/Local/nvim
+    if has('win32') || has ('win64')
+        let $VIM_HOME = $HOME."/AppData/Local/nvim"
     else
         let $VIM_HOME = $HOME."/.vim"
     endif
@@ -19,7 +19,13 @@ if has("win32") || has("win64") || has("win16")
     if &shell=~#'bash$'
         set shell=$COMSPEC " sets shell to correct path for cmd.exe
     endif
+
+    " actually just use powershell
+    " set shell=powershell
+    " set shellcmdflag=-command
 endif
+
+command! PlugInstallCmd set shell=bash shellcmdflag=-c | PlugInstall
 
 filetype off
 call plug#begin($VIM_HOME.'/plugged')
@@ -42,6 +48,14 @@ endif
 set modeline
 set modelines=3
 set noswapfile
+
+if !has('nvim')
+  set viminfo+=n$VIM_HOME/viminfo
+else
+  " Do nothing here to use the neovim default
+  " or do soemething like:
+  " set viminfo+=n~/.shada
+endif
 
 " }}}
 " Autocommands {{{
@@ -119,9 +133,6 @@ let maplocalleader = "\\"
 nnoremap <M-;> ,
 " nnoremap ; ;
 
-" create vsplit and switch to it
-noremap <leader>w <C-w>v<C-w>l
-
 " Shortcut to rapidly toggle `set list`
 " noremap <leader>l :set list!<CR>
 
@@ -152,7 +163,7 @@ nnoremap <leader>bd :Bdelete<CR>
 nnoremap <leader>bD :Bdelete!<CR>
 
 " exit a buffer or split
-nnoremap <leader>q :q<CR>
+nnoremap <leader>q :close<CR>
 
 " Find merge conflict markers
 nnoremap <silent> <leader>Cf <ESC>/\v^[<=>]{7}( .*\|$)<CR>
@@ -215,8 +226,6 @@ noremap <M-k> <C-w>k
 noremap <M-l> <C-w>l
 
 " Better command-line editing (:O emacs mode!)
-cnoremap <C-j> <t_kd>
-cnoremap <C-k> <t_ku>
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
@@ -226,10 +235,6 @@ cnoremap <C-e> <End>
 " map <silent> <A-j> <C-W>5-
 " map <silent> <A-k> <C-W>5+
 
-" noremap <silent> <A-k> :ObviousResizeUp<CR>
-" noremap <silent> <A-j> :ObviousResizeDown<CR>
-" noremap <silent> <A-h> :ObviousResizeLeft<CR>
-" noremap <silent> <A-l> :ObviousResizeRight<CR>
 noremap <silent> <A-S-k> :ObviousResizeUp 5<CR>
 noremap <silent> <A-S-j> :ObviousResizeDown 5<CR>
 noremap <silent> <A-S-h> :ObviousResizeLeft 5<CR>
@@ -251,6 +256,31 @@ set winminheight=0
 
 map <m-tab> :tabnext<cr>
 map <m-c-y> :tabprev<cr>
+
+" https://stackoverflow.com/a/6094578
+fu! PasteWindow(direction) "{{{
+    if exists("g:yanked_buffer")
+        if a:direction == 'edit'
+            let temp_buffer = bufnr('%')
+        endif
+
+        exec a:direction . " +buffer" . g:yanked_buffer
+
+        if a:direction == 'edit'
+            let g:yanked_buffer = temp_buffer
+        endif
+    endif
+endf "}}}
+
+"yank/paste buffers
+nmap <silent> <leader>wy :let g:yanked_buffer=bufnr('%') \| echo 'yanked buffer '.expand('%:t')<cr>
+nmap <silent> <leader>wd :let g:yanked_buffer=bufnr('%')<cr>:close<cr>
+nmap <silent> <leader>wr :call PasteWindow('edit')<cr>
+nmap <silent> <leader>wP :call PasteWindow('top split')<cr>
+nmap <silent> <leader>wp :call PasteWindow('split')<cr>
+nmap <silent> <leader>wV :set nosplitright \| call PasteWindow('vsplit') \| set splitright<cr>
+nmap <silent> <leader>wv :call PasteWindow('vsplit')<cr>
+nmap <silent> <leader>wt :call PasteWindow('tabnew')<cr>
 
 " }}}
 " Remapping {{{
@@ -869,9 +899,9 @@ function! Prose()
     imap <D-b> ****<left><left>
 
     " delete footnotes and -blockquotes-
-    " let @f = ':%g/\v^(\[\^\d+\]|\> )/d'
-    let @f = ':%g/\v^\[\^[a-zA-Z0-9\_\-]+\]/d:%s/\v\[\^[a-zA-Z0-9\-\_]{0,}\]//g'
-    let @v = ':%v/\v^\[\^[a-zA-Z0-9\_\-]+\]/d:%s/\v\[\^[a-zA-Z0-9\-\_]{0,}\]//g'
+    " let @f = ':%g/\v^(\[\^\d+\]|\> )/d'
+    let @f = ':%g/\v^\[\^[a-zA-Z0-9\_\-]+\]/d:%s/\v\[\^[a-zA-Z0-9\-\_]{0,}\]//g'
+    let @v = ':%v/\v^\[\^[a-zA-Z0-9\_\-]+\]/d:%s/\v\[\^[a-zA-Z0-9\-\_]{0,}\]//g'
 
     " increment footnotes in region
     vnoremap <leader>fa <Plug>IncrementFootnotes
