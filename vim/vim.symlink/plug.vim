@@ -45,6 +45,7 @@ Plug 'leafgarland/typescript-vim', { 'for': ['typescript'] }
 " Plug 'HerringtonDarkholme/yats.vim', { 'for': ['typescript'] }
 Plug 'Quramy/vim-js-pretty-template', {'for': ['javascript', 'typescript']}
 Plug 'hashivim/vim-terraform'
+Plug 'juliosueiras/vim-terraform-completion'
 Plug 'PProvost/vim-ps1' " Powershell
 Plug 'ch4r/nginx.conf'
 
