@@ -45,3 +45,17 @@ export VISUAL="$EDITOR"
 # test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+if hash tmux >/dev/null 2>/dev/null; then
+  if [[ "$SSH_CONNECTION" =~ "^::1 .+ ::1 22$" ]]; then
+    echo "Not auto-attaching to TMUX, because you're SSH-ing your own machine"
+  else
+    if [ -z "$TMUX" ]; then
+      tmux attach -t TMUX || tmux new -s TMUX
+    fi
+  fi
+fi
+
+
+# added by travis gem
+[ -f /Users/cormac/.travis/travis.sh ] && source /Users/cormac/.travis/travis.sh
