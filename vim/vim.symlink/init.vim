@@ -41,11 +41,11 @@ set background=dark
 
 " let ayucolor="light"  " for light version of theme
 " let ayucolor="mirage" " for mirage version of theme
-let ayucolor="dark"   " for dark version of theme
-colorscheme ayu
-let g:airline_theme = "twofirewatch"
+" let ayucolor="dark"   " for dark version of theme
+" colorscheme ayu
+" let g:airline_theme = "twofirewatch"
 "
-so $VIM_HOME/hybrid-spelling.vim
+" so $VIM_HOME/hybrid-spelling.vim
 
 set titlestring=nvim:\ %f\ %a%r%m
 
@@ -71,14 +71,15 @@ tnoremap <A-l> <C-\><C-n><C-w>l
 " Typescript {{{
 
 function! Typescript()
-  JsPreTmpl html
-  syn clear foldBraces
-  setlocal indentkeys+=0.
-  " let g:typescript_opfirst='\%([<>=,?^%|*/&]\|\([-:+]\)\1\@!\|!=\|in\%(stanceof\)\=\>\)'
+    setf typescript.html
+    JsPreTmpl html
+    syn clear foldBraces
+    setlocal indentkeys+=0.
+    " let g:typescript_opfirst='\%([<>=,?^%|*/&]\|\([-:+]\)\1\@!\|!=\|in\%(stanceof\)\=\>\)'
 endfunction
 augroup TYPESCRIPT
-  autocmd!
-  autocmd FileType typescript execute Typescript()
+    autocmd!
+    autocmd FileType typescript execute Typescript()
 augroup END
 
 " }}}
@@ -89,22 +90,12 @@ let g:LanguageClient_autoStart = 1
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
     \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'typescript': ['javascript-typescript-stdio']
+    \ 'typescript': ['typescript-language-server', '--stdio'],
+    \ 'go': ['go-langserver']
     \ }
-    " \ 'typescript': ['typescript-language-server.cmd', '--stdio']
+    " \ 'typescript': ['javascript-typescript-stdio'],
 
-" do this where you want deoplete
-autocmd FileType typescript call deoplete#enable()
-autocmd FileType javascript call deoplete#enable()
-autocmd FileType rust call deoplete#enable()
-
-let g:deoplete#ignore_sources = {}
-let g:deoplete#ignore_sources._ = ['buffer']
-inoremap <expr><tab> pumvisible() ? "\<c-n>" : "\<tab>"
-inoremap <expr><s-tab> pumvisible() ? "\<c-p>" : "\<s-tab>"
-
-command! CompletionToggle call deoplete#toggle() 
-
+set shortmess+=c
 
 autocmd FileType typescript setlocal signcolumn=yes
 let g:LanguageClient_diagnosticsDisplay = {
@@ -157,55 +148,99 @@ endif
 
 
 " }}}
+" ncm2 {{{
+
+" --- required ---
+
+" enable ncm2 for all buffer
+autocmd BufEnter * call ncm2#enable_for_buffer()
+
+" note that must keep noinsert in completeopt, the others is optional
+set completeopt=noinsert,menuone,noselect
+
+" --- optional ---
+
+" supress the annoying 'match x of y', 'The only match' and 'Pattern not
+" found' messages
+set shortmess+=c
+
+" auto trigger
+au TextChangedI * call ncm2#auto_trigger()
+
+" CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
+inoremap <c-c> <ESC>
+
+" When the <Enter> key is pressed while the popup menu is visible, it only
+" hides the menu. Use this mapping to close the menu and also start a new
+" line.
+inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+
+" Use <TAB> to select the popup menu:
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+" --- using ncm2-snipmate ---
+
+" https://github.com/autozimu/LanguageClient-neovim/pull/514
+
+inoremap <silent> <expr> <CR> ncm2_snipmate#expand_or("\<CR>", 'n')
+inoremap <expr> <c-u> ncm2_snipmate#expand_or("\<Plug>snipMateTrigger", "m")
+
+let g:snips_no_mappings = 1
+vmap <c-j> <Plug>snipMateNextOrTrigger
+vmap <c-k> <Plug>snipMateBack
+imap <expr> <c-k> pumvisible() ? "\<c-y>\<Plug>snipMateBack" : "\<Plug>snipMateBack"
+imap <expr> <c-j> pumvisible() ? "\<c-y>\<Plug>snipMateNextOrTrigger" : "\<Plug>snipMateNextOrTrigger"
+
+let g:LanguageClient_completionPreferTextEdit = 1
+
+" }}}
 " Denite.vim {{{
 
 " Change mappings.
-call denite#custom#map(
-			\ 'insert',
-			\ '<C-n>',
-			\ '<denite:move_to_next_line>',
-			\ 'noremap'
-			\)
-call denite#custom#map(
-			\ 'insert',
-			\ '<C-p>',
-			\ '<denite:move_to_previous_line>',
-			\ 'noremap'
-			\)
+" call denite#custom#map(
+" 			\ 'insert',
+" 			\ '<C-n>',
+" 			\ '<denite:move_to_next_line>',
+" 			\ 'noremap'
+" 			\)
+" call denite#custom#map(
+" 			\ 'insert',
+" 			\ '<C-p>',
+" 			\ '<denite:move_to_previous_line>',
+" 			\ 'noremap'
+" 			\)
 
 " Ripgrep command on grep source
-call denite#custom#var('grep', 'command', ['rg'])
-call denite#custom#var('grep', 'default_opts',
-			\ ['--vimgrep', '--no-heading'])
-call denite#custom#var('grep', 'recursive_opts', [])
-call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-call denite#custom#var('grep', 'separator', ['--'])
-call denite#custom#var('grep', 'final_opts', [])
-
-call denite#custom#alias('source', 'file_rec/git', 'file_rec')
+" call denite#custom#var('grep', 'command', ['rg'])
+" call denite#custom#var('grep', 'default_opts',
+" 			\ ['--vimgrep', '--no-heading'])
+" call denite#custom#var('grep', 'recursive_opts', [])
+" call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
+" call denite#custom#var('grep', 'separator', ['--'])
+" call denite#custom#var('grep', 'final_opts', [])
+"
+" call denite#custom#alias('source', 'file_rec/git', 'file_rec')
 " call denite#custom#var('file_rec/git', 'command',
-"             \ ['rg', '--files', '--path-separator=/', '.'])
-call denite#custom#var('file_rec/git', 'command',
-            \ ['git', 'ls-files', '-co', '--exclude-standard', '.'])
+"             \ ['git', 'ls-files', '-co', '--exclude-standard', '.'])
 
-nnoremap <silent> <C-p> :<C-u>Denite
-            \ `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`<CR>
-" nnoremap <silent> <C-p> :<C-u>Denite file_rec/git<CR>
+" nnoremap <silent> <C-p> :<C-u>Denite
+"             \ `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`<CR>
 
-call denite#custom#option('_', 'highlight_mode_insert', 'WildMenu')
-call denite#custom#option('_', 'highlight_matched_range', 'None')
-call denite#custom#option('_', 'highlight_matched_char', 'Underlined')
+" call denite#custom#option('_', 'highlight_mode_insert', 'WildMenu')
+" call denite#custom#option('_', 'highlight_matched_range', 'None')
+" call denite#custom#option('_', 'highlight_matched_char', 'Underlined')
 
 " }}}
 " IDE-style mappings to language server {{{
 
-nnoremap <silent> <s-f12> :Denite references<cr>
+nnoremap <silent> <S-F12> :Denite references<cr>
 nnoremap <silent> <f11> :Denite documentSymbol<cr>
 nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
 nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F12> :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-nnoremap <silent> <c-.> :call LanguageClient_textDocument_codeAction()<CR>
+nnoremap <silent> g. :call LanguageClient_textDocument_codeAction()<CR>
 
 " }}}

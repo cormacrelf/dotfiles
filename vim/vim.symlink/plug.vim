@@ -1,23 +1,31 @@
 " Completion, Snippets and Insert Mode
-" Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }t
 Plug 'jiangmiao/auto-pairs'
 " Plug 'tpope/vim-endwise'
 Plug 'mattn/emmet-vim'
-" Plug 'SirVer/ultisnips'
-" Plug 'honza/vim-snippets'
-" Plug 'scrooloose/syntastic'
 "
 " Only in Neovim
 
 Plug 'Yggdroot/indentLine'
-Plug 'ayu-theme/ayu-vim'
-Plug 'beigebrucewayne/hacked_ayu.vim'
+
+" snipmate dependencies
+Plug 'tomtom/tlib_vim'
+Plug 'MarcWeber/vim-addon-mw-utils'
+Plug 'garbas/vim-snipmate'
+Plug 'honza/vim-snippets'
 
 if has('nvim')
-    " Plug 'roxma/nvim-completion-manager'
-    Plug 'autozimu/LanguageClient-neovim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'autozimu/LanguageClient-neovim', {
+    \ 'branch': 'next',
+    \ 'do': 'bash install.sh',
+    \ }
+    " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+    Plug 'roxma/nvim-yarp'
+    Plug 'ncm2/ncm2'
+    Plug 'ncm2/ncm2-path'
+    Plug 'ncm2/ncm2-snipmate'
+    Plug 'junegunn/fzf'
+    Plug 'junegunn/fzf.vim'
+    " Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
     Plug 'Shougo/echodoc.vim'
     Plug 'neomake/neomake'
     Plug 'radenling/vim-dispatch-neovim'
@@ -26,13 +34,14 @@ endif
 Plug 'tpope/vim-dispatch'
 
 " Language-specific
+Plug 'dag/vim-fish'
 Plug 'kana/vim-filetype-haskell'
 Plug 'bitc/vim-hdevtools'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'othree/html5.vim'
-Plug 'fatih/vim-go'
+" Plug 'fatih/vim-go'
 Plug 'derekwyatt/vim-scala'
 Plug 'jeaye/color_coded', { 'for': ['c'] }
 Plug 'rust-lang/rust.vim'
@@ -50,7 +59,6 @@ Plug 'leafgarland/typescript-vim', { 'for': ['typescript'] }
 Plug 'Quramy/vim-js-pretty-template', {'for': ['javascript', 'typescript']}
 Plug 'hashivim/vim-terraform'
 Plug 'PProvost/vim-ps1' " Powershell
-Plug 'ch4r/nginx.conf'
 
 
 " Clojure / Paredit
@@ -87,13 +95,12 @@ Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'talek/obvious-resize'
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'scrooloose/nerdtree'
-Plug 'jistr/vim-nerdtree-tabs'
-Plug 'reedes/vim-wheel' " d-j, d-k
+" Plug 'jistr/vim-nerdtree-tabs'
+" Plug 'reedes/vim-wheel' " d-j, d-k
 Plug 'osyo-manga/vim-over' " :s preview
 Plug 'chrisbra/NrrwRgn' " :NR, :wq
 Plug 'editorconfig/editorconfig-vim'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-" Plug 'junegunn/fzf.vim'
 " Plug 'haya14busa/incsearch.vim'
 " Plug 'jeaye/color_coded'
 " Plug 'kana/vim-tabpagecd'

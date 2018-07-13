@@ -25,6 +25,11 @@ if has("win32") || has("win64") || has("win16")
     " set shellcmdflag=-command
 endif
 
+" use a POSIX compatible shell if you're on fish
+if &shell =~# 'fish$'
+    set shell=sh
+endif
+
 command! PlugInstallCmd set shell=bash shellcmdflag=-c | PlugInstall
 
 filetype off
@@ -139,7 +144,7 @@ nnoremap <M-;> ,
 " use NERDTree on ,d
 " Plus more nerdtree goodies
 " noremap <leader>d :execute 'NERDTreeToggle ' . getcwd()<CR>
-noremap <leader>d :NERDTreeTabsToggle<CR>
+noremap <leader>d :NERDTreeToggle<CR>
 noremap <leader>D :NERDTreeFocusToggle<CR>
 let NERDTreeIgnore = ['\.pyc$']
 let g:nerdtree_tabs_open_on_gui_startup = 0
@@ -339,11 +344,8 @@ nnoremap <m-cr> m`A;<esc>``
 nnoremap <C-s> :w<cr>
 nnoremap <M-s> :w<cr>
 
-" Open CtrlP buffer explorer with C-b
-nnoremap <C-b> :CtrlPBuffer<cr>
-
-" Open MRU files
-nnoremap <C-M-P> :CtrlPMRUFiles<cr>
+" Switch buffers
+nnoremap <C-b> :Buffers<cr>
 
 " }}}
 " Commands {{{
@@ -523,6 +525,8 @@ endfunction
 " }}}
 " Filetypes {{{
 
+au BufRead *.conf setf conf
+
 " allow highlighting $() in #!/bin/sh scripts
 " as vim should do, per the POSIX standard
 let g:is_posix = 1
@@ -625,7 +629,7 @@ let g:pandoc#syntax#conceal#use = 0
 " let g:pantondoc_folding_fold_yaml = 1
 " stop making esc slow!
 let g:pandoc#modules#disabled = ["bibliographies"]
-let g:pandoc_use_embeds_in_codeblocks_for_langs = ["ruby", "haskell", "python",
+let g:pandoc_use_embeds_in_codeblocks_for_langs = ["ruby", "haskell", "python", "typescript",
                                                   \ "go", "c", "scala", "clojure",
                                                   \ "rust", "javascript" ]
 
@@ -739,52 +743,6 @@ omap T <Plug>Sneak_T
 " Omni Completeion and YouCompleteMe {{{
 
 set shortmess+=c " suppress annoying # matches found thing
-" inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-" inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-let g:deoplete#enable_at_startup = 1
-
-" nnoremap <leader>jd :YcmCompleter GoTo<cr>
-
-" let g:ycm_filetype_whitelist = { 'javascript': 1 }
-
-" this uses the default toolchain
-" let g:ycm_rust_src_path = $RUST_SRC_PATH
-" but this uses the active toolchain
-" let g:ycm_rust_src_path = system("echo -n $(dirname $(dirname $(rustup which rustc)))") . "/lib/rustlib/src/rust/src"
-
-" Snippets / UltiSnips
-" let g:UltiSnipsSnippetDirectories=["UltiSnips", "my-ultisnips"]
-" let g:UltiSnipsSnippetsDir = $HOME.'/.vim/my-ultisnips'
-" let g:UltiSnipsExpandTrigger="<C-CR>"
-" let g:UltiSnipsJumpForwardTrigger="<C-tab>"
-" let g:UltiSnipsJumpBackwardTrigger="<s-tab>"
-
-" function! g:UltiSnips_Complete()
-"     call UltiSnips#ExpandSnippet()
-"     if g:ulti_expand_res == 0
-"         if pumvisible()
-"             return "\<C-n>"
-"         else
-"             call UltiSnips#JumpForwards()
-"             if g:ulti_jump_forwards_res == 0
-"                return "\<TAB>"
-"             endif
-"         endif
-"     endif
-"     return ""
-" endfunction
-"
-" fun! Ultisnips_Remap()
-"     exec "inoremap <silent> " . g:UltiSnipsExpandTrigger . " <C-R>=g:UltiSnips_Complete()<cr>"
-" endf
-
-" au InsertEnter * call Ultisnips_Remap()
-" let g:UltiSnipsJumpForwardTrigger="<tab>"
-" let g:UltiSnipsListSnippets="<c-e>"
-" this mapping Enter key to <C-y> to chose the current highlight item 
-" and close the selection list, same as other IDEs.
-" CONFLICT with some plugins like tpope/Endwise
-" inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " }}}
 " Prose Formatting {{{

@@ -24,7 +24,6 @@ zplug "unixorn/tumult.plugin.zsh" # osx
 zplug "peterhurford/git-it-on.zsh" # term->github
 zplug "supercrabtree/k" # ls for git
 zplug "chrissicool/zsh-256color"
-zplug "changyuheng/zsh-interactive-cd"
 
 # themes
 zplug "oskarkrawczyk/honukai-iterm-zsh"
