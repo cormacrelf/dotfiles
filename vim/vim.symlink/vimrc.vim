@@ -200,9 +200,20 @@ nmap gG <plug>(GrepperOperator)
 xmap gG <plug>(GrepperOperator)
 nnoremap <leader>g :Grepper -tool rg<cr>
 nnoremap <leader>G :Grepper -tool rg -cword -noprompt<cr>
-command! -nargs=* Rg :Grepper -tool rg -noswitch<cr>
+command! -nargs=* Rg :Grepper -tool rg
 nnoremap <leader>L :let @/="\\<".expand("<cword>")."\\>"<cr>:lvim! /\C<c-r>//j %<cr>
 nnoremap <leader>l :lw<cr>
+let g:grepper = {
+    \ 'tools': ['git', 'rg', 'grep'],
+    \ 'open':  1,
+    \ 'jump':  0,
+    \ }
+
+if executable('rg')
+    set grepprg=rg\ --no-heading\ --vimgrep
+    set grepformat=%f:%l:%c:%m
+endif
+
 
 " word count
 nnoremap <leader>wc :!wordcount %<cr>
@@ -281,7 +292,7 @@ endf "}}}
 nmap <silent> <leader>wy :let g:yanked_buffer=bufnr('%') \| echo 'yanked buffer '.expand('%:t')<cr>
 nmap <silent> <leader>wd :let g:yanked_buffer=bufnr('%')<cr>:close<cr>
 nmap <silent> <leader>wr :call PasteWindow('edit')<cr>
-nmap <silent> <leader>wP :call PasteWindow('top split')<cr>
+nmap <silent> <leader>wP :call PasteWindow('aboveleft split')<cr>
 nmap <silent> <leader>wp :call PasteWindow('split')<cr>
 nmap <silent> <leader>wV :set nosplitright \| call PasteWindow('vsplit') \| set splitright<cr>
 nmap <silent> <leader>wv :call PasteWindow('vsplit')<cr>
@@ -312,10 +323,10 @@ let g:wheel#map#down = '<D-j>'
 let g:wheel#map#mouse = 0
 
 " also for EOL, etc
-nnoremap $ g$
-nnoremap 0 g0
-nnoremap A g$a
-nnoremap I g0i
+" nnoremap $ g$
+" nnoremap 0 g0
+" nnoremap A g$a
+" nnoremap I g0i
 
 " make Y behave like other capitals
 map Y y$
@@ -680,18 +691,6 @@ let g:ctrlp_user_command = {
     \ },
     \ 'fallback': 'ag %s -l --nocolor -g ""'
 \ }
-
-" vim-grepper
-let g:grepper = {
-    \ 'tools': ['rg', 'git', 'grep'],
-    \ 'open':  1,
-    \ 'jump':  0,
-    \ }
-
-if executable('rg')
-    set grepprg=rg\ --no-heading\ --vimgrep
-    set grepformat=%f:%l:%c:%m
-endif
 
 " Syntastic checking
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }

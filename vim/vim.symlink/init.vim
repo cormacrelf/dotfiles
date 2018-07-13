@@ -71,11 +71,11 @@ tnoremap <A-l> <C-\><C-n><C-w>l
 " Typescript {{{
 
 function! Typescript()
-    setf typescript.html
-    JsPreTmpl html
-    syn clear foldBraces
-    setlocal indentkeys+=0.
-    " let g:typescript_opfirst='\%([<>=,?^%|*/&]\|\([-:+]\)\1\@!\|!=\|in\%(stanceof\)\=\>\)'
+  JsPreTmpl html
+  syn clear foldBraces
+  setlocal indentkeys+=0.
+  setl foldmethod=marker foldmarker=#region,#endregion
+  " let g:typescript_opfirst='\%([<>=,?^%|*/&]\|\([-:+]\)\1\@!\|!=\|in\%(stanceof\)\=\>\)'
 endfunction
 augroup TYPESCRIPT
     autocmd!
@@ -242,5 +242,51 @@ nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F12> :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 nnoremap <silent> g. :call LanguageClient_textDocument_codeAction()<CR>
+
+" }}}
+" {{{ Terraform
+
+function! Terraform()
+    setlocal commentstring=#%s
+    " we want nmap so it can use gl
+    nmap <leader>= mgvi{gl=`g
+    nnoremap gK T"f_l"tyt":!start https://www.terraform.io/docs/providers/aws/r/<C-r>t.html<cr>
+    command! Vars above split %:h/variables.tf
+    command! Out below split %:h/outputs.tf
+    command! Main below split %:h/main.tf
+    " opens the main file for a module
+    command! -nargs=1 Mod execute 'edit' fnamemodify("modules/".<f-args>."/main.tf", ":p")
+endfunc
+augroup TERRAFORM
+    autocmd!
+    autocmd FileType terraform execute Terraform()
+augroup END
+
+function! Angular()
+    command! Ts above split %:r.ts
+    command! Html below split %:r.html
+    command! Css below split %:r.scss
+    " opens the main file for a module
+    " command! -nargs=1 Mod execute 'edit' fnamemodify("modules/".<f-args>."/main.tf", ":p")
+    " nnoremap gK T"f_l"tyt":!start https://www.terraform.io/docs/providers/aws/r/<C-r>t.html<cr>
+    nmap <leader>= mgvi{gl=`g
+endfunc
+augroup ANGULAR
+    autocmd!
+    autocmd FileType typescript execute Angular()
+    autocmd FileType html execute Angular()
+    autocmd FileType css execute Angular()
+augroup END
+
+" }}}
+" Neomake {{{
+
+let g:neomake_typescript_enabled_makers = ['tslint']
+call neomake#configure#automake('')
+
+" }}}
+" {{{
+
+autocmd BufRead *.xaml setf xml
 
 " }}}
