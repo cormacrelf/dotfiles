@@ -1,0 +1,1 @@
+/Users/cormac/.config/fisherman/z/conf.d/z.fish
