@@ -1,0 +1,34 @@
+register types/pip3.sh
+
+ok brew
+ok brew-tap Homebrew/cask
+
+ok brew bork
+ok brew git
+ok brew fzf
+ok brew ripgrep
+ok brew fd
+ok brew rsync
+ok brew ssh-copy-id
+ok brew tree
+ok brew tmux
+
+plug_install () {
+  nvim +PlugInstall +UpdateRemotePlugins +qa
+}
+ok brew python
+ok brew neovim
+if did_install; then plug_install; fi
+ok pip3 neovim
+if did_update; then plug_install; fi
+
+ok brew fish
+if did_install; then
+  ./helpers/set-fish.sh
+fi
+
+ok brew rustup-init
+if did_install; then
+  rustup-init
+fi
+
