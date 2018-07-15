@@ -1,5 +1,6 @@
 ok apt git
 ok apt fish
 if did_install; then
-  ./helpers/set-fish.sh
+  echo "/usr/local/bin/fish" | sudo tee -a /etc/shells
+  chsh -s /usr/local/bin/fish
 fi

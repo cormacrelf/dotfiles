@@ -5,14 +5,14 @@ export NVM_DIR="$HOME/.nvm"
 
 ok github "$NVM_DIR" creationix/nvm --branch="v0.33.11"
 
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" || exit $STATUS_FAILED_PRECONDITION
-
 ok nvm 10
 ok nvm-alias default 10
+
 # use it because otherwise it could still be on another version
-nvm use 10
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" && nvm use 10
 
 ok npm yarn
 ok npm typescript-language-server
 ok npm crx
 ok npm @angular/cli
+ok npm sql-cli
