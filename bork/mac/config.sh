@@ -25,7 +25,7 @@ ok defaults NSGlobalDomain PMPrintingExpandedStateForPrint bool true
 # defaults NSGlobalDomain NSAutomaticWindowAnimationsEnabled bool false
 
 # Increase window resize speed for Cocoa applications
-ok defaults NSGlobalDomain NSWindowResizeTime float 0.001
+ok defaults NSGlobalDomain NSWindowResizeTime float 0.01
 
 # Disable Resume system-wide
 # defaults NSGlobalDomain NSQuitAlwaysKeepsWindows bool false
@@ -44,7 +44,7 @@ ok defaults NSGlobalDomain AppleFontSmoothing int 2
 ok defaults NSGlobalDomain ApplePressAndHoldEnabled bool false
 
 # Set a blazingly fast keyboard repeat rate
-ok defaults NSGlobalDomain KeyRepeat float 0.01
+# ok defaults NSGlobalDomain KeyRepeat float 0.01
 
 # Disable auto-correct
 # defaults NSGlobalDomain NSAutomaticSpellingCorrectionEnabled bool false

@@ -21,4 +21,8 @@ ok mas 403504866 PCalc
 # casks
 
 ok cask firefox
+ok cask google-chrome
+ok cask alfred
 ok cask gitup
+ok cask keybase
+ok cask hex-fiend

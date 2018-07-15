@@ -8,10 +8,22 @@ ok brew git
 ok brew fzf
 ok brew ripgrep
 ok brew fd
+ok brew jq
+ok brew coreutils
+ok brew moreutils
+ok brew binutils
 ok brew rsync
 ok brew ssh-copy-id
 ok brew tree
 ok brew tmux
+ok brew hexedit
+ok brew wget
+ok brew repl
+ok brew ispell
+ok brew nmap
+ok brew cmake
+ok brew tig
+ok brew ranger
 
 plug_install () {
   nvim +PlugInstall +UpdateRemotePlugins +qa
