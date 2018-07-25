@@ -33,3 +33,6 @@ set -U FZF_CD_WITH_HIDDEN_COMMAND "fd --type d --hidden"
 set -U FZF_FIND_AND_EXECUTE_COMMAND "fd --type x"
 # set -u FZF_REVERSE_ISEARCH_COMMAND "..."
 set -U FZF_OPEN_COMMAND "fd --type f"
+
+abbr :q 'exit'
+abbr md 'mkdir -p'

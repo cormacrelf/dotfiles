@@ -15,7 +15,6 @@ ok brew binutils
 ok brew rsync
 ok brew ssh-copy-id
 ok brew tree
-ok brew tmux
 ok brew hexedit
 ok brew wget
 ok brew repl
@@ -39,6 +38,10 @@ if did_install; then
   echo "/usr/local/bin/fish" | sudo tee -a /etc/shells
   chsh -s /usr/local/bin/fish
 fi
+
+# for pbcopy support
+ok brew reattach-to-user-namespace
+ok brew tmux
 
 ok brew rustup-init
 if did_install; then
