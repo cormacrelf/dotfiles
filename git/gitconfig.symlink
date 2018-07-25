@@ -1,7 +1,7 @@
 
 [user]
 	name = Cormac Relf
-	email = cormacrelf@me.com
+	email = web@cormacrelf.net
 	signingkey = 75A25B12
 [include]
 	path = ~/.gitconfig.local
@@ -10,6 +10,7 @@
 	excludesfile = ~/.gitignore_global
 	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 	untrackedCache = true
+	pager = diff-so-fancy | less --tabs=4 -RFX
 [color "sh"]
 	dirty = red
 	workdir = blue bold
@@ -51,30 +52,28 @@
 	ds = diff stash@{0}
 	ds-own = diff stash@{0}^!
 [color]
-	ui = auto
+	ui = true
 	sh = auto
 [color "branch"]
 	current = yellow reverse
 	local = yellow
 	remote = green
 [color "diff"]
-	meta = yellow bold
-	frag = magenta
-	old = red
-	commit = green bold
+	meta = yellow
+	frag = magenta bold
+	old = red bold
+	commit = yellow bold
 	new = green bold
 	whitespace = red reverse
 [color "diff-highlight"]
 	oldNormal = red bold
-	oldHighlight = "red bold 52"
-	newNormal = "green bold"
-	newHighlight = "green bold 22"
+	oldHighlight = red bold 52
+	newNormal = green bold
+	newHighlight = green bold 22
 [color "status"]
 	added = yellow
 	changed = green
 	untracked = cyan
-[credential]
-	helper = osxkeychain
 [difftool "Kaleidoscope"]
 	cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
 [diff]
@@ -106,5 +105,3 @@
 	clean = git-lfs clean %f
 	smudge = git-lfs smudge %f
 	required = true
-[interactive]
-	diffFilter = diff-highlight | diff-so-fancy

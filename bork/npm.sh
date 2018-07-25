@@ -14,5 +14,5 @@ ok nvm-alias default 10
 ok npm yarn
 ok npm typescript-language-server
 ok npm crx
-ok npm @angular/cli
 ok npm sql-cli
+ok npm diff-so-fancy
