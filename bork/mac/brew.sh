@@ -23,6 +23,8 @@ ok brew nmap
 ok brew cmake
 ok brew tig
 ok brew ranger
+ok brew htop
+ok brew bat
 
 plug_install () {
   nvim +PlugInstall +UpdateRemotePlugins +qa
