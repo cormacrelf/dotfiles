@@ -1,11 +1,16 @@
 " Completion, Snippets and Insert Mode
-Plug 'jiangmiao/auto-pairs'
+" Plug 'jiangmiao/auto-pairs'
+" Plug 'rstacruz/vim-closer'
 " Plug 'tpope/vim-endwise'
+Plug 'cohama/lexima.vim'
 Plug 'mattn/emmet-vim'
 "
 " Only in Neovim
 
-Plug 'Yggdroot/indentLine'
+" Plug 'Yggdroot/indentLine'
+
+" Writing mode
+Plug 'junegunn/goyo.vim'
 
 " snipmate dependencies
 Plug 'tomtom/tlib_vim'
@@ -90,8 +95,9 @@ Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-grepper'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
+" Plug 'mhinz/vim-signify' " replace gitgutter
 Plug 'mhinz/vim-startify'
-Plug 'vim-scripts/tasklist.vim', { 'on': 'TaskList' }
+" Plug 'vim-scripts/tasklist.vim', { 'on': 'TaskList' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'talek/obvious-resize'
 Plug 'moll/vim-bbye' " Bdelete
@@ -99,7 +105,7 @@ Plug 'scrooloose/nerdtree'
 " Plug 'jistr/vim-nerdtree-tabs'
 " Plug 'reedes/vim-wheel' " d-j, d-k
 Plug 'osyo-manga/vim-over' " :s preview
-Plug 'chrisbra/NrrwRgn' " :NR, :wq
+" Plug 'chrisbra/NrrwRgn' " :NR, :wq
 Plug 'editorconfig/editorconfig-vim'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " Plug 'haya14busa/incsearch.vim'
@@ -140,7 +146,7 @@ Plug 'romainl/Apprentice'
 Plug 'morhetz/gruvbox'
 Plug 'dracula/vim'
 Plug 'vim-scripts/chlordane.vim'
-Plug 'rakr/vim-two-firewatch'
+Plug 'shofel/vim-two-firewatch'
 Plug 'w0ng/vim-hybrid'
 Plug 'sjl/badwolf'
 Plug 'chriskempson/base16-vim'

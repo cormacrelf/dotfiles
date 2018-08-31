@@ -1,3 +1,5 @@
+set termguicolors
+
 " Source ~/.vimrc, vim-plug {{{
 if has('win32') || has ('win64')
   let $VIM_HOME = $HOME."/AppData/Local/nvim"
@@ -30,13 +32,11 @@ set path+=src " for using gf on app/models/blah where app is really src/app
 " }}}
 " colorscheme, appearance {{{
 
-set termguicolors
-
 " colorscheme two-firewatch
 " let g:airline_theme = "twofirewatch"
 " set background=dark
-colorscheme gruvbox
-let g:airline_theme = "gruvbox"
+colorscheme two-firewatch
+let g:airline_theme = "twofirewatch"
 set background=dark
 
 " let ayucolor="light"  " for light version of theme
@@ -87,12 +87,13 @@ augroup END
 "
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
+let g:LanguageClient_diagnosticsList = 'location'
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['typescript-language-server', '--stdio'],
     \ 'go': ['go-langserver']
     \ }
+    " \ 'javascript': ['javascript-typescript-stdio'],
     " \ 'typescript': ['javascript-typescript-stdio'],
 
 set shortmess+=c
@@ -288,5 +289,12 @@ call neomake#configure#automake('')
 " {{{
 
 autocmd BufRead *.xaml setf xml
+
+nnoremap <c-p> :FZF<cr>
+
+" }}}
+" Pandoc {{{
+
+let g:pandoc#completion#bib#mode = "citeproc"
 
 " }}}

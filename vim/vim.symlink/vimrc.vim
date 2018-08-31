@@ -797,9 +797,10 @@ function! Prose()
     " -r, so enter doesn't insert bullets prematurely
     " -o, so essentially manually insert bullets.
     setl formatoptions=tcroqlnj1
+    setl formatoptions=nj
     " same as above
     " setl formatlistpat=\\v^\\s*((\\d+\|[a-z]\|)[\\]:\\.\\)}]\|\\*[\\t\ ])\\s*
-    setl textwidth=80
+    setl textwidth=0
     " markdown comments
     setl com=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,b:-
 

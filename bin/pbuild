@@ -39,8 +39,7 @@ LONGTEMPLATE="$PREFIX/kjhealy/xelatex.template"
 REFERENCE_DOCX="" # default location is $PREFIX/reference.docx, override with pbuild --reference-docx <loc>
 
 # Markdown Extensions
-EXTENSIONS="+citations+simple_tables+pipe_tables+table_captions+yaml_metadata_block+fenced_code_blocks+fancy_lists+startnum+example_lists+line_blocks+footnotes+inline_notes+inline_code_attributes+superscript+subscript+tex_math_dollars+raw_tex"
-
+EXTENSIONS="+smart+citations+simple_tables+pipe_tables+table_captions+yaml_metadata_block+fenced_code_blocks+fancy_lists+startnum+example_lists+line_blocks+footnotes+inline_notes+inline_code_attributes+superscript+subscript+tex_math_dollars+raw_tex" 
 # Short doc arguments. Override with env variables.
 # (note that `: ${var=value}` sets var iff not already set.)
 
@@ -70,16 +69,8 @@ $alphaalgs
 $noalgnumbering"
 }
 
-PANDOC_BINARY="/usr/local/bin/pandoc"
-PANDOC_BIB="--filter=pandoc-citeproc --csl=$PREFIX/csl/${CSL}.csl --biblio=$BIB" # not in use
-PANDOC_CMD="$PANDOC_BINARY -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE" # --data-dir='$PREFIX'"
-
-make_pandoc_cmd () {
-    ###
-    ### Needs a few args: $1=template, $2=
-    ### 
-    echo "$PANDOC_CMD --template=$1"
-}
+PANDOC_BINARY="pandoc --filter pandoc-citeproc"
+PANDOC_CMD="$PANDOC_BINARY -r markdown$EXTENSIONS -s --pdf-engine=$ENGINE" # --data-dir='$PREFIX'"
 
 ###############################
 ########## Commands ###########
