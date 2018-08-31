@@ -4,7 +4,7 @@ if did_update; then
   needs_exec "cargo" || exit $STATUS_FAILED_PRECONDITION
   cd $HOME/git/alacritty
   make app
-  cargo install --path .
+  cargo install --force --path .
   rm -rf /Applications/Alacritty.app
   cp -r target/release/osx/Alacritty.app /Applications/
   cp alacritty-completions.fish $HOME/.dotfiles/fish/completions/
