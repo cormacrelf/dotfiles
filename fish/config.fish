@@ -1,5 +1,33 @@
 set fish_greeting ""
 
+set -g fishconfig ~/.config/fish/config.fish
+
+function fish_mode_prompt --description 'Displays the current mode'
+  # Do nothing if not in vi mode
+  if test "$fish_key_bindings" = "fish_vi_key_bindings"
+    switch $fish_bind_mode
+      case default
+        set_color --bold red
+        echo "N"
+      case insert
+        set_color --bold green
+        echo "⌁"
+      case replace_one
+        set_color --bold green
+        echo "R"
+      case visual
+        set_color --bold brmagenta
+        echo "V"
+      end
+    set_color normal
+    echo -n " "
+  end
+end
+
+function fish_vi_cursor; end
+
+fish_vi_key_bindings
+
 # fisherman bootstrap
 if not test -f ~/.config/fish/functions/fisher.fish
   echo "Installing fisherman for the first time"

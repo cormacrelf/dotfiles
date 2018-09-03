@@ -18,6 +18,8 @@ Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
 
+Plug 'https://framagit.org/tyreunom/coquille', { 'branch': 'pathogen-bundle' }
+
 if has('nvim')
     Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
@@ -48,7 +50,7 @@ Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'othree/html5.vim'
 " Plug 'fatih/vim-go'
 Plug 'derekwyatt/vim-scala'
-Plug 'jeaye/color_coded', { 'for': ['c'] }
+" Plug 'jeaye/color_coded', { 'for': ['c'] }
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
 Plug 'elixir-lang/vim-elixir'
@@ -151,6 +153,7 @@ Plug 'w0ng/vim-hybrid'
 Plug 'sjl/badwolf'
 Plug 'chriskempson/base16-vim'
 Plug 'rakr/vim-togglebg'
+Plug 'atelierbram/Base2Tone-vim'
 " Plug 'jszakmeister/vim-togglecursor'
 
 

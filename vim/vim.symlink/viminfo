@@ -42,9 +42,12 @@
 |4,48,8,8,1535088350,"~/Dropbox/anu/natsec/annotated-bibliography.md"
 '1  1  25  ~/Dropbox/natsec/leg.md
 |4,49,1,25,1534987468,"~/Dropbox/natsec/leg.md"
+'8  1  0  ~/.config/ranger/bookmarks
+|4,56,1,0,1531499515,"~/.config/ranger/bookmarks"
 
 # Jumplist (newest first):
 -'  8  8  ~/Dropbox/anu/natsec/annotated-bibliography.md
+-'  1  0  ~/git/cormacrelf/angular-skyhook/packages/examples/src/app/sortable/NERD_tree_1
 |4,39,8,8,1535088350,"~/Dropbox/anu/natsec/annotated-bibliography.md"
 -'  1  0  ~/Dropbox/anu/natsec/annotated-bibliography.md
 |4,39,1,0,1535088332,"~/Dropbox/anu/natsec/annotated-bibliography.md"

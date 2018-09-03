@@ -1,3 +1,5 @@
+" you need this before rtp+=ing any themes, otherwise they configure
+" themselves with 256 colors, or maybe Airline does
 set termguicolors
 
 " Source ~/.vimrc, vim-plug {{{
@@ -32,20 +34,9 @@ set path+=src " for using gf on app/models/blah where app is really src/app
 " }}}
 " colorscheme, appearance {{{
 
-" colorscheme two-firewatch
-" let g:airline_theme = "twofirewatch"
-" set background=dark
+set background=dark
 colorscheme two-firewatch
 let g:airline_theme = "twofirewatch"
-set background=dark
-
-" let ayucolor="light"  " for light version of theme
-" let ayucolor="mirage" " for mirage version of theme
-" let ayucolor="dark"   " for dark version of theme
-" colorscheme ayu
-" let g:airline_theme = "twofirewatch"
-"
-" so $VIM_HOME/hybrid-spelling.vim
 
 set titlestring=nvim:\ %f\ %a%r%m
 
@@ -83,17 +74,21 @@ augroup TYPESCRIPT
 augroup END
 
 " }}}
-" LanguageClient / LanguageServer {{{
-"
+" Terminal Neovim, ie not Oni {{{
+
+if !exists("g:gui_oni")
+" LanguageClient-neovim {{{
+
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
-let g:LanguageClient_diagnosticsList = 'location'
+let g:LanguageClient_diagnosticsList = "location"
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'typescript': ['typescript-language-server', '--stdio'],
+    \ 'javascript': ['javascript-typescript-stdio'],
+    \ 'typescript': ['typescript-language-server', '--stdio', '--tsserver-path=/Users/cormac/.nvm/versions/node/v10.6.0/bin/tsserver', '--tsserver-log-file=/tmp/tsserver.log'],
     \ 'go': ['go-langserver']
     \ }
-    " \ 'javascript': ['javascript-typescript-stdio'],
+    " \ 'typescript': ['javascript-typescript-stdio'],
     " \ 'typescript': ['javascript-typescript-stdio'],
 
 set shortmess+=c
@@ -145,8 +140,6 @@ endif
 if !hlexists('ALEInfo')
     highlight link ALEInfo ALEWarning
 endif
-
-
 
 " }}}
 " ncm2 {{{
@@ -245,6 +238,9 @@ nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 nnoremap <silent> g. :call LanguageClient_textDocument_codeAction()<CR>
 
 " }}}
+endif
+
+" }}}
 " {{{ Terraform
 
 function! Terraform()
@@ -293,8 +289,22 @@ autocmd BufRead *.xaml setf xml
 nnoremap <c-p> :FZF<cr>
 
 " }}}
-" Pandoc {{{
+" Coq {{{
 
-let g:pandoc#completion#bib#mode = "citeproc"
+function! Coq()
+    command! Coq call CoqLaunch()
+    call coquille#FNMapping()
+    if &background == 'dark'
+        hi CheckedByCoq ctermbg=10 guibg='#2F4C40'
+        hi SentToCoq ctermbg=12 guibg='#53B087'
+    else
+        hi CheckedByCoq ctermbg=10 guibg='#90ee90'
+        hi SentToCoq ctermbg=12 guibg=LimeGreen
+    endif
+endfunction
+augroup COQ
+    autocmd!
+    autocmd FileType coq execute Coq()
+augroup END
 
 " }}}
