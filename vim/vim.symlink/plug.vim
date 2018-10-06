@@ -148,12 +148,15 @@ Plug 'romainl/Apprentice'
 Plug 'morhetz/gruvbox'
 Plug 'dracula/vim'
 Plug 'vim-scripts/chlordane.vim'
+" Plug 'malcolmbaig/vim-two-firewatch' " white brace matching, but even in light mode
 Plug 'shofel/vim-two-firewatch'
 Plug 'w0ng/vim-hybrid'
 Plug 'sjl/badwolf'
 Plug 'chriskempson/base16-vim'
 Plug 'rakr/vim-togglebg'
 Plug 'atelierbram/Base2Tone-vim'
+Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
+Plug 'rakr/vim-one'
 " Plug 'jszakmeister/vim-togglecursor'
 
 

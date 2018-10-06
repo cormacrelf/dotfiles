@@ -42,14 +42,15 @@ chunkc tiling::rule --owner \"App Store\" --state float &
 chunkc tiling::rule --owner Things --state float &
 chunkc tiling::rule --owner Reminders --state float &
 
+edge=0
 edge=40
-
-chunkc set global_desktop_mode           bsp
 chunkc set global_desktop_offset_top     $edge
 chunkc set global_desktop_offset_bottom  $edge
 chunkc set global_desktop_offset_left    $edge
 chunkc set global_desktop_offset_right   $edge
 chunkc set global_desktop_offset_gap     5
+
+chunkc set global_desktop_mode           bsp
 
 chunkc set focused_border_color          0xff0f6288
 chunkc set focused_border_width          5

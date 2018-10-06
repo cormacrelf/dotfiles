@@ -34,9 +34,12 @@ set path+=src " for using gf on app/models/blah where app is really src/app
 " }}}
 " colorscheme, appearance {{{
 
-set background=dark
-colorscheme two-firewatch
-let g:airline_theme = "twofirewatch"
+" set background=dark
+" colorscheme two-firewatch
+" let g:airline_theme = "twofirewatch"
+set background=light
+colorscheme tempus_dawn
+let g:airline_theme = "Base2Tone_EveningLight"
 
 set titlestring=nvim:\ %f\ %a%r%m
 
@@ -83,10 +86,12 @@ if !exists("g:gui_oni")
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_diagnosticsList = "location"
 let g:LanguageClient_serverCommands = {
+    \ 'cpp': ['ccls', '--log-file=/tmp/cc.log'],
+    \ 'c': ['ccls', '--log-file=/tmp/cc.log'],
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'go': ['go-langserver'],
     \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'typescript': ['typescript-language-server', '--stdio', '--tsserver-path=/Users/cormac/.nvm/versions/node/v10.6.0/bin/tsserver', '--tsserver-log-file=/tmp/tsserver.log'],
-    \ 'go': ['go-langserver']
+    \ 'typescript': ['typescript-language-server', '--stdio', '--tsserver-path=/Users/cormac/.nvm/versions/node/v10.6.0/bin/tsserver', '--tsserver-log-file=/tmp/tsserver.log']
     \ }
     " \ 'typescript': ['javascript-typescript-stdio'],
     " \ 'typescript': ['javascript-typescript-stdio'],
@@ -239,6 +244,13 @@ nnoremap <silent> g. :call LanguageClient_textDocument_codeAction()<CR>
 
 " }}}
 endif
+
+" }}}
+" {{{ ccls
+
+
+let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if you want system-wide settings
+let g:LanguageClient_settingsPath = $HOME.'/.config/nvim/settings.json'
 
 " }}}
 " {{{ Terraform
