@@ -91,12 +91,14 @@ Plug 'terryma/vim-expand-region'        " + or _
 " Navigation, behaviour
 " Plug 'kien/ctrlp.vim'
 Plug 'tpope/vim-vinegar'
+Plug 'tpope/vim-projectionist'
+Plug 'cormacrelf/fuzzy-projectionist.vim'
 Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-grepper'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 " Plug 'mhinz/vim-signify' " replace gitgutter
-Plug 'mhinz/vim-startify'
+" Plug 'mhinz/vim-startify'
 " Plug 'vim-scripts/tasklist.vim', { 'on': 'TaskList' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'talek/obvious-resize'

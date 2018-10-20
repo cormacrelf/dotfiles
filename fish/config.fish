@@ -5,16 +5,26 @@ if not test -f ~/.config/fish/functions/fisher.fish
   echo "Installing fisherman for the first time"
   curl -sLo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
   fisher
-  fisher omf/theme-bobthefish
-  fisher omf/theme-batman
 end
 
-# path
-set -gx PATH $HOME/bin $HOME/.dotfiles/bin $PATH
+set -g default_user cormac # for themes
+
+# path -- don't add segments if they don't exist, so fish doesn't complain
+function _pathadd
+  test -d $argv; and set -gx PATH $argv $PATH
+end
+_pathadd $HOME/bin
+_pathadd $HOME/.dotfiles/bin
+_pathadd $HOME/Library/Python/2.7/bin
+_pathadd $HOME/go/bin
 
 # abbreviations / aliases
 set -gx EDITOR "nvim"
+set -g DOTFILES "$HOME/.dotfiles"
+set -g CONFIG "$HOME/.config"
+set -g FISHCONFIG "$HOME/.config/fish/config.fish"
 abbr -a -- - 'cd -'
+alias ef="$EDITOR $CONFIG/fish/config.fish"
 
 # nvm plugin
 # put the shims in a nvm-shims directory

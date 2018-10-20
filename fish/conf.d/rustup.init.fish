@@ -1,1 +1,0 @@
-/Users/cormac/.config/fisherman/rustup/init.fish
