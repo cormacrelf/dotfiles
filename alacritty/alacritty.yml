@@ -87,7 +87,7 @@ font:
   # OS X only: use thin stroke font rendering. Thin strokes are suitable
   # for retina displays, but for non-retina you probably want this set to
   # false.
-  use_thin_strokes: false
+  use_thin_strokes: true
 
 # Should display the render timer
 render_timer: false
@@ -271,6 +271,7 @@ background_opacity: 1.0
 key_bindings:
   - { key: V,        mods: Command, action: Paste                        }
   - { key: C,        mods: Command, action: Copy                         }
+  - { key: H,        mods: Command, action: Hide                         }
   - { key: Q,        mods: Command, action: Quit                         }
   - { key: W,        mods: Command, action: Quit                         }
   - { key: Home,                    chars: "\x1bOH",   mode: AppCursor   }
@@ -371,5 +372,5 @@ shell:
   args:
     - --login
     - -c
-    - 'tmux -2 attach -t TMUX || tmux -2 new -s TMUX'
+    - 'tmux -u -2 attach -t TMUX || tmux -u -2 new -s TMUX'
 

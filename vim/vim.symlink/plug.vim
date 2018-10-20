@@ -19,6 +19,8 @@ Plug 'MarcWeber/vim-addon-mw-utils'
 Plug 'garbas/vim-snipmate'
 Plug 'honza/vim-snippets'
 
+Plug 'https://framagit.org/tyreunom/coquille', { 'branch': 'pathogen-bundle' }
+
 if has('nvim')
     Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
@@ -147,12 +149,14 @@ Plug 'romainl/Apprentice'
 Plug 'morhetz/gruvbox'
 Plug 'dracula/vim'
 Plug 'vim-scripts/chlordane.vim'
+" Plug 'malcolmbaig/vim-two-firewatch' " white brace matching, but even in light mode
 Plug 'shofel/vim-two-firewatch'
 Plug 'w0ng/vim-hybrid'
 Plug 'sjl/badwolf'
 Plug 'chriskempson/base16-vim'
 Plug 'rakr/vim-togglebg'
 Plug 'cormacrelf/vim-colors-github'
+Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
 Plug 'gerw/vim-HiLinkTrace'
 " Plug 'jszakmeister/vim-togglecursor'
 

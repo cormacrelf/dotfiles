@@ -1,4 +1,6 @@
 " vim: set foldlevel=1 :
+" you need this before rtp+=ing any themes, otherwise they configure
+" themselves with 256 colors, or maybe Airline does
 set termguicolors
 
 " Source ~/.vimrc, vim-plug {{{
@@ -72,17 +74,23 @@ augroup TYPESCRIPT
 augroup END
 
 " }}}
-" LanguageClient / LanguageServer {{{
-"
+" Terminal Neovim, ie not Oni {{{
+
+if !exists("g:gui_oni")
+" LanguageClient-neovim {{{
+
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
-let g:LanguageClient_diagnosticsList = 'location'
+let g:LanguageClient_diagnosticsList = "location"
 let g:LanguageClient_serverCommands = {
+    \ 'cpp': ['ccls', '--log-file=/tmp/cc.log'],
+    \ 'c': ['ccls', '--log-file=/tmp/cc.log'],
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+    \ 'javascript': ['javascript-typescript-stdio'],
     \ 'typescript': ['typescript-language-server', '--stdio', '--tsserver-path', '/Users/cormac/.nvm/versions/node/v10.9.0/lib/node_modules/typescript/bin/tsserver'],
     \ 'go': ['go-langserver']
     \ }
-    " \ 'javascript': ['javascript-typescript-stdio'],
+    " \ 'typescript': ['javascript-typescript-stdio'],
     " \ 'typescript': ['javascript-typescript-stdio'],
 
 set shortmess+=c
@@ -134,8 +142,6 @@ endif
 if !hlexists('ALEInfo')
     highlight link ALEInfo ALEWarning
 endif
-
-
 
 " }}}
 " ncm2 {{{
@@ -195,6 +201,16 @@ nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F12> :call LanguageClient_textDocument_definition()<CR>
 nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
 nnoremap <silent> g. :call LanguageClient_textDocument_codeAction()<CR>
+
+" }}}
+endif
+
+" }}}
+" {{{ ccls
+
+
+let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if you want system-wide settings
+let g:LanguageClient_settingsPath = $HOME.'/.config/nvim/settings.json'
 
 " }}}
 " {{{ Terraform
@@ -268,6 +284,24 @@ autocmd! User GoyoEnter nested call <SID>goyo_enter()
 autocmd! User GoyoLeave nested call <SID>goyo_leave()
 
 " }}}
+" Coq {{{
 
+function! Coq()
+    command! Coq call CoqLaunch()
+    call coquille#FNMapping()
+    if &background == 'dark'
+        hi CheckedByCoq ctermbg=10 guibg='#2F4C40'
+        hi SentToCoq ctermbg=12 guibg='#53B087'
+    else
+        hi CheckedByCoq ctermbg=10 guibg='#90ee90'
+        hi SentToCoq ctermbg=12 guibg=LimeGreen
+    endif
+endfunction
+augroup COQ
+    autocmd!
+    autocmd FileType coq execute Coq()
+augroup END
+
+" }}}
 
 
