@@ -8,6 +8,7 @@ if did_update; then
   rm -rf /Applications/Alacritty.app
   cp -r target/release/osx/Alacritty.app /Applications/
   cp alacritty-completions.fish $HOME/.dotfiles/fish/completions/
+  sudo tic -x alacritty.info # install terminfo database entry
 fi
 
 # mac app store

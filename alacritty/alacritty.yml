@@ -13,7 +13,7 @@ env:
   # Note that some xterm terminfo databases don't declare support for italics.
   # You can verify this by checking for the presence of `smso` and `sitm` in
   # `infocmp xterm-256color`.
-  TERM: xterm-256color
+  # TERM: alacritty-256color
 
 window:
   # show title bar
@@ -35,6 +35,8 @@ window:
 # The FreeType rasterizer needs to know the device DPI for best results
 # (changes require restart)
 dpi:
+  # x: 127.68
+  # y: 127.68
   x: 109.0
   y: 109.0
 
@@ -48,25 +50,28 @@ draw_bold_text_with_bright_colors: true
 font:
   # The normal (roman) font face to use.
   normal:
-    family: Fira Code
+    family: SF Mono
+    # family: Fira Code
     # family: IBM Plex Mono
     # Style can be specified to pick a specific face.
     # style: Regular
 
   # The bold font face
   bold:
-    family: Fira Code
+    family: SF Mono
+    # family: Fira Code
     # Style can be specified to pick a specific face.
     # style: Bold
 
   # The italic font face
   italic:
-    family: Fira Code
+    family: SF Mono
+    # family: Fira Code
     # Style can be specified to pick a specific face.
     # style: Italic
 
   # Point size of the font
-  size: 13.0
+  size: 12.0
 
   # tester
   # this.catatonic$ = this.svc.map(ls => ls.reduce((acc, x) => `09${acc}.95${x && 17}`, ""));
@@ -75,14 +80,14 @@ font:
   # as modifying the linespacing, and offset.x as modifying the letter spacing.
   offset:
     x: 0
-    y: 2
+    y: 4
 
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increase the x offset to move the glyph to
   # the right, increase the y offset to move the glyph upward.
   glyph_offset:
     x: 0
-    y: 0
+    y: 2
 
   # OS X only: use thin stroke font rendering. Thin strokes are suitable
   # for retina displays, but for non-retina you probably want this set to
@@ -372,5 +377,5 @@ shell:
   args:
     - --login
     - -c
-    - 'tmux -u -2 attach -t TMUX || tmux -u -2 new -s TMUX'
+    - 'tmux attach -t TMUX || tmux new -s TMUX'
 
