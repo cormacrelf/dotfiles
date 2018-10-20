@@ -1,51 +1,40 @@
+" vim: set foldlevel=1 :
 set termguicolors
 
 " Source ~/.vimrc, vim-plug {{{
+" vim roots {{{
 if has('win32') || has ('win64')
   let $VIM_HOME = $HOME."/AppData/Local/nvim"
 else
   let $VIM_HOME = $HOME."/.config/nvim"
 endif
-
 let $VIM_INIT = $VIM_HOME.'/init.vim'
 let $VIM_VIMRC = $VIM_HOME.'/vimrc.vim'
 let $VIM_PLUG = $VIM_HOME.'/plug.vim'
 let $VIM_G_INIT = $VIM_HOME.'/ginit.vim'
 
-" Source the ~/.vimrc
-source $VIM_VIMRC
-
-nnoremap <leader>Vs  :so $VIM_INIT<cr>
 nnoremap <leader>Ve  :e $VIM_VIMRC<cr>
 nnoremap <leader>Vn  :e $VIM_INIT<cr>
 nnoremap <leader>Vp  :e $VIM_PLUG<cr>
 nnoremap <leader>Vg  :e $VIM_G_INIT<cr>
+" }}}
 
+" Source the ~/.vimrc
+source $VIM_VIMRC
 runtime! python_setup.vim
-
-
-autocmd BufRead *.vim,.*vimrc set foldenable foldmethod=marker foldlevel=0
-
-
-set path+=src " for using gf on app/models/blah where app is really src/app
+" after because vimrc also maps this
+nnoremap <leader>Vs  :so $VIM_INIT<cr>
 
 " }}}
 " colorscheme, appearance {{{
 
-" colorscheme two-firewatch
-" let g:airline_theme = "twofirewatch"
-" set background=dark
-colorscheme two-firewatch
-let g:airline_theme = "twofirewatch"
-set background=dark
-
-" let ayucolor="light"  " for light version of theme
-" let ayucolor="mirage" " for mirage version of theme
-" let ayucolor="dark"   " for dark version of theme
-" colorscheme ayu
-" let g:airline_theme = "twofirewatch"
-"
-" so $VIM_HOME/hybrid-spelling.vim
+let g:github_colors_soft = 1
+let g:github_colors_block_diffmark = 1
+let g:airline_theme = "github"
+let g:lightline.colorscheme = "github"
+colorscheme github
+unmap <f5>
+nnoremap <f5> :call github_colors#toggle_soft()<cr>
 
 set titlestring=nvim:\ %f\ %a%r%m
 
@@ -90,7 +79,7 @@ let g:LanguageClient_autoStart = 1
 let g:LanguageClient_diagnosticsList = 'location'
 let g:LanguageClient_serverCommands = {
     \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'typescript': ['typescript-language-server', '--stdio'],
+    \ 'typescript': ['typescript-language-server', '--stdio', '--tsserver-path', '/Users/cormac/.nvm/versions/node/v10.9.0/lib/node_modules/typescript/bin/tsserver'],
     \ 'go': ['go-langserver']
     \ }
     " \ 'javascript': ['javascript-typescript-stdio'],
@@ -196,43 +185,6 @@ imap <expr> <c-j> pumvisible() ? "\<c-y>\<Plug>snipMateNextOrTrigger" : "\<Plug>
 let g:LanguageClient_completionPreferTextEdit = 1
 
 " }}}
-" Denite.vim {{{
-
-" Change mappings.
-" call denite#custom#map(
-" 			\ 'insert',
-" 			\ '<C-n>',
-" 			\ '<denite:move_to_next_line>',
-" 			\ 'noremap'
-" 			\)
-" call denite#custom#map(
-" 			\ 'insert',
-" 			\ '<C-p>',
-" 			\ '<denite:move_to_previous_line>',
-" 			\ 'noremap'
-" 			\)
-
-" Ripgrep command on grep source
-" call denite#custom#var('grep', 'command', ['rg'])
-" call denite#custom#var('grep', 'default_opts',
-" 			\ ['--vimgrep', '--no-heading'])
-" call denite#custom#var('grep', 'recursive_opts', [])
-" call denite#custom#var('grep', 'pattern_opt', ['--regexp'])
-" call denite#custom#var('grep', 'separator', ['--'])
-" call denite#custom#var('grep', 'final_opts', [])
-"
-" call denite#custom#alias('source', 'file_rec/git', 'file_rec')
-" call denite#custom#var('file_rec/git', 'command',
-"             \ ['git', 'ls-files', '-co', '--exclude-standard', '.'])
-
-" nnoremap <silent> <C-p> :<C-u>Denite
-"             \ `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec'`<CR>
-
-" call denite#custom#option('_', 'highlight_mode_insert', 'WildMenu')
-" call denite#custom#option('_', 'highlight_matched_range', 'None')
-" call denite#custom#option('_', 'highlight_matched_char', 'Underlined')
-
-" }}}
 " IDE-style mappings to language server {{{
 
 nnoremap <silent> <S-F12> :Denite references<cr>
@@ -263,6 +215,9 @@ augroup TERRAFORM
     autocmd FileType terraform execute Terraform()
 augroup END
 
+" }}}
+" Angular{{{
+
 function! Angular()
     command! Ts above split %:r.ts
     command! Html below split %:r.html
@@ -286,15 +241,33 @@ let g:neomake_typescript_enabled_makers = ['tslint']
 call neomake#configure#automake('')
 
 " }}}
-" {{{
-
-autocmd BufRead *.xaml setf xml
-
-nnoremap <c-p> :FZF<cr>
-
-" }}}
 " Pandoc {{{
 
 let g:pandoc#completion#bib#mode = "citeproc"
+" don't auto-cd into %:h
+let g:pandoc#modules#disabled = ["chdir"]
+let g:pandoc#biblio#bibs = "$HOME/lib/zotero-library.bib"
 
 " }}}
+" Goyo {{{
+
+function! s:goyo_enter()
+  " silent !tmux set status off
+  " silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
+  set showmode
+  set scrolloff=2
+endfunction
+
+function! s:goyo_leave()
+  set showmode
+  set showcmd
+  set scrolloff=2
+endfunction
+
+autocmd! User GoyoEnter nested call <SID>goyo_enter()
+autocmd! User GoyoLeave nested call <SID>goyo_leave()
+
+" }}}
+
+
+

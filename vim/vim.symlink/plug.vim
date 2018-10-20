@@ -4,6 +4,7 @@
 " Plug 'tpope/vim-endwise'
 Plug 'cohama/lexima.vim'
 Plug 'mattn/emmet-vim'
+Plug 'junegunn/vader.vim'
 "
 " Only in Neovim
 
@@ -40,15 +41,13 @@ Plug 'tpope/vim-dispatch'
 
 " Language-specific
 Plug 'dag/vim-fish'
-Plug 'kana/vim-filetype-haskell'
-Plug 'bitc/vim-hdevtools'
+Plug 'neovimhaskell/haskell-vim'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
 Plug 'othree/html5.vim'
-" Plug 'fatih/vim-go'
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'derekwyatt/vim-scala'
-Plug 'jeaye/color_coded', { 'for': ['c'] }
 Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
 Plug 'elixir-lang/vim-elixir'
@@ -93,12 +92,13 @@ Plug 'terryma/vim-expand-region'        " + or _
 Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-projectionist'
 Plug 'cormacrelf/fuzzy-projectionist.vim'
-Plug 'vim-airline/vim-airline'
+" Plug 'vim-airline/vim-airline'
+Plug 'itchyny/lightline.vim'
 Plug 'mhinz/vim-grepper'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 " Plug 'mhinz/vim-signify' " replace gitgutter
-" Plug 'mhinz/vim-startify'
+Plug 'mhinz/vim-startify'
 " Plug 'vim-scripts/tasklist.vim', { 'on': 'TaskList' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'talek/obvious-resize'
@@ -111,7 +111,6 @@ Plug 'osyo-manga/vim-over' " :s preview
 Plug 'editorconfig/editorconfig-vim'
 " Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
 " Plug 'haya14busa/incsearch.vim'
-" Plug 'jeaye/color_coded'
 " Plug 'kana/vim-tabpagecd'
 " Plug 'terryma/vim-multiple-cursors'
 
@@ -153,6 +152,8 @@ Plug 'w0ng/vim-hybrid'
 Plug 'sjl/badwolf'
 Plug 'chriskempson/base16-vim'
 Plug 'rakr/vim-togglebg'
+Plug 'cormacrelf/vim-colors-github'
+Plug 'gerw/vim-HiLinkTrace'
 " Plug 'jszakmeister/vim-togglecursor'
 
 
