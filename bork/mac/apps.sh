@@ -2,13 +2,7 @@ ok directory $HOME/git
 ok github $HOME/git/alacritty jwilm/alacritty
 if did_update; then
   needs_exec "cargo" || exit $STATUS_FAILED_PRECONDITION
-  cd $HOME/git/alacritty
-  make app
-  cargo install --force --path .
-  rm -rf /Applications/Alacritty.app
-  cp -r target/release/osx/Alacritty.app /Applications/
-  cp alacritty-completions.fish $HOME/.dotfiles/fish/completions/
-  sudo tic -x alacritty.info # install terminfo database entry
+  include alacritty.sh
 fi
 
 # mac app store
