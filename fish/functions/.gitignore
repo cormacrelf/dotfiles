@@ -1,2 +1,6 @@
 *
 !.gitignore
+!dot.fish
+!fish_user_key_bindings.fish
+!spotlight_*.fish
+!fuzzy_edit_in.fish
