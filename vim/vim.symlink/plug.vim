@@ -4,42 +4,44 @@
 " Plug 'tpope/vim-endwise'
 Plug 'cohama/lexima.vim'
 Plug 'mattn/emmet-vim'
-Plug 'junegunn/vader.vim'
-"
-" Only in Neovim
 
 " Plug 'Yggdroot/indentLine'
 
 " Writing mode
 Plug 'junegunn/goyo.vim'
 
-" snipmate dependencies
-Plug 'tomtom/tlib_vim'
-Plug 'MarcWeber/vim-addon-mw-utils'
-Plug 'garbas/vim-snipmate'
-Plug 'honza/vim-snippets'
-
-Plug 'https://framagit.org/tyreunom/coquille', { 'branch': 'pathogen-bundle' }
+" snippets
+if g:cormacrelf.snippets
+  Plug 'tomtom/tlib_vim'
+  Plug 'MarcWeber/vim-addon-mw-utils'
+  Plug 'SirVer/ultisnips'
+  " Plug 'garbas/vim-snipmate'
+  " Plug 'honza/vim-snippets'
+endif
 
 if has('nvim')
+  if g:cormacrelf.LanguageClient
     Plug 'autozimu/LanguageClient-neovim', {
     \ 'branch': 'next',
     \ 'do': 'bash install.sh',
     \ }
-    " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'roxma/nvim-yarp'
-    Plug 'ncm2/ncm2'
-    Plug 'ncm2/ncm2-path'
-    Plug 'ncm2/ncm2-snipmate'
-    Plug 'junegunn/fzf'
-    Plug 'junegunn/fzf.vim'
-    " Plug 'Shougo/denite.nvim', { 'do': ':UpdateRemotePlugins' }
-    Plug 'Shougo/echodoc.vim'
-    Plug 'neomake/neomake'
-    Plug 'radenling/vim-dispatch-neovim'
+  endif
+endif
+if g:cormacrelf.ncm2
+  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+  Plug 'roxma/nvim-yarp'
+  Plug 'ncm2/ncm2'
+  Plug 'ncm2/ncm2-path'
+  if g:cormacrelf.snippets
+    Plug 'ncm2/ncm2-ultisnips'
+  endif
 endif
 
 Plug 'tpope/vim-dispatch'
+Plug 'radenling/vim-dispatch-neovim'
+Plug 'junegunn/fzf'
+Plug 'junegunn/fzf.vim'
+Plug 'Shougo/echodoc.vim'
 
 " Language-specific
 Plug 'dag/vim-fish'
@@ -66,7 +68,7 @@ Plug 'Quramy/vim-js-pretty-template', {'for': ['javascript', 'typescript']}
 Plug 'hashivim/vim-terraform'
 Plug 'juliosueiras/vim-terraform-completion'
 Plug 'PProvost/vim-ps1' " Powershell
-
+Plug 'https://framagit.org/tyreunom/coquille', { 'branch': 'pathogen-bundle', 'do': ':UpdateRemotePlugins' }
 
 " Clojure / Paredit
 Plug 'guns/vim-clojure-static', { 'for': ['clojure'] }
@@ -91,7 +93,7 @@ Plug 'terryma/vim-expand-region'        " + or _
 
 " Navigation, behaviour
 " Plug 'kien/ctrlp.vim'
-Plug 'tpope/vim-vinegar'
+" Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-projectionist'
 Plug 'cormacrelf/fuzzy-projectionist.vim'
 " Plug 'vim-airline/vim-airline'
@@ -107,11 +109,9 @@ Plug 'talek/obvious-resize'
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'scrooloose/nerdtree'
 " Plug 'jistr/vim-nerdtree-tabs'
-" Plug 'reedes/vim-wheel' " d-j, d-k
 Plug 'osyo-manga/vim-over' " :s preview
-" Plug 'chrisbra/NrrwRgn' " :NR, :wq
 Plug 'editorconfig/editorconfig-vim'
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
+Plug 'romainl/vim-cool' " basically incsearch highlighting
 " Plug 'haya14busa/incsearch.vim'
 " Plug 'kana/vim-tabpagecd'
 " Plug 'terryma/vim-multiple-cursors'
@@ -120,7 +120,7 @@ Plug 'editorconfig/editorconfig-vim'
 " Motion, commands
 Plug 'godlygeek/tabular'
 Plug 'tommcdo/vim-lion'           " glip= gLii,
-Plug 'maxbrunsfeld/vim-yankstack'
+" Plug 'maxbrunsfeld/vim-yankstack' " disabled because https://github.com/vim-pandoc/vim-pandoc/issues/245
 Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
@@ -130,16 +130,6 @@ Plug 'justinmk/vim-sneak' " s<char><char>
 " Plug 'tpope/vim-commentary'
 " Plug 'Lokaltog/vim-easymotion'
 " Plug 'tpope/vim-ragtag'
-
-function! BuildYCM(info)
-  " info is a dictionary with 3 fields
-  " - name:   name of the plugin
-  " - status: 'installed', 'updated', or 'unchanged'
-  " - force:  set on PlugInstall! or PlugUpdate!
-  if a:info.status == 'installed'
-    !./install.py --all
-  endif
-endfunction
 
 " Colours and Appearance
 Plug 'xolox/vim-misc' | Plug 'xolox/vim-colorscheme-switcher'
@@ -168,8 +158,5 @@ Plug 'tpope/vim-eunuch' " :Move, :Mkdir, :Rename
 
 
 " Other
-" Plug 'MarcWeber/vim-addon-mw-utils'
-" Plug 'tomtom/tlib_vim'
 Plug 'ciaranm/detectindent'
-" Plug 'vim-scripts/loremipsum'
-
+Plug 'junegunn/vader.vim'

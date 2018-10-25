@@ -14,6 +14,9 @@ let $VIM_INIT = $VIM_HOME.'/init.vim'
 let $VIM_VIMRC = $VIM_HOME.'/vimrc.vim'
 let $VIM_PLUG = $VIM_HOME.'/plug.vim'
 let $VIM_G_INIT = $VIM_HOME.'/ginit.vim'
+if !exists("$VIM_CONFIG")
+  let $VIM_CONFIG = $VIM_HOME.'/config.vim'
+endif
 " }}}
 " Shells {{{
 " this goes before plug#begin so git can work
@@ -40,6 +43,9 @@ if &shell =~# 'fish$'
 endif
 " }}}
 
+" get g:cormacrelf to adapt vim init script to situations
+source $VIM_CONFIG
+
 filetype off
 call plug#begin($VIM_HOME.'/plugged')
     so $VIM_PLUG
@@ -49,7 +55,7 @@ syntax on
 
 " Startup {{{
 " do this first so any yank mappings still cache
-call yankstack#setup()
+" call yankstack#setup()
 
 if filereadable($VIM_HOME."/private.vim")
     so ~/.vim/private.vim
@@ -68,15 +74,34 @@ endif
 " Settings {{{
 " Lightline config {{{
 
+" Airline {{{
+if exists('g:airline_detect_iminsert')
+    let g:airline_left_sep  = ''
+    let g:airline_right_sep = ''
+    " Airline WordCount extension
+    let b:toggled_ws_once = 1
+    " let g:airline_section_y = '%{WordCount()}w'
+    let g:airline#extensions#whitespace#enabled = 0
+    call airline#parts#define_function('wordcount', 'WordCount')
+    call airline#parts#define_condition('wordcount', 'exists("b:wc_enabled") && b:wc_enabled == 1')
+    let g:airline_section_y = airline#section#create(['ffenc', ' ', 'wordcount'])
+    map <leader>wS :AirlineToggleWhitespace<CR>
+endif
+" }}}
+
 let g:lightline = {
             \ 'active': {
             \   'left': [ [ 'mode', 'paste' ],
             \             [ 'readonly', 'filename', 'modified' ] ],
+            \   'right': [ [ 'lineinfo' ],
+            \              [ 'percent' ],
+            \              [ 'fileformat', 'fileencoding', 'filetype', 'wordcount' ] ]
             \ },
             \ 'component_function': {
             \   'filename': 'LightlineFilename',
             \   'fileformat': 'LightlineFileformat',
             \   'filetype': 'LightlineFiletype',
+            \   'wordcount': 'LightlineWordCount',
             \ } }
 
 func! s:fname()
@@ -92,6 +117,11 @@ func! LightlineFileformat()
 endfunc
 func! LightlineFiletype()
   return winwidth(0) > 90 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+endfunc
+
+func! LightlineWordCount()
+  if exists("b:wc_enabled") && b:wc_enabled | return string(WordCount()) . 'w' | endif
+  return ""
 endfunc
 
 " }}}
@@ -145,10 +175,11 @@ set showmatch                       " brackets/braces that is
 set mat=1                           " duration to show matching brace (1/10 sec)
 set incsearch                       " do incremental searching
 set laststatus=2                    " always show the status line
+set shortmess+=c                    " don't show match x of y in the status line
 set noshowmode                      " don't show INSERT in the status line
 set ignorecase
 set smartcase                       " auto case sensitivity when searching
-set nohlsearch                      " don't highlight searches
+set hlsearch                        " do highlight searches, but with vim-cool
 set novisualbell                    " shut the fuck up
 set title
 set titlestring=vim:\ %f\ %a%r%m
@@ -164,7 +195,6 @@ endif
 " Indentation {{{
 
 set breakindent
-" set showbreak=↪\ \ \ 
 set list
 set listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·
 set autoindent                                     " automatic indent new lines
@@ -340,6 +370,7 @@ nnoremap <leader>q :close<CR>
 " editing vim config
 nnoremap <D-<>       :tabe ~/.vimrc<cr>
 nnoremap <leader>Vs  :so $VIM_VIMRC<cr>
+nnoremap <leader>Vc  :e $VIM_CONFIG<cr>
 nnoremap <leader>Ve  :e $VIM_VIMRC<cr>
 nnoremap <leader>Vn  :e $VIM_INIT<cr>
 nnoremap <leader>Vp  :e $VIM_PLUG<cr>
@@ -693,7 +724,7 @@ let g:pandoc#folding#fdc = 0
 let g:pandoc#syntax#style#emphases = 1
 let g:pandoc#syntax#style#underline_special = 0
 let g:pandoc#syntax#conceal#use = 0
-let g:pandoc#formatting#mode='ha' " soft breaks; automatically set formatoptions
+" let g:pandoc#formatting#mode=a " soft breaks; automatically set formatoptions
 " let g:pantondoc_folding_fold_yaml = 1
 " stop making esc slow!
 " let g:pandoc#modules#disabled = ["bibliographies"]
@@ -711,21 +742,6 @@ autocmd User Startified setlocal buftype=
 let g:startify_files_number = 5
 let g:startify_custom_header = []
 let g:startify_custom_header = startify#fortune#cowsay()
-
-" Airline
-if exists('g:airline_detect_iminsert')
-    let g:airline_left_sep  = ''
-    let g:airline_right_sep = ''
-    " Airline WordCount extension
-    let b:toggled_ws_once = 1
-    " let g:airline_section_y = '%{WordCount()}w'
-    let g:airline#extensions#whitespace#enabled = 0
-    call airline#parts#define_function('wordcount', 'WordCount')
-    call airline#parts#define_condition('wordcount', 'exists("b:wc_enabled") && b:wc_enabled == 1')
-    let g:airline_section_y = airline#section#create(['ffenc', ' ', 'wordcount'])
-    map <leader>wS :AirlineToggleWhitespace<CR>
-endif
-
 
 " Syntastic checking
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
@@ -799,8 +815,12 @@ command! -range=% SoftWrap
             \ <line1>,<line2>g/.\+/ .;-/^$/ join |normal $x
 
 function! Prose()
-    let g:prose_hard_wrap = 1
+    let g:prose_hard_wrap = 0
     let b:wc_enabled = 1 " see airline wordcount segment
+
+    if exists("ncm2#disable_for_buffer")
+      call ncm2#disable_for_buffer()
+    endif
 
     if !exists("b:toggled_ws_once") || b:toggled_ws_once == 0
         " silent exec :AirlineToggleWhitespace
@@ -808,8 +828,10 @@ function! Prose()
     let b:toggled_ws_once = 1
 
     " speed up syntax highlighting
-    syn  sync minlines=45
-    syn  match myExCapitalWords +\<[A-Z]\+\>+ contains=@NoSpell
+    syn sync minlines=45
+    syn match myExCapitalWordsBQ +\<[A-Z]\+\>+ contains=@NoSpell containedin=pandocBlockQuote contained
+    syn match myExCapitalWords +\<[A-Z]\+\>+ contains=@NoSpell containedin=pandocUListItem,pandocListItem
+    hi link myExCapitalWordsBQ pandocBlockQuote
     setl cinwords=
 
     setl nocindent
@@ -830,7 +852,7 @@ function! Prose()
     " setl formatlistpat=\\v^\\s*((\\d+\|[a-z]\|)[\\]:\\.\\)}]\|\\*[\\t\ ])\\s*
     " setl textwidth=0
     " markdown comments
-    " setl com=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,b:-
+    setl com=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,b:-
 
     " for cool lists using fo~=o/c
     " setlocal com+=:*

@@ -14,6 +14,9 @@ let $VIM_INIT = $VIM_HOME.'/init.vim'
 let $VIM_VIMRC = $VIM_HOME.'/vimrc.vim'
 let $VIM_PLUG = $VIM_HOME.'/plug.vim'
 let $VIM_G_INIT = $VIM_HOME.'/ginit.vim'
+if !exists("$VIM_CONFIG")
+  let $VIM_CONFIG = $VIM_HOME.'/config.vim'
+endif
 
 nnoremap <leader>Ve  :e $VIM_VIMRC<cr>
 nnoremap <leader>Vn  :e $VIM_INIT<cr>
@@ -64,8 +67,10 @@ tnoremap <A-l> <C-\><C-n><C-w>l
 function! Typescript()
   JsPreTmpl html
   syn clear foldBraces
-  setlocal indentkeys+=0.
+  setl indentkeys+=0.
   setl foldmethod=marker foldmarker=#region,#endregion
+  setl signcolumn=yes
+
   " let g:typescript_opfirst='\%([<>=,?^%|*/&]\|\([-:+]\)\1\@!\|!=\|in\%(stanceof\)\=\>\)'
 endfunction
 augroup TYPESCRIPT
@@ -74,28 +79,47 @@ augroup TYPESCRIPT
 augroup END
 
 " }}}
-" Terminal Neovim, ie not Oni {{{
-
-if !exists("g:gui_oni")
 " LanguageClient-neovim {{{
+if g:cormacrelf.LanguageClient
+
+" IDE-style mappings to language server
+nnoremap <silent> <F11> :call LanguageClient_textDocument_references()<cr>
+nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
+nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <F12> :call LanguageClient_textDocument_definition()<CR>
+nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+nnoremap <silent> g. :call LanguageClient_textDocument_codeAction()<CR>
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
 let g:LanguageClient_diagnosticsList = "location"
+let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if you want system-wide settings
+let g:LanguageClient_settingsPath = $HOME.'/.config/nvim/settings.json'
+let g:LanguageClient_completionPreferTextEdit = 1
+let g:LanguageClient_rootMarkers = {
+      \ 'typescript': ['tsconfig.json']
+      \ }
 let g:LanguageClient_serverCommands = {
-    \ 'cpp': ['ccls', '--log-file=/tmp/cc.log'],
-    \ 'c': ['ccls', '--log-file=/tmp/cc.log'],
-    \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
-    \ 'javascript': ['javascript-typescript-stdio'],
-    \ 'typescript': ['typescript-language-server', '--stdio', '--tsserver-path', '/Users/cormac/.nvm/versions/node/v10.9.0/lib/node_modules/typescript/bin/tsserver'],
-    \ 'go': ['go-langserver']
-    \ }
-    " \ 'typescript': ['javascript-typescript-stdio'],
-    " \ 'typescript': ['javascript-typescript-stdio'],
+      \ 'cpp': ['ccls', '--log-file=/tmp/ccls.log'],
+      \ 'c': ['ccls', '--log-file=/tmp/ccls.log'],
+      \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
+      \ 'go': ['go-langserver']
+      \ }
 
-set shortmess+=c
+if executable('typescript-language-server') && executable('tsserver')
+  let  g:LanguageClient_serverCommands.typescript = [
+        \'typescript-language-server', '--stdio',
+        \'--tsserver-path=tsserver']
+        " \+ [ '--tsserver-log-file', '/tmp/tsserver-log',
+        " \'--tsserver-log-verbosity', 'verbose',
+        " \]
+  " let  g:LanguageClient_serverCommands.typescript = [
+  "       \'javascript-typescript-stdio', '--logfile', '/tmp/js-ts-log'
+  "       \]
+endif
 
-autocmd FileType typescript setlocal signcolumn=yes
+" diagnostics display {{{
 let g:LanguageClient_diagnosticsDisplay = {
         \ 1: {
             \"name": "Error",
@@ -142,75 +166,53 @@ endif
 if !hlexists('ALEInfo')
     highlight link ALEInfo ALEWarning
 endif
-
-" }}}
-" ncm2 {{{
-
-" --- required ---
-
-" enable ncm2 for all buffer
-autocmd BufEnter * call ncm2#enable_for_buffer()
-
-" note that must keep noinsert in completeopt, the others is optional
-set completeopt=noinsert,menuone,noselect
-
-" --- optional ---
-
-" supress the annoying 'match x of y', 'The only match' and 'Pattern not
-" found' messages
-set shortmess+=c
-
-" auto trigger
-au TextChangedI * call ncm2#auto_trigger()
-
-" CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
-inoremap <c-c> <ESC>
-
-" When the <Enter> key is pressed while the popup menu is visible, it only
-" hides the menu. Use this mapping to close the menu and also start a new
-" line.
-inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-
-" Use <TAB> to select the popup menu:
-inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
-inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-" --- using ncm2-snipmate ---
-
-" https://github.com/autozimu/LanguageClient-neovim/pull/514
-
-inoremap <silent> <expr> <CR> ncm2_snipmate#expand_or("\<CR>", 'n')
-inoremap <expr> <c-u> ncm2_snipmate#expand_or("\<Plug>snipMateTrigger", "m")
-
-let g:snips_no_mappings = 1
-vmap <c-j> <Plug>snipMateNextOrTrigger
-vmap <c-k> <Plug>snipMateBack
-imap <expr> <c-k> pumvisible() ? "\<c-y>\<Plug>snipMateBack" : "\<Plug>snipMateBack"
-imap <expr> <c-j> pumvisible() ? "\<c-y>\<Plug>snipMateNextOrTrigger" : "\<Plug>snipMateNextOrTrigger"
-
-let g:LanguageClient_completionPreferTextEdit = 1
-
-" }}}
-" IDE-style mappings to language server {{{
-
-nnoremap <silent> <S-F12> :Denite references<cr>
-nnoremap <silent> <f11> :Denite documentSymbol<cr>
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F12> :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-nnoremap <silent> g. :call LanguageClient_textDocument_codeAction()<CR>
-
 " }}}
 endif
-
 " }}}
-" {{{ ccls
+" ncm2 {{{
+if g:cormacrelf.ncm2
+  " --- required ---
 
+  " enable ncm2 for all buffer
+  autocmd BufEnter * call ncm2#enable_for_buffer()
 
-let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if you want system-wide settings
-let g:LanguageClient_settingsPath = $HOME.'/.config/nvim/settings.json'
+  " note that must keep noinsert in completeopt, the others is optional
+  set completeopt=noinsert,menuone,noselect
+
+  " --- optional ---
+
+  " auto trigger
+  au TextChangedI * call ncm2#auto_trigger()
+
+  " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
+  inoremap <c-c> <ESC>
+
+  " When the <Enter> key is pressed while the popup menu is visible, it only
+  " hides the menu. Use this mapping to close the menu and also start a new
+  " line.
+  " inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
+
+  " Use <TAB> to select the popup menu:
+  inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : "\<tab>"
+  inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+  " --- using ultisnips ---
+
+  if g:cormacrelf.snippets
+    " Press enter key to trigger snippet expansion
+    " The parameters are the same as `:help feedkeys()`
+    inoremap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>", 'n')
+    inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+    inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
+    " c-j c-k for moving in snippet
+    let g:UltiSnipsExpandTrigger = "<Plug>(ultisnips_expand)"
+    let g:UltiSnipsJumpForwardTrigger = "<c-j>"
+    let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
+    let g:UltiSnipsRemoveSelectModeMappings = 0
+  endif
+
+endif
 
 " }}}
 " {{{ Terraform
@@ -253,15 +255,16 @@ augroup END
 " }}}
 " Neomake {{{
 
-let g:neomake_typescript_enabled_makers = ['tslint']
-call neomake#configure#automake('')
+" let g:neomake_typescript_enabled_makers = ['tslint']
+" call neomake#configure#automake('')
 
 " }}}
 " Pandoc {{{
 
 let g:pandoc#completion#bib#mode = "citeproc"
-" don't auto-cd into %:h
-let g:pandoc#modules#disabled = ["chdir"]
+" chdir: don't auto-cd into %:h
+" folding is too slow
+let g:pandoc#modules#disabled = ["chdir", "folding"]
 let g:pandoc#biblio#bibs = "$HOME/lib/zotero-library.bib"
 
 " }}}
@@ -272,12 +275,14 @@ function! s:goyo_enter()
   " silent !tmux list-panes -F '\#F' | grep -q Z || tmux resize-pane -Z
   set showmode
   set scrolloff=2
+  " set showbreak=↪\ \ \ 
 endfunction
 
 function! s:goyo_leave()
   set showmode
   set showcmd
   set scrolloff=2
+  set showbreak=
 endfunction
 
 autocmd! User GoyoEnter nested call <SID>goyo_enter()

@@ -1,2 +1,2 @@
 " Markdown
-autocmd BufNewFile,BufRead *.{md,mkd,mkdn,mark*} set filetype=pandoc
+" autocmd BufNewFile,BufRead *.{md,mkd,mkdn,mark*} set filetype=pandoc
