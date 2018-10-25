@@ -54,11 +54,6 @@ set -g FISHCONFIG "$HOME/.config/fish/config.fish"
 abbr -a -- - 'cd -'
 alias ef="$EDITOR $CONFIG/fish/config.fish"
 
-# nvm plugin
-# put the shims in a nvm-shims directory
-set -gx PATH /usr/local/bin $HOME/.dotfiles/nvm-shims $PATH
-set -g nvm_alias_output $HOME/.dotfiles/nvm-shims
-
 # fzf native
 set -x FZF_DEFAULT_COMMAND 'fd --type f'
 set -x FZF_CTRL_T_COMMAND "$FZF_DEFAULT_COMMAND"
@@ -74,3 +69,4 @@ set -U FZF_OPEN_COMMAND "fd --type f"
 
 abbr :q 'exit'
 abbr md 'mkdir -p'
+source ~/.asdf/asdf.fish
