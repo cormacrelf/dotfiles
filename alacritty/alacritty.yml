@@ -16,8 +16,12 @@ env:
   # TERM: alacritty-256color
 
 window:
-  # show title bar
-  decorations: true
+  # Values for `decorations`:
+  #     - full: Borders and title bar
+  #     - none: Neither borders nor title bar
+  #     - buttonless: Title bar, transparent background and title bar buttons
+  #     - transparent: Title bar, transparent background, but no title bar buttons
+  decorations: none
 
   # Window dimensions in character columns and lines
   # (changes require restart)
