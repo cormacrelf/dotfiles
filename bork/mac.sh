@@ -1,4 +1,5 @@
 include symlink.sh
+include tmux.sh
 
 include mac/brew.sh
 include npm.sh

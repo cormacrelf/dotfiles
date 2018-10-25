@@ -7,6 +7,7 @@ ok symlink $HOME/.zshrc $DOT/zsh/zshrc.symlink
 ok symlink $HOME/.gitignore $DOT/git/gitignore.symlink
 ok symlink $HOME/.gitconfig $DOT/git/gitconfig.symlink
 ok symlink $HOME/.tmux.conf $DOT/tmux/tmux.conf
+ok symlink $HOME/.tmux $DOT/tmux
 ok symlink $HOME/.chunkwmrc $DOT/chunkwm/chunkwmrc
 ok symlink $HOME/.skhdrc $DOT/chunkwm/skhdrc
 
