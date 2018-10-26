@@ -1,0 +1,61 @@
+---
+- include_vars: config-mac.yml
+- debug:
+    msg: "{{ mas_installed_apps }}"
+
+- name: Mac App Store
+  tags: ['mas']
+  import_role:
+    name: geerlingguy.mas
+
+- name: Homebrew base
+  tags: ['brew']
+  import_role:
+    name: geerlingguy.homebrew
+
+- name: Install python
+  tags: ['brew', 'neovim']
+  register: python2
+  homebrew:
+    name: python2
+    state: latest
+- name: Install python3
+  tags: ['brew', 'neovim']
+  register: python3
+  homebrew:
+    name: python
+    state: latest
+- name: Install neovim
+  tags: ['neovim']
+  register: neovim
+  homebrew:
+    name: neovim
+    state: latest
+- pip:
+    name: neovim
+    executable: "{{item}}"
+  loop: ['pip2', 'pip3']
+  when: python2.changed or python3.changed or neovim.changed
+  tags: ['neovim']
+
+- name: Chunkwm
+  homebrew:
+    name: chunkwm
+    state: latest
+  register: chunkwm
+- shell: brew services restart chunkwm
+  when: chunkwm.changed
+- name: skhd
+  homebrew:
+    name: skhd
+    state: latest
+  register: skhd
+- shell: brew services restart skhd
+  when: skhd.changed
+
+- name: Install fish
+  homebrew:
+    name: fish
+    state: present
+  register: fish
+

@@ -1,0 +1,11 @@
+---
+home: "{{ lookup('env','HOME') }}"
+dotfiles: "{{ home }}/.dotfiles"
+apt_packages:
+  - neovim
+  - build-essential
+  - fish
+  - zlib1g-dev
+  - ncurses-dev
+  - g++-7
+

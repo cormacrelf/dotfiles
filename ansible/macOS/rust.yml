@@ -1,0 +1,23 @@
+---
+- name: Rust
+  tags: ['alacritty', 'rust']
+  block:
+
+  - name: Install rustup-init
+    homebrew:
+      name: rustup-init
+      state: present
+    register: rustup_init
+
+  - shell: |
+      rustup init -y
+      rustup component add rls-preview rust-analysis rust-src
+    name: rustup-init & add RLS components (first time)
+    when: rustup_init.changed
+
+  - name: cargo packages
+    shell: >
+      {{ home }}/.cargo/bin/rustup run {{ item.channel }} cargo install {{ item.name }} 2>/dev/null || true
+    loop:
+      - { channel: nightly, name: rustfmt }
+

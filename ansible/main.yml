@@ -1,0 +1,52 @@
+- hosts: localhost
+  vars_files:
+    - config.yml
+  tasks:
+    - name: xdg-config directory
+      tags: ['symlink']
+      file:
+        path: "{{ home }}/.config"
+        state: directory
+
+    - name: home/lib directory
+      tags: ['symlink']
+      file:
+        path: "{{ home }}/lib"
+        state: directory
+
+    - name: symlink
+      tags: ['symlink']
+      loop: "{{ symlinks }}"
+      file:
+        src:  "{{ dotfiles }}/{{ item.src }}"
+        dest: "{{ home }}/{{ item.dest }}"
+        state: link
+
+    - debug:
+        msg: "{{ ansible_distribution }}"
+
+    - when: ansible_distribution == "MacOSX"
+      block:
+        - include_tasks:
+            file: macOS/main.yml
+            apply:
+              tags: ['mac']
+        - include_tasks:
+            file: macOS/rust.yml
+            apply:
+              tags: ['mac', 'rust', 'alacritty']
+        - include_tasks:
+            file: macOS/alacritty.yml
+            apply:
+              tags: ['alacritty']
+
+    - when: ansible_os_family == "Debian"
+      block:
+        - include_tasks:
+            file: debian/main.yml
+            apply:
+              tags: ['debian']
+
+    # expects fish result to be registered
+    - include_tasks: fish.yml
+

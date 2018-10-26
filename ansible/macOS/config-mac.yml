@@ -1,0 +1,64 @@
+---
+home: "{{ lookup('env','HOME') }}"
+dotfiles: "{{ home }}/.dotfiles"
+homebrew_taps:
+  - homebrew/cask
+  - crisidev/chunkwm
+  - twlz0ne/ccls
+  - koekeishiya/formulae
+
+homebrew_installed_packages:
+  - pandoc
+  - pandoc-citeproc
+  - git
+  - fzf
+  - ripgrep
+  - fd
+  - jq
+  - coreutils
+  - moreutils
+  - binutils
+  - rsync
+  - ssh-copy-id
+  - tree
+  - hexedit
+  - wget
+  - repl
+  - ispell
+  - nmap
+  - cmake
+  - tig
+  - ranger
+  - htop
+  - bat
+  - reattach-to-user-namespace
+  - tmux
+  - go
+  - ccls # language server for clang
+  - bear # generate compile_commands.json
+  - kubernetes-cli
+  - terraform
+  - ffmpeg
+  - youtube-dl
+  - xld
+
+homebrew_fonts:
+  - font-fira-code
+  - font-eb-garamond
+
+homebrew_cask_apps:
+  - docker
+  - firefox
+  - google-chrome
+  - alfred
+  - gitup
+  - keybase
+  - hex-fiend
+  - dropbox
+  - wireshark
+
+mas_upgrade_all_apps: no
+mas_installed_apps:
+  - { id: 904280696, name: "Things" }
+  - { id: 403504866, name: "PCalc" }
+  - { id: 443987910, name: "1Password6.9" }

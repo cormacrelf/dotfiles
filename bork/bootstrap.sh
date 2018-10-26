@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if hash gdate 2>/dev/null; then
+if hash brew 2>/dev/null; then
   echo "ok: brew installed already"
 else 
   echo "~~~ now installing homebrew ~~~"

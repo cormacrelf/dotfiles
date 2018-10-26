@@ -1,0 +1,37 @@
+---
+- include_vars:
+  file: config-debian.yml
+
+- name: Apt repo for neovim
+  apt_repository:
+    repo: ppa:neovim-ppa/stable
+
+- name: Install long list of Apt packages
+  apt:
+    name: "{{ apt_packages }}"
+
+# register fish specifically
+- apt:
+    name: fish
+  register: fish
+
+- name: ccls git repo
+  tags: ['ccls']
+  git:
+    repo: https://github.com/MaskRay/ccls.git
+    dest: "{{ home }}/lib/ccls"
+  register: ccls_git
+
+- name:  Install CCLS
+  tags: ['ccls']
+  block:
+    - shell: git submodule update --init
+             chdir={{home}}/lib/ccls
+    - shell: cmake -H. -BRelease
+             chdir={{home}}/lib/ccls
+    - shell: cmake --build Release
+             chdir={{home}}/lib/ccls
+    - file:
+        src: "{{home}}/lib/ccls/Release/ccls"
+        dest: "{{dotfiles}}/bin/ccls"
+

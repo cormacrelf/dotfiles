@@ -1,0 +1,32 @@
+---
+- name: alacritty git repo
+  tags: ['alacritty']
+  git:
+    repo: https://github.com/jwilm/alacritty.git
+    dest: "{{ home }}/lib/alacritty"
+  register: alacritty_git
+
+- name: Alacritty
+  when: alacritty_git.changed
+  tags: ['alacritty']
+  block:
+    - shell: make app
+             chdir={{home}}/lib/alacritty
+    - shell: cargo install --force --path .
+             chdir={{home}}/lib/alacritty
+    - file:
+        path: "/Applications/Alacritty.app"
+        state: absent
+    - file:
+        src: "{{home}}/lib/alacritty/target/release/osx/Alacritty.app"
+        dest: "/Applications/Alacritty.app"
+        state: link
+    - file:
+        src: "{{home}}/lib/alacritty/alacritty-completions.fish"
+        dest: "{{ dotfiles }}/fish/completions/alacritty-completions.fish"
+        state: link
+    # install terminfo database entry
+    - shell: tic -x alacritty.info
+             chdir={{home}}/lib/alacritty
+      become: yes
+
