@@ -20,6 +20,9 @@ if has("win32") || has("win64") || has("win16")
     endif
 endif
 
+let $VIM_CONFIG=$VIM_HOME.'/config.vim'
+source $VIM_CONFIG
+
 filetype off
 call plug#begin($VIM_HOME.'/plugged')
     let $VIM_PLUG = $VIM_HOME."/plug.vim"
@@ -28,4 +31,5 @@ call plug#end()
 
 echom "running PlugInstall"
 PlugInstall
-echom "installed all plugins"
+PlugUpdate
+qa!
