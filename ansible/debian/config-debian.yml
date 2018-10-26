@@ -4,8 +4,9 @@ dotfiles: "{{ home }}/.dotfiles"
 apt_packages:
   - neovim
   - build-essential
-  - fish
+  - cmake
   - zlib1g-dev
   - ncurses-dev
   - g++-7
+  - curl
 

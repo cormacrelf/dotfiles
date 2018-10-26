@@ -40,7 +40,6 @@ homebrew_installed_packages:
   - terraform
   - ffmpeg
   - youtube-dl
-  - xld
 
 homebrew_fonts:
   - font-fira-code
@@ -56,6 +55,7 @@ homebrew_cask_apps:
   - hex-fiend
   - dropbox
   - wireshark
+  - xld
 
 mas_upgrade_all_apps: no
 mas_installed_apps:

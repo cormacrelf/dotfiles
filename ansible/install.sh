@@ -9,14 +9,9 @@ os_release() {
 }
 
 symlink_hosts() {
-  ln -s $DOTFILES/ansible/ansible_hosts $HOME/ansible_hosts
   echo "-----------------"
-  echo "installed ansible. you will need:"
-  echo 'export ANSIBLE_INVENTORY=$HOME/ansible_hosts'
-  # => do it for now
-    eval 'export ANSIBLE_INVENTORY=$HOME/ansible_hosts'
-  echo "test:"
-  ansible all -m ping
+  echo "installed ansible. testing:"
+  ansible localhost -m ping
   exit 0
 }
 

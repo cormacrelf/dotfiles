@@ -1,6 +1,6 @@
 ---
 - include_vars:
-  file: config-debian.yml
+    file: config-debian.yml
 
 - name: Apt repo for neovim
   apt_repository:
@@ -13,6 +13,7 @@
 # register fish specifically
 - apt:
     name: fish
+  tags: ['fish']
   register: fish
 
 - name: ccls git repo
@@ -29,9 +30,10 @@
              chdir={{home}}/lib/ccls
     - shell: cmake -H. -BRelease
              chdir={{home}}/lib/ccls
-    - shell: cmake --build Release
+    - shell: cmake --build Release -- -j $(nproc)
              chdir={{home}}/lib/ccls
     - file:
         src: "{{home}}/lib/ccls/Release/ccls"
         dest: "{{dotfiles}}/bin/ccls"
+        state: link
 
