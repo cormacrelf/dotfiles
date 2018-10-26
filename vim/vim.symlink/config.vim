@@ -2,6 +2,7 @@ let g:cormacrelf = {}
 let g:cormacrelf.ncm2 = 1
 let g:cormacrelf.LanguageClient = 1
 let g:cormacrelf.snippets = 1
+let g:cormacrelf.startify = 0
 
 func! Cormacrelf_DisableSnippets()
   let g:cormacrelf.ncm2 = 0

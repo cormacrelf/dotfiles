@@ -4,6 +4,7 @@
 " Plug 'tpope/vim-endwise'
 Plug 'cohama/lexima.vim'
 Plug 'mattn/emmet-vim'
+Plug 'dkarter/bullets.vim'
 
 " Plug 'Yggdroot/indentLine'
 
@@ -102,7 +103,7 @@ Plug 'mhinz/vim-grepper'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
 " Plug 'mhinz/vim-signify' " replace gitgutter
-Plug 'mhinz/vim-startify'
+" Plug 'mhinz/vim-startify'
 " Plug 'vim-scripts/tasklist.vim', { 'on': 'TaskList' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'talek/obvious-resize'

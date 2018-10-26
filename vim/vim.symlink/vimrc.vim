@@ -738,10 +738,12 @@ let g:vimclojure#ParenRainbow = 1
 " Startify
 
 " Solve problems with ctrlp and nerdtree splitting
-autocmd User Startified setlocal buftype=
-let g:startify_files_number = 5
-let g:startify_custom_header = []
-let g:startify_custom_header = startify#fortune#cowsay()
+if g:cormacrelf.startify
+  autocmd User Startified setlocal buftype=
+  let g:startify_files_number = 5
+  let g:startify_custom_header = []
+  let g:startify_custom_header = startify#fortune#cowsay()
+endif
 
 " Syntastic checking
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
@@ -802,12 +804,12 @@ set shortmess+=c " suppress annoying # matches found thing
 " j: delete comment chars when joining lines
 " 1: wraps before 1-letter words,
 
-set formatoptions=croqlnj1
+" set formatoptions=croqlnj1
 " set formatlistpat=\\v^\\s*(\\d+|[a-z])[\\]:.)}]\\s*
 " set formatlistpat=^\\s*[0-9a-z][\\]\\:.)}]\\s*
 " set formatlistpat=\\v^\\s*(\\d+\|[a-z])[\\]:\\.\\)}]\\s*
 " ( ( 2. | a. | ii. ) | *  )
-set formatlistpat=\\v^\\s*((\\d+\|[a-z]\|)[\\]:\\.\\)}]\|\\*[\\t\ ])\\s*
+" set formatlistpat=\\v^\\s*((\\d+\|[a-z])[:\\.\\]})]\|\\*[\\t\ ])\\s*
 
 " copyable text from hard-wrapped document
 command! -range=% SoftWrap
@@ -817,8 +819,9 @@ command! -range=% SoftWrap
 function! Prose()
     let g:prose_hard_wrap = 0
     let b:wc_enabled = 1 " see airline wordcount segment
+    " setlocal formatlistpat=\\C^\\s*[\\[({]\\\?\\([0-9]\\+\\\|[iIvVxXlLcCdDmM]\\+\\\|[a-zA-Z]\\)[\\]:.)}]\\s\\+\\\|^\\s*[-+o*]\\s\\+
 
-    if exists("ncm2#disable_for_buffer")
+    if g:cormacrelf.ncm2
       call ncm2#disable_for_buffer()
     endif
 
@@ -835,10 +838,12 @@ function! Prose()
     setl cinwords=
 
     setl nocindent
-    setl nosmartindent
+    setl smartindent
     setl autoindent
 
     setl ts=4 sts=4 sw=4 expandtab
+
+    setl fo=1nroj
 
     setl noshowmatch
 
@@ -852,7 +857,7 @@ function! Prose()
     " setl formatlistpat=\\v^\\s*((\\d+\|[a-z]\|)[\\]:\\.\\)}]\|\\*[\\t\ ])\\s*
     " setl textwidth=0
     " markdown comments
-    setl com=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,b:-
+    " setl com=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,b:-
 
     " for cool lists using fo~=o/c
     " setlocal com+=:*
