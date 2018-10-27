@@ -16,8 +16,6 @@ symlink_hosts() {
 }
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-  elliotweiser.osx-command-line-tools
-
   if hash brew 2>/dev/null; then
     echo "ok: brew installed already"
   else 
