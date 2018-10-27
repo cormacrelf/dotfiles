@@ -1,7 +1,5 @@
 ---
 - include_vars: config-mac.yml
-- debug:
-    msg: "{{ mas_installed_apps }}"
 
 - name: Mac App Store
   tags: ['mas']
@@ -50,6 +48,7 @@
   when: skhd.changed
 
 - name: Install fish
+  tags: ['fish']
   homebrew:
     name: fish
     state: present

@@ -1,27 +1,33 @@
 ---
 # expects 'fish' to be registered
-
-- name: Add fish to /etc/shells, chsh to it
+- name: Fish shell
   tags: ['fish']
-  when: fish.changed
-  shell: |
-    FISH="$(which fish)"
-    if ! grep $FISH /etc/shells; then
-      echo $FISH | sudo tee -a /etc/shells
-      chsh -s $FISH
-    fi
+  block:
 
-- name: .asdf git repo
-  git:
-    repo: https://github.com/asdf-vm/asdf.git
-    dest: "{{ home }}/.asdf"
-    version: v0.6.0
-  register: asdf_git
+    - name: Add fish to /etc/shells, chsh to it
+      tags: ['fish']
+      when: fish.changed
+      shell: |
+        FISH="$(which fish)"
+        if ! grep $FISH /etc/shells; then
+          echo $FISH | sudo tee -a /etc/shells
+          chsh -s $FISH
+        fi
 
-- name: asdf
-  when: asdf_git.changed
-  shell: |
-    fish -c 'asdf plugin-add nodejs'
-    bash {{ home }}/.asdf/plugins/nodejs/bin/import-release-team-keyring
-    fish -c 'asdf install nodejs 10.12.0'
+    - name: Fisherman
+      shell: fish -c fisher
+
+    - name: .asdf git repo
+      git:
+        repo: https://github.com/asdf-vm/asdf.git
+        dest: "{{ home }}/.asdf"
+        version: v0.6.0
+      register: asdf_git
+
+    - name: asdf
+      when: asdf_git.changed
+      shell: |
+        fish -c 'asdf plugin-add nodejs'
+        bash {{ home }}/.asdf/plugins/nodejs/bin/import-release-team-keyring
+        fish -c 'asdf install nodejs 10.12.0'
 

@@ -1,21 +1,29 @@
-- hosts: localhost
+- hosts: all
   vars_files:
     - config.yml
   tasks:
+    - name: dotfiles git repo
+      tags: ['dotfiles', 'neovim']
+      when: is_local is not defined
+      git:
+        repo: https://github.com/cormacrelf/dotfiles.git
+        dest: "{{dotfiles}}"
+      register: dotfiles_git
+
     - name: xdg-config directory
-      tags: ['symlink']
+      tags: ['dotfiles']
       file:
         path: "{{ home }}/.config"
         state: directory
 
     - name: home/lib directory
-      tags: ['symlink']
+      tags: ['dotfiles']
       file:
         path: "{{ home }}/lib"
         state: directory
 
-    - name: symlink
-      tags: ['symlink']
+    - name: Symlink the dotfiles
+      tags: ['dotfiles']
       loop: "{{ symlinks }}"
       file:
         src:  "{{ dotfiles }}/{{ item.src }}"

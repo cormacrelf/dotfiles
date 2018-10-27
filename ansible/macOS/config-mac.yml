@@ -59,6 +59,11 @@ homebrew_cask_apps:
 
 mas_upgrade_all_apps: no
 mas_installed_apps:
-  - { id: 904280696, name: "Things" }
+  - { id: 904280696, name: "Things3" }
   - { id: 403504866, name: "PCalc" }
   - { id: 443987910, name: "1Password6.9" }
+  - { id: 407963104, name: "Pixelmator" }
+  - { id: 587512244, name: "Kaleidoscope" }
+  - { id: 530458789, name: "Frank DeLoupe" }
+  - { id: 425424353, name: "The Unarchiver" }
+  - { id: 639968404, name: "Parcel" }

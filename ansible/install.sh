@@ -2,6 +2,7 @@
 # install.sh
 
 DOTFILES=$HOME/.dotfiles
+ANSIBLE=$HOME/.dotfiles/ansible
 
 
 os_release() {
@@ -10,8 +11,12 @@ os_release() {
 
 symlink_hosts() {
   echo "-----------------"
+  echo "making /etc/ansible/hosts"
+  sudo mkdir -p /etc/ansible
+  sudo ln -s $ANSIBLE/hosts /etc/ansible/hosts
+  echo "-----------------"
   echo "installed ansible. testing:"
-  ansible localhost -m ping
+  ansible local -m ping
   exit 0
 }
 
