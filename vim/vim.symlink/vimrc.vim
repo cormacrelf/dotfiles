@@ -203,7 +203,7 @@ set cindent                                        " be smart about it: actually
 inoremap # X<BS>#
 set wrap                                           " wrap lines so no h-scrolling required
 set nojs                                           " don't J-join sentences with double spaces
-set linebreak                                      " word boundaries 
+set linebreak                                      " word boundaries
 set smarttab                                       " fuck tabs
 set virtualedit=block                              " allow virtual edit in visual-block mode
 set nofoldenable                                   " don't automatically close all folds initially
@@ -230,7 +230,6 @@ autocmd Filetype cpp        setlocal ts=8 sw=8 sts=8 expandtab
 autocmd Filetype objc       setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype python     setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype markdown   setlocal ts=2 sw=2 sts=2 expandtab fo-=c
-autocmd Filetype pandoc     setlocal ts=4 sw=4 sts=4 expandtab fo-=c
 autocmd Filetype scala      setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype go         setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype vim        setlocal ts=2 sw=2 sts=2 expandtab com+=":\""
@@ -717,23 +716,39 @@ let g:projectionist_heuristics = {
 
 " javascript and JSX syntax
 let g:jsx_ext_required = 0
+let g:vimclojure#HighlightBuiltins = 1
+let g:vimclojure#ParenRainbow = 1
 
-" for pandoc speed
+" vim-pandoc
 let g:pandoc#folding#level = 999
 let g:pandoc#folding#fdc = 0
 let g:pandoc#syntax#style#emphases = 1
 let g:pandoc#syntax#style#underline_special = 0
 let g:pandoc#syntax#conceal#use = 0
-" let g:pandoc#formatting#mode=a " soft breaks; automatically set formatoptions
-" let g:pantondoc_folding_fold_yaml = 1
-" stop making esc slow!
-" let g:pandoc#modules#disabled = ["bibliographies"]
+let g:pandoc#formatting#mode='ha' " soft breaks; automatically set formatoptions
 let g:pandoc_use_embeds_in_codeblocks_for_langs = ["ruby", "haskell", "python", "typescript",
                                                   \ "go", "c", "scala", "clojure",
                                                   \ "rust", "javascript" ]
-
-let g:vimclojure#HighlightBuiltins = 1
-let g:vimclojure#ParenRainbow = 1
+let g:pandoc#completion#bib#mode = "citeproc"
+" chdir: don't auto-cd into %:h
+" folding is too slow
+let g:pandoc#modules#disabled = ["chdir", "folding"]
+let g:pandoc#completion#bib#mode = "citeproc"
+let g:pandoc#biblio#bibs = [$HOME."/lib/zotero-library.bib"]
+let g:pandoc#biblio#sources = "bcg"
+let g:pandoc#completion#bib#use_preview = 0
+if g:cormacrelf.ncm2
+  au User Ncm2Plugin call ncm2#register_source({
+        \ 'name' : 'pandoc-bib',
+        \ 'priority': 9,
+        \ 'subscope_enable': 1,
+        \ 'scope': ['pandoc'],
+        \ 'mark': 'bib',
+        \ 'word_pattern': '[\w]+',
+        \ 'complete_pattern': '@\s*',
+        \ 'on_complete': ['ncm2#on_complete#omni', 'pandoc#completion#Complete'],
+        \ })
+endif
 
 " Startify
 
@@ -816,15 +831,15 @@ command! -range=% SoftWrap
             \ <line2>put _ |
             \ <line1>,<line2>g/.\+/ .;-/^$/ join |normal $x
 
-let g:prose_hard_wrap = 0
+let g:cormacrelf.prose_hard_wrap = 1
 
 function! Prose()
     let b:wc_enabled = 1 " see airline wordcount segment
     " setlocal formatlistpat=\\C^\\s*[\\[({]\\\?\\([0-9]\\+\\\|[iIvVxXlLcCdDmM]\\+\\\|[a-zA-Z]\\)[\\]:.)}]\\s\\+\\\|^\\s*[-+o*]\\s\\+
 
-    if g:cormacrelf.ncm2
-      call ncm2#disable_for_buffer()
-    endif
+    " if g:cormacrelf.ncm2
+    "   call ncm2#disable_for_buffer()
+    " endif
 
     if !exists("b:toggled_ws_once") || b:toggled_ws_once == 0
         " silent exec :AirlineToggleWhitespace
@@ -838,31 +853,12 @@ function! Prose()
     hi link myExCapitalWordsBQ pandocBlockQuote
     setl cinwords=
 
+    setl noshowmatch
     setl nocindent
     setl smartindent
     setl autoindent
-
     setl ts=4 sts=4 sw=4 expandtab
-
-    setl fo=1nroj
-
-    setl noshowmatch
-
-    " t: auto-format paragraphs of text
-    " -l
-    " -r, so enter doesn't insert bullets prematurely
-    " -o, so essentially manually insert bullets.
-    " setl formatoptions=tcroqlnj1
-    " setl formatoptions=nj
-    " same as above
-    " setl formatlistpat=\\v^\\s*((\\d+\|[a-z]\|)[\\]:\\.\\)}]\|\\*[\\t\ ])\\s*
-    " setl textwidth=0
-    " markdown comments
-    " setl com=s1:/*,mb:*,ex:*/,://,b:#,:%,:XCOMM,n:>,b:-
-
-    " for cool lists using fo~=o/c
-    " setlocal com+=:*
-    " setlocal com+=:\-
+    " setl formatoptions=1nrojta " no comments, bullets.vim handles that
 
     " Set undo points at important text operations.
     inoremap <buffer> . .<c-g>u
@@ -874,7 +870,7 @@ function! Prose()
     inoremap <buffer> <c-u> <c-g>u<c-u>
     inoremap <buffer> <c-w> <c-g>u<c-w>
 
-    if g:prose_hard_wrap == 0
+    if g:cormacrelf.prose_hard_wrap == 0
         " sane movement with wrap turned on
         nnoremap <buffer> j gj
         nnoremap <buffer> k gk

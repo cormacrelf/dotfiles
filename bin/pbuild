@@ -25,7 +25,9 @@ PREFIX="$HOME/.pandoc"
 BIB="--bibliography $HOME/lib/zotero-library.bib"
 
 # CSL stylesheet (located in the csl folder of the PREFIX directory).
-CSL="aglc"
+CSL=""
+AGLC="$HOME/Zotero/styles/australian-guide-to-legal-citation.csl"
+test -s "$AGLC" && CSL="--csl $AGLC"
 
 # Latex engine
 ENGINE="xelatex"
@@ -246,6 +248,11 @@ gobble_args(){
                 let "flags_read+=$#"
                 break
                 ;;
+            -*)
+                echo "error: unrecognised argument $1"
+                echo "use --help"
+                exit 1
+                ;;
             *)
                 INPUT_FILES+=("$1")
                 let "flags_read+=1"
@@ -273,7 +280,7 @@ gobble_args $@
 shift $?
 
 PANDOC_BINARY="pandoc"
-PANDOC_CMD="$PANDOC_BINARY $BIB -r markdown$EXTENSIONS -s --pdf-engine=$ENGINE $PANDOC_REMAINING_ARGS"
+PANDOC_CMD="$PANDOC_BINARY $BIB -r markdown$EXTENSIONS -s --pdf-engine=$ENGINE $CSL $PANDOC_REMAINING_ARGS"
 # --data-dir='$PREFIX'"
 
 # sub_${subcommand} $@

@@ -261,14 +261,7 @@ augroup END
 " }}}
 " Pandoc {{{
 
-let g:pandoc#completion#bib#mode = "citeproc"
-" chdir: don't auto-cd into %:h
-" folding is too slow
-let g:pandoc#modules#disabled = ["chdir", "folding"]
-let g:pandoc#biblio#bibs = "$HOME/lib/zotero-library.bib"
-
-" }}}
-" Goyo {{{
+" }}} Goyo {{{
 
 function! s:goyo_enter()
   " silent !tmux set status off

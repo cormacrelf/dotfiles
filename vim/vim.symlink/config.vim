@@ -3,6 +3,7 @@ let g:cormacrelf.ncm2 = 1
 let g:cormacrelf.LanguageClient = 1
 let g:cormacrelf.snippets = 1
 let g:cormacrelf.startify = 0
+let g:cormacrelf.prose_hard_wrap = 1
 
 func! Cormacrelf_DisableSnippets()
   let g:cormacrelf.ncm2 = 0
