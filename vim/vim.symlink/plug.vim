@@ -59,17 +59,18 @@ Plug 'elixir-lang/vim-elixir'
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
 Plug 'maxmellon/vim-jsx-pretty', { 'for': ['javascript', 'javascript.jsx'] }
 " Plug 'othree/yajs.vim'
-Plug 'fsharp/vim-fsharp', {
-      \ 'for': 'fsharp',
-      \ 'do':  'make fsautocomplete',
-      \}
 Plug 'leafgarland/typescript-vim', { 'for': ['typescript'] }
 " Plug 'HerringtonDarkholme/yats.vim', { 'for': ['typescript'] }
 Plug 'Quramy/vim-js-pretty-template', {'for': ['javascript', 'typescript']}
 Plug 'hashivim/vim-terraform'
 Plug 'juliosueiras/vim-terraform-completion'
 Plug 'PProvost/vim-ps1' " Powershell
-Plug 'https://framagit.org/tyreunom/coquille', { 'branch': 'pathogen-bundle', 'do': ':UpdateRemotePlugins' }
+" Plug 'https://framagit.org/tyreunom/coquille', {
+"       \ 'branch': 'pathogen-bundle',
+"       \ 'do': ':UpdateRemotePlugins' }
+" Plug 'fsharp/vim-fsharp', {
+"       \ 'for': 'fsharp',
+"       \ 'do':  'make fsautocomplete' }
 
 " Clojure / Paredit
 Plug 'guns/vim-clojure-static', { 'for': ['clojure'] }

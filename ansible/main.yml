@@ -27,26 +27,27 @@
 
     - when: ansible_distribution == "MacOSX"
       block:
-        - include_tasks:
-            file: macOS/main.yml
-            apply:
-              tags: ['mac']
-        - include_tasks:
-            file: macOS/rust.yml
-            apply:
-              tags: ['mac', 'rust', 'alacritty']
-        - include_tasks:
-            file: macOS/alacritty.yml
-            apply:
-              tags: ['alacritty']
+        - import_tasks: macOS/main.yml
+        - import_tasks: macOS/rust.yml
+        - import_tasks: macOS/alacritty.yml
 
     - when: ansible_os_family == "Debian"
       block:
-        - include_tasks:
-            file: debian/main.yml
-            apply:
-              tags: ['debian']
+        - import_tasks: debian/main.yml
 
     # expects fish result to be registered
-    - include_tasks: fish.yml
+    - import_tasks: fish.yml
+
+    - name: Neovim postinstall
+      tags: ['neovim']
+      block:
+        - name: Neovim > python packages
+          pip:
+            name: neovim
+            executable: "{{item}}"
+          loop: ['pip2', 'pip3']
+          when: python.changed or neovim.changed
+
+        - name: Neovim > :PlugInstall
+          shell: nvim -u {{home}}/.config/nvim/install.vim
 

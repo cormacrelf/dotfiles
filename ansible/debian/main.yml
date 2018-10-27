@@ -2,19 +2,39 @@
 - include_vars:
     file: config-debian.yml
 
-- name: Apt repo for neovim
-  apt_repository:
-    repo: ppa:neovim-ppa/stable
-
 - name: Install long list of Apt packages
   apt:
     name: "{{ apt_packages }}"
 
-# register fish specifically
-- apt:
+- name: Fish
+  apt:
     name: fish
-  tags: ['fish']
   register: fish
+
+- name: Neovim
+  tags: ['neovim']
+  block:
+    - name: Python 2 and 3
+      apt:
+        name: "{{ packages }}"
+      register: python
+      vars:
+        packages:
+          - python
+          - python-dev
+          - python-pip
+          - python3
+          - python3-dev
+          - python3-pip
+
+    - name: Apt repo for neovim
+      apt_repository:
+        repo: ppa:neovim-ppa/stable
+
+    - name: Install neovim
+      apt:
+        name: neovim
+      register: neovim
 
 - name: ccls git repo
   tags: ['ccls']

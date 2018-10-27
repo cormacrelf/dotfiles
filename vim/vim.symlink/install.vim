@@ -7,7 +7,6 @@ if $VIM_HOME == ''
         let $VIM_HOME = $HOME."/.vim"
     endif
 endif
-echom $VIM_HOME.'/plugged'
 
 let $VIM_INIT = $VIM_HOME."/init.vim"
 if has("win32") || has("win64") || has("win16")
@@ -23,10 +22,13 @@ endif
 let $VIM_CONFIG=$VIM_HOME.'/config.vim'
 source $VIM_CONFIG
 
+let s:plug = $VIM_HOME."/plug.vim"
+let s:plugdir =  $VIM_HOME.'/plugged'
+echom 'installing plugins from '.s:plug.' to ' . s:plugdir
+
 filetype off
-call plug#begin($VIM_HOME.'/plugged')
-    let $VIM_PLUG = $VIM_HOME."/plug.vim"
-    so $VIM_PLUG
+call plug#begin(s:plugdir)
+    exec 'so ' .s:plug
 call plug#end()
 
 echom "running PlugInstall"

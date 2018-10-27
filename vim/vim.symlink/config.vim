@@ -10,7 +10,7 @@ func! Cormacrelf_DisableSnippets()
   let g:cormacrelf.snippets = 0
 endfunc
 
-if !exists("g:gui_oni")
+if exists("g:gui_oni")
   call Cormacrelf_DisableSnippets()
 endif
 
