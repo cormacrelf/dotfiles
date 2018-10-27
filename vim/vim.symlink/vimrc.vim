@@ -365,7 +365,7 @@ nnoremap <leader>bd :Bdelete<CR>
 nnoremap <leader>bD :Bdelete!<CR>
 
 " exit a buffer or split
-nnoremap <leader>q :close<CR>
+nnoremap <leader>q :q<CR>
 
 " editing vim config
 nnoremap <D-<>       :tabe ~/.vimrc<cr>
@@ -816,8 +816,9 @@ command! -range=% SoftWrap
             \ <line2>put _ |
             \ <line1>,<line2>g/.\+/ .;-/^$/ join |normal $x
 
+let g:prose_hard_wrap = 0
+
 function! Prose()
-    let g:prose_hard_wrap = 0
     let b:wc_enabled = 1 " see airline wordcount segment
     " setlocal formatlistpat=\\C^\\s*[\\[({]\\\?\\([0-9]\\+\\\|[iIvVxXlLcCdDmM]\\+\\\|[a-zA-Z]\\)[\\]:.)}]\\s\\+\\\|^\\s*[-+o*]\\s\\+
 
