@@ -1,0 +1,14 @@
+---
+- name: Tmux
+  tags: ['tmux']
+  block:
+    - name: .tmux/plugins/ directory
+      file:
+        path: "{{dotfiles}}/tmux/plugins"
+        state: directory
+    - name: Tmux plugin manager
+      git:
+        repo: https://github.com/tmux-plugins/tpm
+        dest: "{{dotfiles}}/tmux/plugins/tpm"
+      register: tpm_git
+    # you have to make tpm install the plugins yourself using prefix + I

@@ -8,4 +8,5 @@ apt_packages:
   - ncurses-dev
   - g++-7
   - curl
+  - tmux
 

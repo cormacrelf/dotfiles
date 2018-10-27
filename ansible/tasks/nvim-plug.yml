@@ -1,0 +1,13 @@
+---
+    - name: Neovim postinstall/plugins
+      tags: ['neovim']
+      block:
+        - name: Neovim > python packages
+          pip:
+            name: neovim
+            executable: "{{item}}"
+          loop: ['pip2', 'pip3']
+          when: python.changed or neovim.changed
+
+        - name: Neovim > :PlugInstall
+          shell: nvim -u {{home}}/.config/nvim/install.vim

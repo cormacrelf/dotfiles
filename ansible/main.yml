@@ -3,7 +3,7 @@
     - config.yml
   tasks:
     - name: dotfiles git repo
-      tags: ['dotfiles', 'neovim']
+      tags: ['dotfiles', 'neovim', 'fish', 'tmux']
       when: is_local is not defined
       git:
         repo: https://github.com/cormacrelf/dotfiles.git
@@ -44,18 +44,7 @@
         - import_tasks: debian/main.yml
 
     # expects fish result to be registered
-    - import_tasks: fish.yml
-
-    - name: Neovim postinstall
-      tags: ['neovim']
-      block:
-        - name: Neovim > python packages
-          pip:
-            name: neovim
-            executable: "{{item}}"
-          loop: ['pip2', 'pip3']
-          when: python.changed or neovim.changed
-
-        - name: Neovim > :PlugInstall
-          shell: nvim -u {{home}}/.config/nvim/install.vim
+    - import_tasks: tasks/fish.yml
+    - import_tasks: tasks/tmux.yml
+    - import_tasks: tasks/nvim-plug.yml
 
