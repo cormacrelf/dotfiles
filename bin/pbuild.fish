@@ -161,13 +161,11 @@ add_var mainfont 'EB Garamond'
 add_var sansfont 'Helvetica'
 add_var monofont 'Fira Code'
 add_var fontsize '12pt'
-# add_var linespace '1.24' # ~1.4 spaced (1.6 = double)
-add_var linespace '1.5'
+add_var linespace '1.24' # ~1.4 spaced (1.6 = double)
 add_var parindent '0pt'
 add_var parskip '10pt'
-add_var documentclass 'scrartcl'
-add_var linkcolor '[HTML]{da547b}'
-add_var citecolor '[HTML]{333333}'
+add_var linkcolor '[HTML]{4d98ff}'
+add_var citecolor '[HTML]{4d98ff}'
 add_var urlcolor '[HTML]{4d98ff}'
 
 for var in $variables

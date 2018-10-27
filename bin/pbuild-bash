@@ -1,0 +1,319 @@
+#!/bin/bash
+
+DOTFILES="$HOME/.dotfiles"
+
+pbuild=$(basename $0)
+
+sub_help(){
+    echo "Usage: $pbuild <subcommand> <file.md>"
+    echo "Subcommands:"
+    echo "    short   Build a plain document with small headers."
+    echo "    json    Raw pandoc syntax output"
+    echo "    count   Word count without generated footnotes from pandoc-citeproc"
+    echo "    toc     Build a plain document with a table of contents."
+    echo "    tex     Build a plain document, but only output generated latex."
+    echo "    word    Build a .docx representation. Use --reference-docx <ref> to change styles."
+    echo "    paper   Build a full academic paper. (disabled for now)"
+}
+
+###############################
+########## Constants ##########
+###############################
+
+DEBUG_OUT="/dev/null"
+
+# Location of Pandoc support files.
+PREFIX="$HOME/.pandoc"
+
+# Location of your working bibliography file
+BIB="--filter pandoc-citeproc --metadata bibliography=$HOME/lib/zotero-library.bib"
+
+# CSL stylesheet (located in the csl folder of the PREFIX directory).
+CSL=""
+AGLC="$HOME/Zotero/styles/australian-guide-to-legal-citation.csl"
+test -s "$AGLC" && CSL="--csl $AGLC"
+SUPPRESS_BIB="--metadata suppress-bibliography=true"
+
+# Latex engine
+ENGINE="xelatex"
+
+# Latex Template
+TEMPLATE="default.latex"
+MODERNTEMPLATE="$PREFIX/templates/xelatex-modern.template"
+LONGTEMPLATE="$PREFIX/kjhealy/xelatex.template"
+
+# For word docs
+REFERENCE_DOCX="" # default location is $PREFIX/reference.docx, override with pbuild --reference-docx <loc>
+
+# Markdown Extensions
+EXTENSIONS="+smart+citations+simple_tables+pipe_tables+table_captions+yaml_metadata_block+fenced_code_blocks+fancy_lists+startnum+example_lists+line_blocks+footnotes+inline_notes+inline_code_attributes+superscript+subscript+tex_math_dollars+raw_tex" 
+# Short doc arguments. Override with env variables.
+# (note that `: ${var=value}` sets var iff not already set.)
+
+: ${mainfont="EB Garamond"}
+: ${sansfont="Helvetica"}
+: ${monofont="Fira Code"}
+: ${fontsize="12pt"}
+: ${linespace="1.24"} # ~1.4 spaced (1.6 = double)
+: ${parindent="0pt"}
+: ${parskip="10pt"}
+
+# -V margin:'2.5cm' \
+
+make_shortargs(){ SHORTARGS="
+--pdf-engine=$ENGINE
+--variable=\"geometry:a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm\"
+--variable=\"papersize:a4paper\"
+--variable=\"mainfont:${mainfont}\"
+--variable=\"sansfont:$sansfont\"
+--variable=\"monofont:$monofont\"
+--variable=\"fontsize:$fontsize\"
+--variable=\"linespace:$linespace\"
+--variable=\"parindent:$parindent\"
+--variable=\"parskip:$parskip\"
+--highlight-style=haddock
+$algbysection
+$alphaalgs
+$noalgnumbering"
+}
+
+###############################
+########## Commands ###########
+###############################
+
+declare -a INPUT_FILES=()
+
+foreach_file() {
+    sub=$1
+    error=0
+    shift
+    for file in "${INPUT_FILES[@]}"; do
+        INPUT="$file"
+        OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
+        $sub $file
+        ret=$?
+        if (( $ret==127 )); then
+            error=127
+            return $error
+        elif (( $ret!=0 )); then
+            error=1
+        fi
+        # each sub will get the original filename as $1
+    done
+    return $error
+}
+
+sub_json() {
+    cmd="$PANDOC_CMD $INPUT -t json $PANDOC_REMAINING_ARGS"
+    echo $cmd | tee $DEBUG_OUT | bash
+    return $?
+}
+
+sub_count() {
+    # uses -t none so you can override it to get the plain, no-footnote output (grep it for ibid!)
+    cmd="$PANDOC_CMD $INPUT --lua-filter=$DOTFILES/pandoc/filters/wordcount.lua $PANDOC_REMAINING_ARGS"
+    echo $cmd | bash 2>/dev/null
+    return $?
+}
+
+sub_short() {
+    make_shortargs
+    cmd="$PANDOC_CMD --template=default $SHORTARGS -o $OUTPUT $INPUT $PANDOC_REMAINING_ARGS "
+    echo $cmd | tee $DEBUG_OUT | bash
+    if [[ "$?" == 0 ]] && [[ "$OPEN" == 1 ]]; then
+      open $OUTPUT
+    fi
+    return $?
+}
+
+sub_modern(){
+    mainfont="Neue Haas Unica Pro"
+    make_shortargs
+    cmd="$PANDOC_CMD --template=default $SHORTARGS -o $OUTPUT $INPUT"
+    echo $cmd | tee $DEBUG_OUT | bash
+    if [[ "$?" == 0 ]] && [[ "$OPEN" == 1 ]]; then
+      open $OUTPUT
+    fi
+    return $?
+}
+
+sub_toc(){
+    make_shortargs
+    cmd="$PANDOC_CMD --template=default $SHORTARGS --toc -o $OUTPUT $INPUT"
+    echo $cmd | tee $DEBUG_OUT | bash
+    if [[ "$?" == 0 ]] && [[ "$OPEN" == 1 ]]; then
+      open $OUTPUT
+    fi
+    return $?
+}
+
+sub_tex(){
+    file=$1
+    OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
+    make_shortargs
+    cmd="$PANDOC_CMD --template=default $SHORTARGS -t latex -o $OUTPUT $INPUT"
+    echo $cmd | tee $DEBUG_OUT | bash
+    return $?
+}
+
+sub_word(){
+    file=$1
+    OUTPUT="`echo $file | cut -f 1 -d .`.docx"
+    make_shortargs
+    if [ -n "$REFERENCE_DOCX" ]; then
+        cmd="$PANDOC_CMD --reference-docx=\"$REFERENCE_DOCX\" $SHORTARGS -o $OUTPUT $INPUT"
+    else
+        cmd="$PANDOC_CMD $SHORTARGS -o $OUTPUT $INPUT"
+    fi
+    echo $cmd | tee $DEBUG_OUT | bash
+    if [[ "$?" == 0 ]] && [[ "$OPEN" == 1 ]]; then
+      open $OUTPUT
+    fi
+    return $?
+}
+
+# sub_paper(){
+# 	for file in "$@"
+# 	do
+# 		INPUT="$file"
+# 		OUTPUT="`echo $file | cut -f 1 -d .`.pdf"
+#         make_shortargs
+# 		echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$LONGTEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -o $OUTPUT $INPUT" | /bin/bash
+# 	done
+# }
+
+# sub_papertex(){
+# 	for file in "$@"
+# 	do
+# 		INPUT="$file"
+# 		OUTPUT="`echo $file | cut -f 1 -d .`.latex"
+#         make_shortargs
+#         echo "$HOME/.cabal/bin/pandoc -r markdown$EXTENSIONS -s -S --latex-engine=$ENGINE --template=$LONGTEMPLATE --filter pandoc-citeproc --csl=$PREFIX/csl/$CSL.csl --biblio=$BIB $SHORTARGS -t latex -o $OUTPUT $INPUT" | /bin/bash
+# 	done
+#     return 0
+# }
+
+#########################################
+########## Subcommand control ###########
+#########################################
+
+gobble_args(){
+    flags_read=0
+    while [ "$#" -ne 0 ]; do
+        arg=$1
+        case $arg in
+            "-h" | "--help")
+                sub_help
+                exit 0
+                ;;
+            "-O" | "--open")
+                OPEN=1
+                shift 1
+                ;;
+            "-l" | "--linespace")
+                linespace=$2
+                let "flags_read+=2"
+                shift 2
+                ;;
+            "-c" | "--csl")
+                CSL="--csl $2"
+                let "flags_read+=2"
+                shift 2
+                ;;
+            "--append-bibliography")
+                SUPPRESS_BIB="--metadata suppress-bibliography=false"
+                let "flags_read+=1"
+                shift 1
+                ;;
+            "-b")
+                BIB="--metadata bibliography=$2"
+                let "flags_read+=2"
+                shift 2
+                ;;
+            "-p" | "--parskip")
+                parskip=$2
+                let "flags_read+=2"
+                shift 2
+                ;;
+            "--reference-docx")
+                REFERENCE_DOCX=$2
+                let "flags_read+=2"
+                shift 2
+                ;;
+            "-f" | "--fontsize")
+                fontsize=$2
+                let "flags_read+=2"
+                shift 2
+                ;;
+            "--alpha-algs")
+                alphaalgs="--variable=\"alphaalgs:1\""
+                let "flags_read+=1"
+                shift 1
+                ;;
+            "--no-alg-numbering")
+                noalgnumbering="--variable=\"noalgnumbering:1\""
+                let "flags_read+=1"
+                shift 1
+                ;;
+            "--alg-by-section")
+                algbysection="--variable=\"algbysection:1\""
+                let "flags_read+=1"
+                shift 1
+                ;;
+            "-v" | "--verbose")
+                DEBUG_OUT="/dev/stderr"
+                let "flags_read+=1"
+                shift 1
+                ;;
+            "--")
+                # pass any other args to pandoc
+                shift 1
+                PANDOC_REMAINING_ARGS="$@"
+                let "flags_read+=$#"
+                break
+                ;;
+            -*)
+                echo "error: unrecognised argument $1"
+                echo "use --help"
+                exit 1
+                ;;
+            *)
+                INPUT_FILES+=("$1")
+                let "flags_read+=1"
+                shift 1
+                ;;
+        esac
+    done
+    return $flags_read
+}
+
+subcommand=$1
+case $subcommand in
+    "" | "-h" | "--help")
+        sub_help
+        exit 0
+        ;;
+    *)
+        # take subcommand, leaving just args
+        shift
+        ;;
+esac
+
+# read any args, and populate INPUT_FILES
+gobble_args $@
+shift $?
+
+PANDOC_BINARY="pandoc"
+PANDOC_CMD="$PANDOC_BINARY $BIB $SUPPRESS_BIB -r markdown$EXTENSIONS -s $CSL"
+# --data-dir='$PREFIX'"
+
+# sub_${subcommand} $@
+foreach_file sub_${subcommand} $@
+ret=$?
+if (( $ret==127 )); then
+    echo "Error: '$subcommand' is not a known subcommand." >&2
+    echo "Run '$pbuild --help' for a list of known subcommands." >&2
+    exit 1
+fi
+
+exit $ret
