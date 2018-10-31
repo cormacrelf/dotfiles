@@ -37,10 +37,18 @@ chunkc core::load tiling.so
 # chunkc load ~/.chunkwm_plugins/border.so
 
 
-chunkc tiling::rule --owner Finder --name Copy --state float &
-chunkc tiling::rule --owner \"App Store\" --state float &
-chunkc tiling::rule --owner Things --state float &
-chunkc tiling::rule --owner Reminders --state float &
+# --grid-layout rows:cols:left:top:width:height
+
+chunkc tiling::rule --owner Finder --name Copy --state float
+chunkc tiling::rule --owner \"App Store\" --state float
+chunkc tiling::rule --owner Things --state float
+chunkc tiling::rule --owner Preview --state float
+chunkc tiling::rule --owner Zotero --state float
+chunkc tiling::rule --owner Reminders --state float
+chunkc tiling::rule --owner Firefox \
+  --name \"^https://pinboard.in - Pinboard - Save a Bookmark$\" \
+  --state float \
+  --grid-layout 12:3:2:0:2:5
 
 edge=0
 edge=40
