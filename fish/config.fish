@@ -76,3 +76,15 @@ abbr :q 'exit'
 abbr md 'mkdir -p'
 source ~/.asdf/asdf.fish
 
+function bsr
+  brew services restart $argv
+end
+
+function bss
+  brew services start $argv
+end
+
+function bsstop
+  brew services stop $argv
+end
+

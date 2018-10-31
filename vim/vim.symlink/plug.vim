@@ -114,6 +114,7 @@ Plug 'airblade/vim-gitgutter'
 " Plug 'vim-scripts/tasklist.vim', { 'on': 'TaskList' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
 Plug 'talek/obvious-resize'
+Plug 'christoomey/vim-tmux-navigator'
 Plug 'moll/vim-bbye' " Bdelete
 Plug 'scrooloose/nerdtree'
 " Plug 'jistr/vim-nerdtree-tabs'
