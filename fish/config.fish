@@ -1,6 +1,10 @@
+
 set fish_greeting ""
 
 set -g fishconfig ~/.config/fish/config.fish
+
+# pure uses this deliberately. ugh.
+function fish_default_mode_prompt; end
 
 function fish_mode_prompt --description 'Displays the current mode'
   # Do nothing if not in vi mode
@@ -23,7 +27,6 @@ function fish_mode_prompt --description 'Displays the current mode'
     echo -n " "
   end
 end
-
 function fish_vi_cursor; end
 
 fish_vi_key_bindings
@@ -31,7 +34,7 @@ fish_vi_key_bindings
 # fisherman bootstrap
 if not test -f ~/.config/fish/functions/fisher.fish
   echo "Installing fisherman for the first time"
-  curl -sLo ~/.config/fish/functions/fisher.fish --create-dirs https://git.io/fisher
+  curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
   fisher
 end
 
@@ -45,6 +48,8 @@ _pathadd $HOME/bin
 _pathadd $HOME/.dotfiles/bin
 _pathadd $HOME/Library/Python/2.7/bin
 _pathadd $HOME/go/bin
+_pathadd $HOME/.local/bin
+# last specified has priority
 
 # abbreviations / aliases
 set -gx EDITOR "nvim"
@@ -70,3 +75,4 @@ set -U FZF_OPEN_COMMAND "fd --type f"
 abbr :q 'exit'
 abbr md 'mkdir -p'
 source ~/.asdf/asdf.fish
+
