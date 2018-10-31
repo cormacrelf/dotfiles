@@ -193,6 +193,33 @@ colors-nord:
      cyan:    '0x8FBCBB'
      white:   '0xECEFF4'
 
+# Colors (Termius)
+colors-termius:
+  # Default colors primary:
+  primary:
+    background: '0x080b20'
+    foreground: '0x1fca78'
+  # Normal colors
+  normal:
+    black:   '0x080b20'
+    red:     '0xf14f56'
+    green:   '0x1fca78'
+    yellow:  '0xe5e9eb'
+    blue:    '0x125789'
+    magenta: '0xfb7377'
+    cyan:    '0x2e91f1'
+    white:   '0xd5dcdf'
+  # Bright colors
+  bright:
+    black:   '0x080b20'
+    red:     '0xf14f56'
+    green:   '0x1fca78'
+    yellow:  '0xe5e9eb'
+    blue:    '0x125789'
+    magenta: '0xfb7377'
+    cyan:    '0x2e91f1'
+    white:   '0xd5dcdf'
+
 # Colors (Dracula)
 colors:
   # Default colors primary:
