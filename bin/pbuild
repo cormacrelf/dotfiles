@@ -37,7 +37,7 @@ set -g OVERRIDE_OUTPUT
 set PREFIX "$HOME/.pandoc"
 
 # Location of your working bibliography file
-set BIB "--bibliography $HOME/lib/zotero-library.bib"
+set BIB "--filter=pandoc-citeproc --metadata bibliography=$HOME/lib/zotero-library.bib"
 
 # CSL stylesheet (located in the csl folder of the PREFIX directory).
 set CSL ""
@@ -82,23 +82,27 @@ for arg in $argv
 end
 
 # GLOBAL args
-set flags 'h/help' 'O/open' 'o/output=' 'V/verbose' 'c/csl=' 'b/bib=' 'v/variable=+'
+set -g SUBCOMMAND 'short'
+
+set flags 't/type=' 'h/help' 'O/open' 'o/output=' 'V/verbose' 'c/csl=' 'b/bib=' 'v/variable=+'
 set flags $flags 'r/reference-doc=' 'a-append-bibliography'
 set flags $flags 'g/aglc-headers'
-set -l $argv
+set -l argv
 argparse "--name=$pbuild" "--min-args=1" $flags -- $pbuild_argv
 if test $status -ne 0
   echo
   sub_help
   exit
 end
-set -g SUBCOMMAND $argv[1]
-set -g REST $argv[2..-1]
+set -g REST $argv[1..-1]
 
 # flags handling {{{
 
 set -g AGLC_HEADERS
 
+if set -q _flag_type
+  set -g SUBCOMMAND $_flag_type
+end
 if set -q _flag_help;
   sub_help
   exit 0;
@@ -116,7 +120,7 @@ if set -q _flag_csl
   set CSL "--csl $_flag_csl"
 end
 if set -q _flag_bib
-  set BIB "--bib $_flag_bib"
+  set BIB "--filter=pandoc-citeproc --metadata bibliography=$_flag_bib"
 end
 if set -q _flag_reference_doc
   set REFERENCE_DOC "--reference-doc '$_flag_r'"
@@ -157,14 +161,17 @@ end
 
 add_var geometry 'a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm'
 add_var papersize 'a4paper'
-add_var mainfont 'EB Garamond'
-add_var sansfont 'Helvetica'
+# add_var mainfont 'EB Garamond'
+add_var mainfont 'Baskerville'
+# add_var sansfont 'Helvetica'
+add_var sansfont 'Open Sans'
 add_var monofont 'Fira Code'
 add_var fontsize '12pt'
 # add_var linespace '1.24' # ~1.4 spaced (1.6 = double)
 add_var linespace '1.5'
 add_var parindent '0pt'
 add_var parskip '10pt'
+add_var subparagraph yes
 add_var documentclass 'scrartcl'
 add_var linkcolor '[HTML]{da547b}'
 add_var citecolor '[HTML]{333333}'

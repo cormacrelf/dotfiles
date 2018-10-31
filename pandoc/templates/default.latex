@@ -166,9 +166,26 @@ $endif$
 $if(verbatim-in-note)$
 \usepackage{fancyvrb}
 $endif$
-$if(colorlinks)$
+
 \usepackage{xcolor}
-$endif$
+
+% yale law journal inspired
+% requires documentclass=scrartcl
+\usepackage{setspace}
+\onehalfspacing
+\definecolor{grey}{HTML}{454545}
+\addtokomafont{footnote}{\sffamily\color{grey}}
+\addtokomafont{footnotereference}{\sffamily\bfseries\color{grey}}
+\addtokomafont{footnotelabel}{\sffamily\bfseries}
+\setkomafont{title}{\Large\rmfamily}
+\setkomafont{section}{\normalsize\bfseries\sffamily}
+\setkomafont{subsection}{\normalsize\mdseries\rmfamily}
+\setkomafont{subsubsection}{\normalsize\mdseries\rmfamily}
+\setkomafont{paragraph}{\normalsize\mdseries\rmfamily}
+\setkomafont{subparagraph}{\normalsize\mdseries\rmfamily}
+
+% hyperref goes last
+
 \usepackage{hyperref}
 \hypersetup{
 $if(title-meta)$
