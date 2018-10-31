@@ -95,7 +95,7 @@ let g:lightline = {
             \             [ 'readonly', 'filename', 'modified' ] ],
             \   'right': [ [ 'lineinfo' ],
             \              [ 'percent' ],
-            \              [ 'fileformat', 'fileencoding', 'filetype', 'wordcount' ] ]
+            \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
             \ },
             \ 'component_function': {
             \   'filename': 'LightlineFilename',
@@ -122,6 +122,10 @@ endfunc
 func! LightlineWordCount()
   if exists("b:wc_enabled") && b:wc_enabled | return string(WordCount()) . 'w' | endif
   return ""
+endfunc
+
+func! PbuildCount()
+  return (split(system('pbuild count '.fnameescape(expand("%"))))[0])
 endfunc
 
 " }}}
@@ -392,7 +396,9 @@ let g:grepper = {
 " Leader Mappings {{{
 
 " word count
-nnoremap <leader>wc :!wordcount %<cr>
+" nnoremap <leader>wc :!wordcount %<cr>
+" nnoremap <leader>wc :!pbuild count %<cr>
+nnoremap <leader>wc :echo PbuildCount()<cr>
 
 " errors
 " nnoremap <leader>j :cnext<cr>zz
@@ -520,8 +526,6 @@ function! <SID>SynStack()
   endif
   echo map(synstack(line('.'), col('.')), 'synIDattr(v:val, "name")')
 endfunc
-
-nmap <leader>hl :HLT<cr>
 
 " }}}
 " }}}
@@ -720,35 +724,39 @@ let g:vimclojure#HighlightBuiltins = 1
 let g:vimclojure#ParenRainbow = 1
 
 " vim-pandoc
-let g:pandoc#folding#level = 999
-let g:pandoc#folding#fdc = 0
-let g:pandoc#syntax#style#emphases = 1
-let g:pandoc#syntax#style#underline_special = 0
-let g:pandoc#syntax#conceal#use = 0
-let g:pandoc#formatting#mode='ha' " soft breaks; automatically set formatoptions
-let g:pandoc_use_embeds_in_codeblocks_for_langs = ["ruby", "haskell", "python", "typescript",
-                                                  \ "go", "c", "scala", "clojure",
-                                                  \ "rust", "javascript" ]
-let g:pandoc#completion#bib#mode = "citeproc"
 " chdir: don't auto-cd into %:h
 " folding is too slow
+let g:pandoc#folding#level = 999
+let g:pandoc#folding#fdc = 0
 let g:pandoc#modules#disabled = ["chdir", "folding"]
+let g:pandoc#formatting#mode='ha' " soft breaks; automatically set formatoptions
 let g:pandoc#completion#bib#mode = "citeproc"
 let g:pandoc#biblio#bibs = [$HOME."/lib/zotero-library.bib"]
 let g:pandoc#biblio#sources = "bcg"
 let g:pandoc#completion#bib#use_preview = 0
 if g:cormacrelf.ncm2
-  au User Ncm2Plugin call ncm2#register_source({
+  au! User Ncm2Plugin call ncm2#register_source({
         \ 'name' : 'pandoc-bib',
         \ 'priority': 9,
         \ 'subscope_enable': 1,
         \ 'scope': ['pandoc'],
         \ 'mark': 'bib',
-        \ 'word_pattern': '[\w]+',
-        \ 'complete_pattern': '@\s*',
+        \ 'word_pattern': '@\w+',
+        \ 'complete_pattern': ['@'],
         \ 'on_complete': ['ncm2#on_complete#omni', 'pandoc#completion#Complete'],
         \ })
 endif
+
+" call ncm2#override_source('bufword', {'on_completed': 0})
+
+" vim-pandoc-syntax
+let g:pandoc#syntax#style#emphases = 1
+let g:pandoc#syntax#style#underline_special = 0
+let g:pandoc#syntax#conceal#use = 0
+" https://github.com/vim-pandoc/vim-pandoc-syntax/issues/250
+let g:pandoc#syntax#codeblocks#embeds#langs = ["ruby", "python", "typescript",
+                                                  \ "go", "c", "clojure",
+                                                  \ "rust", "javascript", "sh" ]
 
 " Startify
 
@@ -848,8 +856,11 @@ function! Prose()
 
     " speed up syntax highlighting
     syn sync minlines=45
-    syn match myExCapitalWordsBQ +\<[A-Z]\+\>+ contains=@NoSpell containedin=pandocBlockQuote contained
-    syn match myExCapitalWords +\<[A-Z]\+\>+ contains=@NoSpell containedin=pandocUListItem,pandocListItem
+    " somehow it's disabled in vim-pandoc, though it works with only that
+    " plugin & syntax loaded
+    " syn spell toplevel
+    syn match myExCapitalWordsBQ +\<[A-Z]\+s\?\>+ contains=@NoSpell containedin=pandocBlockQuote contained
+    syn match myExCapitalWords +\<[A-Z]\+s\?\>+ contains=@NoSpell containedin=pandocUListItem,pandocListItem,pandocListItemContinuation
     hi link myExCapitalWordsBQ pandocBlockQuote
     setl cinwords=
 
@@ -869,6 +880,8 @@ function! Prose()
     inoremap <buffer> : :<c-g>u
     inoremap <buffer> <c-u> <c-g>u<c-u>
     inoremap <buffer> <c-w> <c-g>u<c-w>
+
+    nnoremap <buffer> gd lbyiw:!open zotero://select/items/bbt:<c-r>"<cr><cr>
 
     if g:cormacrelf.prose_hard_wrap == 0
         " sane movement with wrap turned on
@@ -922,6 +935,8 @@ function! Prose()
     " let @f = ':%g/\v^(\[\^\d+\]|\> )/d'
     let @f = ':%g/\v^\[\^[a-zA-Z0-9\_\-]+\]/d:%s/\v\[\^[a-zA-Z0-9\-\_]{0,}\]//g'
     let @v = ':%v/\v^\[\^[a-zA-Z0-9\_\-]+\]/d:%s/\v\[\^[a-zA-Z0-9\-\_]{0,}\]//g'
+    " biblio entries like [see, e.g. @yates2001]
+    let @b = ':%v/\v^\[\^[.+]+\]/d:%s/\v\[\^[a-zA-Z0-9\-\_]{0,}\]//g'
 
     " increment footnotes in region
     vnoremap <leader>fa <Plug>IncrementFootnotes
@@ -932,6 +947,11 @@ function! Prose()
     vnoremap <leader>fz <Plug>DecrementFootnotes
     vnoremap <silent> <Plug>DecrementFootnotes :sno/[^\(\d\+\)]/\='[^'.(submatch(1)-1).']'/g<CR>
                 \:silent! call repeat#set("gv\<Plug>DecrementFootnotes", -1)<CR>
+
+    " vim-wordy
+    noremap <silent> <F8> :<C-u>NextWordy<cr>
+    xnoremap <silent> <F8> :<C-u>NextWordy<cr>
+    inoremap <silent> <F8> <C-o>:NextWordy<cr>
 
 endfunction
 

@@ -5,6 +5,10 @@
 Plug 'cohama/lexima.vim'
 Plug 'mattn/emmet-vim'
 Plug 'dkarter/bullets.vim'
+Plug 'reedes/vim-wordy'
+if version < 800
+  Plug 'ConradIrwin/vim-bracketed-paste' " vim8/neovim have this now
+endif
 
 " Plug 'Yggdroot/indentLine'
 
@@ -45,6 +49,7 @@ Plug 'junegunn/fzf.vim'
 Plug 'Shougo/echodoc.vim'
 
 " Language-specific
+Plug 'tpope/vim-scriptease'
 Plug 'dag/vim-fish'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'vim-ruby/vim-ruby'
@@ -86,6 +91,7 @@ Plug 'guns/vim-sexp', { 'for': ['clojure'] }
 Plug 'vim-scripts/argtextobj.vim'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
+Plug 'kana/vim-textobj-syntax' " viy
 Plug 'tpope/vim-surround'
 Plug 'kana/vim-textobj-function'          " af if
 Plug 'beloglazov/vim-textobj-punctuation' " au iu
@@ -149,7 +155,6 @@ Plug 'chriskempson/base16-vim'
 Plug 'rakr/vim-togglebg'
 Plug 'cormacrelf/vim-colors-github'
 Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
-Plug 'gerw/vim-HiLinkTrace'
 " Plug 'jszakmeister/vim-togglecursor'
 
 

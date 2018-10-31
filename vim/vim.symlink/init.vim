@@ -79,17 +79,8 @@ augroup TYPESCRIPT
 augroup END
 
 " }}}
-" LanguageClient-neovim {{{
+" LanguageClient-neovim / LSP {{{
 if g:cormacrelf.LanguageClient
-
-" IDE-style mappings to language server
-nnoremap <silent> <F11> :call LanguageClient_textDocument_references()<cr>
-nnoremap <silent> K :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gK :call LanguageClient_textDocument_hover()<CR>
-nnoremap <silent> gd :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F12> :call LanguageClient_textDocument_definition()<CR>
-nnoremap <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
-nnoremap <silent> g. :call LanguageClient_textDocument_codeAction()<CR>
 
 " Automatically start language servers.
 let g:LanguageClient_autoStart = 1
@@ -97,27 +88,45 @@ let g:LanguageClient_diagnosticsList = "location"
 let g:LanguageClient_loadSettings = 1 " Use an absolute configuration path if you want system-wide settings
 let g:LanguageClient_settingsPath = $HOME.'/.config/nvim/settings.json'
 let g:LanguageClient_completionPreferTextEdit = 1
-let g:LanguageClient_rootMarkers = {
-      \ 'typescript': ['tsconfig.json']
-      \ }
+
 let g:LanguageClient_serverCommands = {
       \ 'cpp': ['ccls', '--log-file=/tmp/ccls.log'],
       \ 'c': ['ccls', '--log-file=/tmp/ccls.log'],
       \ 'rust': ['rustup', 'run', 'nightly', 'rls'],
       \ 'go': ['go-langserver']
       \ }
+let g:LanguageClient_rootMarkers = {
+      \ 'typescript': ['tsconfig.json']
+      \ }
 
 if executable('typescript-language-server') && executable('tsserver')
   let  g:LanguageClient_serverCommands.typescript = [
         \'typescript-language-server', '--stdio',
         \'--tsserver-path=tsserver']
-        " \+ [ '--tsserver-log-file', '/tmp/tsserver-log',
-        " \'--tsserver-log-verbosity', 'verbose',
+        " \+ [ '--tsserver-log-file', '/tmp/tsserver-log', '--tsserver-log-verbosity', 'verbose',
         " \]
   " let  g:LanguageClient_serverCommands.typescript = [
   "       \'javascript-typescript-stdio', '--logfile', '/tmp/js-ts-log'
   "       \]
 endif
+
+" only enable the mappings for filetypes that have an lsp associated with them
+func! LSP()
+  " IDE-style mappings to language server
+  nnoremap <buffer> <silent> <F11> :call LanguageClient_textDocument_references()<cr>
+  nnoremap <buffer> <silent> K :call LanguageClient_textDocument_hover()<CR>
+  nnoremap <buffer> <silent> gK :call LanguageClient_textDocument_hover()<CR>
+  nnoremap <buffer> <silent> gd :call LanguageClient_textDocument_definition()<CR>
+  nnoremap <buffer> <silent> <F12> :call LanguageClient_textDocument_definition()<CR>
+  nnoremap <buffer> <silent> <F2> :call LanguageClient_textDocument_rename()<CR>
+  nnoremap <buffer> <silent> g. :call LanguageClient_textDocument_codeAction()<CR>
+endfunc
+augroup LSP
+  au!
+  for lang in keys(g:LanguageClient_serverCommands)
+    exec "au Filetype ".lang." call LSP()"
+  endfor
+augroup END
 
 " diagnostics display {{{
 let g:LanguageClient_diagnosticsDisplay = {
@@ -259,9 +268,7 @@ augroup END
 " call neomake#configure#automake('')
 
 " }}}
-" Pandoc {{{
-
-" }}} Goyo {{{
+" Goyo {{{
 
 function! s:goyo_enter()
   " silent !tmux set status off
