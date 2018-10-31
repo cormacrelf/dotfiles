@@ -44,6 +44,8 @@ homebrew_installed_packages:
 homebrew_fonts:
   - font-fira-code
   - font-eb-garamond
+  - font-ibm-plex
+  - font-open-sans
 
 homebrew_cask_apps:
   - docker

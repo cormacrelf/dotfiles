@@ -54,3 +54,6 @@
     state: present
   register: fish
 
+- name: Copy SFMono font into ~/Library/Fonts
+  shell: >
+    cd /Applications/Utilities/Terminal.app/Contents/Resources/Fonts/  && cp *.otf ~/Library/Fonts/
