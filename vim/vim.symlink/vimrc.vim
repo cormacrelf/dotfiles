@@ -125,7 +125,7 @@ func! LightlineWordCount()
 endfunc
 
 func! PbuildCount()
-  return (split(system('pbuild count '.fnameescape(expand("%"))))[0])
+  return (split(system('pbuild -t count '.fnameescape(expand("%"))))[0])
 endfunc
 
 " }}}
@@ -308,12 +308,6 @@ nnoremap <M-s> :w<cr>
 cnoremap <C-a> <Home>
 cnoremap <C-e> <End>
 
-" toggle spelling
-nnoremap <leader>Sp :setlocal spell!<cr>
-
-" Look up in online French dictionary
-" nnoremap <leader>wr viw"hy:!open "http://wordreference.com/enfr/<c-r>h"<cr><cr>
-
 " Look up in Mac dictionary
 nnoremap <leader>K viw"hy:!open "dict://<c-r>h"<cr><cr>
 
@@ -394,11 +388,6 @@ let g:grepper = {
 
 " }}}
 " Leader Mappings {{{
-
-" word count
-" nnoremap <leader>wc :!wordcount %<cr>
-" nnoremap <leader>wc :!pbuild count %<cr>
-nnoremap <leader>wc :echo PbuildCount()<cr>
 
 " errors
 " nnoremap <leader>j :cnext<cr>zz
@@ -692,21 +681,25 @@ au FileType rust let b:neomake_makers = "cargo"
 
 command! Paredit execute Paredit()
 function! Paredit()
-    " allow > and < to fling braces
-    " nunmap <buffer> <silent> <p
-    " nunmap <buffer> <silent> <P
-    " nunmap <buffer> <silent> >p
-    " nunmap <buffer> <silent> >P
-    nunmap <leader>Sp
-    let g:paredit_shortmaps = 0
-    let g:paredit_electric_return = 0
-    setlocal ts=2 sw=2 sts=2 expandtab
+  " allow > and < to fling braces
+  " nunmap <buffer> <silent> <p
+  " nunmap <buffer> <silent> <P
+  " nunmap <buffer> <silent> >p
+  " nunmap <buffer> <silent> >P
+  let g:paredit_shortmaps = 0
+  let g:paredit_electric_return = 1
+  let g:paredit_smartjump = 1
+  setlocal ts=2 sw=2 sts=2 expandtab
+  let g:slime_target = "tmux"
 endfunction
 augroup PAREDIT
-    autocmd!
-    autocmd Filetype clojure execute Paredit()
-    autocmd Filetype lisp    execute Paredit()
-    autocmd Filetype cljs    execute Paredit()
+  autocmd!
+  autocmd Syntax clojure RainbowParenthesesLoadRound
+  autocmd BufEnter *.clj RainbowParenthesesToggle
+  autocmd BufLeave *.clj RainbowParenthesesToggle
+  autocmd Filetype clojure execute Paredit()
+  autocmd Filetype lisp    execute Paredit()
+  autocmd Filetype cljs    execute Paredit()
 augroup END
 
 " }}}
@@ -883,6 +876,12 @@ function! Prose()
 
     nnoremap <buffer> gd lbyiw:!open zotero://select/items/bbt:<c-r>"<cr><cr>
 
+    " toggle spelling
+    nnoremap <leader>Sp :setlocal spell!<cr>
+
+    " Look up in online French dictionary
+    " nnoremap <leader>wr viw"hy:!open "http://wordreference.com/enfr/<c-r>h"<cr><cr>
+
     if g:cormacrelf.prose_hard_wrap == 0
         " sane movement with wrap turned on
         nnoremap <buffer> j gj
@@ -918,8 +917,13 @@ function! Prose()
     inoremap <D-6> [^]<left>
 
     " for pandoc building using pbuild
-    nnoremap <leader>pr :Dispatch! pbuild short %<cr>
-    " nnoremap <leader>pR :Dispatch "!pbuild short %"<cr>
+    nnoremap <leader>bp :Dispatch!<cr>
+    nnoremap <leader>bP :exec "Dispatch! ".b:dispatch." --open"<cr>
+
+    " word count
+    " nnoremap <leader>wc :!wordcount %<cr>
+    " nnoremap <leader>wc :!pbuild count %<cr>
+    nnoremap <leader>wc :echo PbuildCount()<cr>
 
     " use convention of **bold** and _italic_
     let b:surround_105 = "_\r_" " i

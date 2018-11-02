@@ -82,7 +82,9 @@ Plug 'guns/vim-clojure-static', { 'for': ['clojure'] }
 Plug 'tpope/vim-classpath', { 'for': ['clojure'] }
 Plug 'tpope/vim-fireplace', { 'for': ['clojure'] }
 Plug 'guns/vim-sexp', { 'for': ['clojure'] }
-" Plug 'vim-scripts/paredit.vim', { 'for': ['clojure'] }
+Plug 'vim-scripts/paredit.vim', { 'for': ['clojure'] }
+" Plug 'tpope/vim-salve', { 'for': ['clojure'] }
+Plug 'kien/rainbow_parentheses.vim'
 " Plug 'VimClojure'
 " Plug 'tpope/vim-foreplay'
 
