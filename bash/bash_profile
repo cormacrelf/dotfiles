@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# just in case you're not running in a shell already,
+# we will add some path segments
+_pathadd () {
+  test -d $1 && export PATH="$1:$PATH"
+}
+# last specified has priority
+_pathadd $HOME/bin
+_pathadd $HOME/.dotfiles/bin
+_pathadd $HOME/Library/Python/2.7/bin
+_pathadd $HOME/go/bin
+_pathadd $HOME/.local/bin # haskell stack build binaries
+

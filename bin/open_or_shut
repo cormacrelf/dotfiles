@@ -1,0 +1,16 @@
+#!/bin/bash
+
+frontmost=$(osascript -e 'tell application "System Events" to return name of first process whose frontmost is true')
+
+hide () {
+  osascript -e "tell application \"System Events\" to set visible of application process \"$1\" to false"
+}
+
+# echo "$frontmost" >> $HOME/.dotfiles/frontmost
+
+if [[ "$frontmost" == "$1" ]]; then
+  hide $frontmost
+else
+  open -a "$1"
+fi
+

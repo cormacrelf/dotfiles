@@ -1,3 +1,23 @@
+# separate fisherman install
+set -g fisher_path $HOME/.config/fish/erman
+mkdir -p $fisher_path
+set -g fish_function_path $fish_function_path $fisher_path/functions
+set -g fish_complete_path $fish_complete_path $fisher_path/completions
+function source_confd
+  for file in $fisher_path/conf.d/*.fish
+    builtin source $file 2> /dev/null
+  end
+end
+source_confd
+
+# fisherman bootstrap
+if not test -f $fisher_path/functions/fisher.fish
+  echo "... installing fisherman to $fisher_path ..."
+  curl https://git.io/fisher --create-dirs -sLo $fisher_path/functions/fisher.fish
+  fisher
+  source_confd
+  echo "probably run fisher again to get your theme? idk"
+end
 
 set fish_greeting ""
 
@@ -30,13 +50,6 @@ end
 function fish_vi_cursor; end
 
 fish_vi_key_bindings
-
-# fisherman bootstrap
-if not test -f ~/.config/fish/functions/fisher.fish
-  echo "Installing fisherman for the first time"
-  curl https://git.io/fisher --create-dirs -sLo ~/.config/fish/functions/fisher.fish
-  fisher
-end
 
 set -g default_user cormac # for themes
 

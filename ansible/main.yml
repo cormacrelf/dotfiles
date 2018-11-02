@@ -1,6 +1,6 @@
 - hosts: all
   vars_files:
-    - config.yml
+    - symlinks.yml
   tasks:
     - name: dotfiles git repo
       tags: ['dotfiles', 'neovim', 'fish', 'tmux']

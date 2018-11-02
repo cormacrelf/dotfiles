@@ -1,5 +1,5 @@
 ---
-- include_vars: config-mac.yml
+- include_vars: homebrew.yml
 
 - name: Mac App Store
   tags: ['mas']
