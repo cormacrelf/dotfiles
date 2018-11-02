@@ -1,23 +1,21 @@
-# separate fisherman install
+# separate fisher install
+set -l normal_fish $HOME/.config/fish
 set -g fisher_path $HOME/.config/fish/erman
 mkdir -p $fisher_path
-set -g fish_function_path $fish_function_path $fisher_path/functions
-set -g fish_complete_path $fish_complete_path $fisher_path/completions
+set -g fish_function_path $normal_fish/functions $fisher_path/functions $fish_function_path 
+set -g fish_complete_path $normal_fish/completions $fisher_path/completions $fish_complete_path
 function source_confd
   for file in $fisher_path/conf.d/*.fish
     builtin source $file 2> /dev/null
   end
 end
-source_confd
-
 # fisherman bootstrap
 if not test -f $fisher_path/functions/fisher.fish
-  echo "... installing fisherman to $fisher_path ..."
+  echo "... installing fisher to $fisher_path ..."
   curl https://git.io/fisher --create-dirs -sLo $fisher_path/functions/fisher.fish
   fisher
-  source_confd
-  echo "probably run fisher again to get your theme? idk"
 end
+source_confd
 
 set fish_greeting ""
 
