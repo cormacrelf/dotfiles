@@ -15,6 +15,9 @@ function Div(el)
   if (el.attr.identifier == "refs") then
     return {}
   end
+  if (el.classes[1] == "not-counted") then
+    return {}
+  end
   return el
 end
 
