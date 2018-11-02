@@ -17,15 +17,6 @@ chunkc core::log_file /tmp/chunkwm.err.log
 
 chunkc core::hotload 0
 
-chunkc tiling::rule --owner Finder --name Copy --state float
-chunkc tiling::rule --owner \"App Store\" --state float
-chunkc tiling::rule --owner Things --state float
-chunkc tiling::rule --owner Preview --state float
-chunkc tiling::rule --owner \"Tor Browser\" --state float
-chunkc tiling::rule --owner Zotero --state float
-chunkc tiling::rule --owner Reminders --state float
-chunkc tiling::rule --owner Firefox --name \"^Pinboard - Save a Bookmark$\" --state float --grid-layout 12:3:2:0:2:5
-
 edge=0
 edge=40
 chunkc set global_desktop_offset_top     $edge
@@ -72,14 +63,15 @@ chunkc set window_region_locked          1
 
 chunkc set ffm_bypass_modifier fn
 
+# need to load plugins so they can pick up init-only settings
+
 #
 # NOTE: specify plugins to load when chunkwm starts.
 #
 
-# need to load these last so they can pick up init-only settings
 chunkc core::load tiling.so
 chunkc core::load border.so
-chunkc core::load ffm.so
+# chunkc core::load ffm.so
 
 # chunkwm-blur
 # chunkc core::load blur.so
@@ -92,4 +84,17 @@ chunkc core::load ffm.so
 # chunkc load ~/.chunkwm_plugins/ffm.so
 # chunkc load ~/.chunkwm_plugins/border.so
 
+
+# Finally the tiling rules, which require a running chunkwm +tiling.so
+# reload with :!bash %
+
+chunkc tiling::rule --owner Finder --name Copy --state float
+chunkc tiling::rule --owner \"App Store\" --state float
+chunkc tiling::rule --owner Things --state float
+chunkc tiling::rule --owner Preview --state float
+chunkc tiling::rule --owner \"Tor Browser\" --state float
+chunkc tiling::rule --owner Zotero --state float
+chunkc tiling::rule --owner Reminders --state float
+chunkc tiling::rule --owner Firefox --name \"Pinboard - Save a Bookmark$\" --state float --grid-layout 12:12:7:0:5:5
+chunkc tiling::rule --owner Skim --state float
 
