@@ -31,8 +31,8 @@ chunkc set global_desktop_mode           bsp
 chunkc set focused_border_color          0xffffffc5
 chunkc set focused_border_width          3
 chunkc set focused_border_radius         2
-chunkc set focused_border_skip_floating  0
-chunkc set focused_border_skip_monocle   0
+chunkc set focused_border_skip_floating  1
+chunkc set focused_border_skip_monocle   1
 
 chunkc set window_float_topmost          0
 chunkc set window_fade_inactive          0

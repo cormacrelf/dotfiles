@@ -223,6 +223,14 @@ if g:cormacrelf.ncm2
 
 endif
 
+" https://github.com/SirVer/ultisnips/issues/593
+if g:cormacrelf.snippets
+  augroup ultisnips_no_auto_expansion
+    au!
+    au VimEnter * au! UltiSnips_AutoTrigger
+  augroup END
+endif
+
 " }}}
 " {{{ Terraform
 

@@ -125,3 +125,4 @@ shift + cmd - 2 : chunkc tiling::window --send-to-desktop 2; chunkc tiling::desk
 # shift + cmd - 6 : chunkc tiling::window --send-to-desktop 6; chunkc tiling::desktop --focus 6
 # shift + cmd - 7 : chunkc tiling::window --send-to-desktop 7; chunkc tiling::desktop --focus 7
 
+cmd + shift - 4 -> : chunkc border::clear
