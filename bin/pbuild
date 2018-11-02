@@ -23,15 +23,24 @@ function sub_help
     echo "                \$ pbuild word template.md"
     echo "                edit the styles in that document"
     echo "                \$ pbuild word real-doc.md -r template.docx"
+    echo
+    echo "filters:"
+    echo "    if there is a file called .pbuild-filters in the PWD where you run $pbuild,"
+    echo "    then each line will be appended to the command as --lua-filter=\$line"
+    echo "    in the order that they are written"
+
 end
 
 ###############################
 ########## Constants ##########
 ###############################
 
-set DEBUG_OUT "/dev/null"
+set -g PRINT_CMD 0
 set -g OPEN 0
+set -g NOEXEC 0
 set -g OVERRIDE_OUTPUT
+# --lua-filters=XXX from .pbuild-filters
+set -g FILTERS
 
 # Location of Pandoc support files.
 set PREFIX "$HOME/.pandoc"
@@ -57,7 +66,7 @@ set LONGTEMPLATE "$PREFIX/kjhealy/xelatex.template"
 set REFERENCE_DOC "--reference-doc $DOTFILES/pandoc/yale-law-journal.docx" # default location is $PREFIX/reference.docx, override with pbuild --reference-docx <loc>
 
 # Markdown Extensions
-set EXTENSIONS "+smart+citations+simple_tables+pipe_tables+table_captions+yaml_metadata_block+fenced_code_blocks+fancy_lists+startnum+example_lists+line_blocks+footnotes+inline_notes+inline_code_attributes+superscript+subscript+tex_math_dollars+raw_tex" 
+set EXTENSIONS "+smart+citations+simple_tables+pipe_tables+table_captions+yaml_metadata_block+fenced_code_blocks+fancy_lists+startnum+example_lists+line_blocks+footnotes+inline_notes+inline_code_attributes+superscript+subscript+tex_math_dollars+raw_tex+fenced_divs" 
 # Short doc arguments. Override with env variables.
 # (note that `: ${var=value}` sets var iff not already set.)
 
@@ -84,9 +93,11 @@ end
 # GLOBAL args
 set -g SUBCOMMAND 'short'
 
-set flags 't/type=' 'h/help' 'O/open' 'o/output=' 'V/verbose' 'c/csl=' 'b/bib=' 'v/variable=+'
+set flags
+set flags $flags 't/type=' 'h/help' 'q/open-only' 'O/open' 'o/output=' 'p-print-cmd' 'V/verbose'
+set flags $flags 'c/csl=' 'b/bib=' 'v/variable=+'
 set flags $flags 'r/reference-doc=' 'a-append-bibliography'
-set flags $flags 'g/aglc-headers'
+set flags $flags 'g/aglc-headers' 'f-no-filters'
 set -l argv
 argparse "--name=$pbuild" "--min-args=1" $flags -- $pbuild_argv
 if test $status -ne 0
@@ -110,11 +121,18 @@ end
 if set -q _flag_open
   set OPEN 1
 end
+if set -q _flag_open_only
+  set OPEN 1
+  set NOEXEC 1
+end
 if set -q _flag_output
   set OVERRIDE_OUTPUT "$_flag_output"
 end
+if set -q _flag_print_cmd
+  set PRINT_CMD 1
+end
 if set -q _flag_verbose
-  set DEBUG_OUT /dev/stderr
+  set VERBOSE 1
 end
 if set -q _flag_csl
   set CSL "--csl $_flag_csl"
@@ -131,7 +149,6 @@ end
 if set -q _flag_aglc_headers;
   set AGLC_HEADERS "--lua-filter=$DOTFILES/pandoc/filters/aglc-headers.lua"
 end
-
 # }}}
 # -v variable:value {{{
 
@@ -192,6 +209,28 @@ function make_shortargs
 end
 # }}}
 
+# FILTERS {{{
+
+function verbose_echo
+  echo $argv > /dev/stderr
+end
+
+if not set -q _flag_no_filters; and test -s .pbuild-filters
+  set filters (cat .pbuild-filters)
+  for filter in $filters
+    set -g FILTERS $FILTERS "--lua-filter=$filter"
+  end
+  if set -q VERBOSE
+    verbose_echo 'found filters:'
+    for filter in $filters
+      test -s $filter
+      verbose_echo '- filter: '$filter(if test $status -eq 0; echo ' [file exists]'; end)
+    end
+  end
+end
+
+# }}}
+
 # }}}
 
 # subcommands {{{
@@ -201,9 +240,26 @@ set -g OUTPUT
 
 set -g PANDOC_CMD "pandoc $BIB $SUPPRESS_BIB -r markdown$EXTENSIONS -s $CSL"
 
+function print_or_execute
+  if test $NOEXEC -eq 0
+    if test $PRINT_CMD -eq 1
+      echo $argv
+      return 0
+    else
+      echo $argv | bash
+      return $status
+    end
+  end
+  return 0
+end
+
 function pb_common
-  set -l cmd "$PANDOC_CMD $argv $INPUT $PANDOC_ARGV"
-  echo $cmd | tee $DEBUG_OUT | bash
+  if set -q VERBOSE
+
+  end
+  set -l cmd "$PANDOC_CMD $argv $INPUT $FILTERS $PANDOC_ARGV"
+  print_or_execute $cmd
+  set printor $status
   if test $status -eq 0; and test $OPEN -eq 1
     open $OUTPUT
   end
@@ -211,13 +267,13 @@ function pb_common
 end
 
 function sub_json
-  set -l cmd "$PANDOC_CMD $INPUT -t json $PANDOC_ARGV"
-  echo $cmd | tee $DEBUG_OUT | bash
+  set -l cmd "$PANDOC_CMD $INPUT -t json $FILTERS $PANDOC_ARGV"
+  print_or_execute $cmd
   return $status
 end
 
 function sub_count
-  set -l cmd "$PANDOC_CMD $INPUT --lua-filter=$DOTFILES/pandoc/filters/wordcount.lua $PANDOC_ARGV"
+  set -l cmd "$PANDOC_CMD $INPUT $FILTERS --lua-filter=$DOTFILES/pandoc/filters/wordcount.lua $PANDOC_ARGV"
   echo $cmd | bash 2>/dev/null
   return $status
 end
