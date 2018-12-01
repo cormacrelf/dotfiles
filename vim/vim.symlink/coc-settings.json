@@ -1,0 +1,21 @@
+{
+  "coc.source.file.enable": false,
+  "coc.source.buffer.enable": false,
+  "coc.source.neco.enable": false,
+  "coc.preferences.triggerAfterInsertEnter": true,
+  "coc.source.omni.filetypes": [
+    "pandoc"
+  ],
+   "languageserver": {
+    "haskell": {
+      "command": "hie-wrapper",
+      "args": ["--lsp"],
+      "filetypes": ["haskell"],
+      "cwd": "./",
+      "initializationOptions": {
+      },
+      "settings": {
+      }
+    }
+  }
+}

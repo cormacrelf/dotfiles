@@ -96,7 +96,9 @@ let g:LanguageClient_serverCommands = {
       \ 'go': ['go-langserver']
       \ }
 let g:LanguageClient_rootMarkers = {
-      \ 'typescript': ['tsconfig.json']
+      \ 'typescript': ['tsconfig.json'],
+      \ 'typescript.tsx': ['tsconfig.json'],
+      \ 'typescriptreact': ['tsconfig.json']
       \ }
 
 if executable('typescript-language-server') && executable('tsserver')
@@ -108,6 +110,9 @@ if executable('typescript-language-server') && executable('tsserver')
   " let  g:LanguageClient_serverCommands.typescript = [
   "       \'javascript-typescript-stdio', '--logfile', '/tmp/js-ts-log'
   "       \]
+  
+  let g:LanguageClient_serverCommands['typescript.tsx'] = g:LanguageClient_serverCommands.typescript
+  let g:LanguageClient_serverCommands['typescriptreact'] = g:LanguageClient_serverCommands.typescript
 endif
 
 " only enable the mappings for filetypes that have an lsp associated with them
@@ -195,6 +200,8 @@ if g:cormacrelf.ncm2
 
   " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
   inoremap <c-c> <ESC>
+
+  imap <c-n> <Plug>(ncm2_manual_trigger)
 
   " When the <Enter> key is pressed while the popup menu is visible, it only
   " hides the menu. Use this mapping to close the menu and also start a new
@@ -317,4 +324,53 @@ augroup END
 
 " }}}
 
+" CoC {{{
+
+" Use K for show documentation in preview window
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if &filetype == 'vim'
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight symbol under cursor on CursorHold
+autocmd! CursorHold * silent call CocActionAsync('highlight')
+
+" Remap keys for gotos
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Remap for rename current word
+nmap <leader>rn <Plug>(coc-rename)
+
+" Remap for format selected region
+vmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+
+nmap ]d <Plug>(coc-diagnostic-next)
+nmap [d <Plug>(coc-diagnostic-prev)
+
+vmap <leader>i  <Plug>(coc-codeaction-selected)
+nmap <leader>i  <Plug>(coc-codeaction-selected)
+nmap <leader>ii  <Plug>(coc-codeaction)
+
+
+" coc-jest
+
+" Run jest for current project
+command! -nargs=0 Jest :call  CocAction('runCommand', 'jest.projectTest')
+" Run jest for current file
+command! -nargs=0 JestCurrent :call  CocAction('runCommand', 'jest.fileTest', ['%'])
+" Run jest for current test
+nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
+" Init jest in current cwd, require global jest command exists
+command! JestInit :call CocAction('runCommand', 'jest.init')
+
+" }}}
 

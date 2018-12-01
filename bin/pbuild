@@ -3,14 +3,21 @@ set DOTFILES "$HOME/.dotfiles"
 
 set pbuild (basename (status -f))
 
+function verbose_echo
+  if set -q VERBOSE
+    echo $argv > /dev/stderr
+  end
+end
+
 function sub_help
     echo "Usage: $pbuild <subcommand> <file.md>"
     echo "Subcommands:"
     # sub_short
     echo "    short   Build a plain document with small headers."
     echo "            -a | --append-bibliography => includes a bibliography at the end"
-    # sub_json
-    echo "    json    Raw pandoc syntax output. Useful for debugging lua filters"
+    # sub_none
+    echo "    none    No output type specified. Pass -- -t json or native for raw pandoc"
+    echo "            syntax output. Useful for debugging lua filters"
     # sub_count
     echo "    count   Word count without generated footnotes from pandoc-citeproc."
     # sub_tex
@@ -40,13 +47,14 @@ set -g OPEN 0
 set -g NOEXEC 0
 set -g OVERRIDE_OUTPUT
 # --lua-filters=XXX from .pbuild-filters
-set -g FILTERS
+set -g BEFORE_FILTERS
+set -g AFTER_FILTERS
 
 # Location of Pandoc support files.
 set PREFIX "$HOME/.pandoc"
 
 # Location of your working bibliography file
-set BIB "--filter=pandoc-citeproc --metadata bibliography=$HOME/lib/zotero-library.bib"
+set BIB "--filter=pandoc-citeproc --metadata bibliography=$HOME/lib/zotero-library.yaml"
 
 # CSL stylesheet (located in the csl folder of the PREFIX directory).
 set CSL ""
@@ -97,7 +105,7 @@ set flags
 set flags $flags 't/type=' 'h/help' 'q/open-only' 'O/open' 'o/output=' 'p-print-cmd' 'V/verbose'
 set flags $flags 'c/csl=' 'b/bib=' 'v/variable=+'
 set flags $flags 'r/reference-doc=' 'a-append-bibliography'
-set flags $flags 'g/aglc-headers' 'f-no-filters'
+set flags $flags 'f-no-filters'
 set -l argv
 argparse "--name=$pbuild" "--min-args=1" $flags -- $pbuild_argv
 if test $status -ne 0
@@ -108,8 +116,6 @@ end
 set -g REST $argv[1..-1]
 
 # flags handling {{{
-
-set -g AGLC_HEADERS
 
 if set -q _flag_type
   set -g SUBCOMMAND $_flag_type
@@ -146,13 +152,9 @@ end
 if set -q _flag_append_bibliography;
   set SUPPRESS_BIB "--metadata suppress-bibliography=false"
 end
-if set -q _flag_aglc_headers;
-  set AGLC_HEADERS "--lua-filter=$DOTFILES/pandoc/filters/aglc-headers.lua"
-end
 # }}}
 # -v variable:value {{{
 
-set -g variables $_flag_variable
 set -g var_names
 set -g var_values
 
@@ -194,6 +196,19 @@ add_var linkcolor '[HTML]{da547b}'
 add_var citecolor '[HTML]{333333}'
 add_var urlcolor '[HTML]{4d98ff}'
 
+function get_yml_vars
+  if test -s ./pbuild.yml
+    yq -r ".variables|to_entries|map(.key + \":\" + .value)|map(tostring)[]" ./pbuild.yml
+  end
+end
+
+set -g variables
+set variables $variables (get_yml_vars)
+# override with command line
+set variables $variables $_flag_variable
+verbose_echo "variables:"
+verbose_echo "  $variables"
+
 for var in $variables
   set_var (string split ':' $var)
 end
@@ -211,22 +226,24 @@ end
 
 # FILTERS {{{
 
-function verbose_echo
-  echo $argv > /dev/stderr
+function read_filters
+  set -l filters (yq ".$argv[1][]" pbuild.yml)
+  set -l arr
+  for filter in $filters
+    eval "test -s $filter"
+    set -l stat (if test $status -eq 0; echo ' [file exists]'; end)
+    verbose_echo '- filter: '$filter$stat
+    set arr $arr "--lua-filter=$filter"
+  end
+  echo $arr
 end
 
-if not set -q _flag_no_filters; and test -s .pbuild-filters
-  set filters (cat .pbuild-filters)
-  for filter in $filters
-    set -g FILTERS $FILTERS "--lua-filter=$filter"
-  end
-  if set -q VERBOSE
-    verbose_echo 'found filters:'
-    for filter in $filters
-      test -s $filter
-      verbose_echo '- filter: '$filter(if test $status -eq 0; echo ' [file exists]'; end)
-    end
-  end
+if not set -q _flag_no_filters; and test -s pbuild.yml
+  verbose_echo "before_filters:"
+  set -g BEFORE_FILTERS $BEFORE_FILTERS (read_filters before_citeproc)
+  verbose_echo "after_filters:"
+  set -g AFTER_FILTERS $AFTER_FILTERS (read_filters after_citeproc)
+  verbose_echo ""
 end
 
 # }}}
@@ -234,11 +251,6 @@ end
 # }}}
 
 # subcommands {{{
-
-set -g INPUT
-set -g OUTPUT
-
-set -g PANDOC_CMD "pandoc $BIB $SUPPRESS_BIB -r markdown$EXTENSIONS -s $CSL"
 
 function print_or_execute
   if test $NOEXEC -eq 0
@@ -253,40 +265,47 @@ function print_or_execute
   return 0
 end
 
-function pb_common
-  if set -q VERBOSE
+set -g INPUT
+set -g OUTPUT
+set -g PANDOC_COMMON "pandoc -s $BEFORE_FILTERS $BIB $AFTER_FILTERS $CSL $SUPPRESS_BIB -r markdown$EXTENSIONS"
 
-  end
-  set -l cmd "$PANDOC_CMD $argv $INPUT $FILTERS $PANDOC_ARGV"
+function pb_common
+  set -l cmd "$PANDOC_COMMON $argv $INPUT $PANDOC_ARGV"
   print_or_execute $cmd
   set printor $status
-  if test $status -eq 0; and test $OPEN -eq 1
+  if test $printor -eq 0; and test $OPEN -eq 1
     open $OUTPUT
   end
-  return $status
+  return $printor
 end
 
-function sub_json
-  set -l cmd "$PANDOC_CMD $INPUT -t json $FILTERS $PANDOC_ARGV"
-  print_or_execute $cmd
+function sub_none
+  set -l out
+  if test -n "$OVERRIDE_OUTPUT"
+    set OUTPUT $OVERRIDE_OUTPUT
+    set out "-o $OVERRIDE_OUTPUT"
+  end
+  set -l cmd "$out"
+  pb_common $cmd
   return $status
 end
 
 function sub_count
-  set -l cmd "$PANDOC_CMD $INPUT $FILTERS --lua-filter=$DOTFILES/pandoc/filters/wordcount.lua $PANDOC_ARGV"
+  set -l WC "--lua-filter=$DOTFILES/pandoc/filters/wordcount.lua"
+  set -l cmd "$PANDOC_COMMON $WC $INPUT $PANDOC_ARGV"
   echo $cmd | bash 2>/dev/null
   return $status
 end
 
 function sub_short
   set -g OUTPUT (change_ext "$INPUT" pdf)
-  pb_common "--template=default" (make_shortargs) "$AGLC_HEADERS -o $OUTPUT"
+  pb_common (make_shortargs) "-o $OUTPUT"
   return $status
 end
 
 function sub_word
   set -g OUTPUT (change_ext "$INPUT" docx)
-  pb_common "$REFERENCE_DOC $AGLC_HEADERS -o $OUTPUT"
+  pb_common "$REFERENCE_DOC -o $OUTPUT"
   return $status
 end
 

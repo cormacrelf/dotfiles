@@ -64,7 +64,13 @@ tabspaces: 8
 draw_bold_text_with_bright_colors: true
 
 # Font configuration (changes require restart)
+# test string: this.catatonic$ = this.svc.map(ls => ls.reduce((acc, x) => `09${acc}.95${x && 17}`, ""));
 font:
+
+  # Scale the font size based on the monitor's DPI. This will lead to bigger text on HiDPI
+  # screens and make reading text a little easier.
+  scale_with_dpi: true
+
   # each:
     # style can be specified to pick a specific face.
     # style: Bold
@@ -78,6 +84,10 @@ font:
   #   family: Fira Code
   # italic:
   #   family: Fira Code
+  # size: 13.0
+  # use_thin_strokes: false
+  # offset:       { x: 0, y: 2 }
+  # glyph_offset: { x: 0, y: 1 }
 
   normal:
     family: IBM Plex Mono
@@ -88,7 +98,10 @@ font:
   italic:
     family: IBM Plex Mono
     style: Text Italic
+  size: 14.0
   use_thin_strokes: true
+  offset: { x: 0, y: 4 }
+  glyph_offset: { x: 0, y: 2 }
 
   # normal:
   #   family: Letter Gothic Std
@@ -99,6 +112,7 @@ font:
   # italic:
   #   family: Letter Gothic Std
   #   style: Medium Slanted
+  # size: 14.0
   # use_thin_strokes: false
 
   # # OS X only: use thin stroke font rendering. Thin strokes are suitable
@@ -106,28 +120,18 @@ font:
   # # false.
   # use_thin_strokes: true
 
-  # Point size of the font
-  size: 14.0
-
-  # tester
-  # this.catatonic$ = this.svc.map(ls => ls.reduce((acc, x) => `09${acc}.95${x && 17}`, ""));
-
   # Offset is the extra space around each character. offset.y can be thought of
   # as modifying the linespacing, and offset.x as modifying the letter spacing.
-  offset:
-    x: 0
-    y: 4
+  # offset:
+  #   x: 0
+  #   y: 4
 
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increase the x offset to move the glyph to
   # the right, increase the y offset to move the glyph upward.
-  glyph_offset:
-    x: 0
-    y: 2
-
-  # Scale the font size based on the monitor's DPI. This will lead to bigger text on HiDPI
-  # screens and make reading text a little easier.
-  scale_with_dpi: true
+  # glyph_offset:
+  #   x: 0
+  #   y: 2
 
 # Should display the render timer
 render_timer: false

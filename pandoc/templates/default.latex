@@ -174,9 +174,10 @@ $endif$
 \usepackage{setspace}
 \onehalfspacing
 \definecolor{grey}{HTML}{454545}
-\addtokomafont{footnote}{\sffamily\color{grey}}
-\addtokomafont{footnotereference}{\sffamily\bfseries\color{grey}}
-\addtokomafont{footnotelabel}{\sffamily\bfseries}
+\definecolor{grey}{HTML}{000000}
+\addtokomafont{footnote}{\sffamily}
+\addtokomafont{footnotereference}{\sffamily\color{grey}}
+\addtokomafont{footnotelabel}{\sffamily}
 \setkomafont{title}{\Large\rmfamily}
 \setkomafont{section}{\normalsize\bfseries\sffamily}
 \setkomafont{subsection}{\normalsize\mdseries\rmfamily}

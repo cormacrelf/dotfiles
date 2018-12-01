@@ -89,40 +89,44 @@ if exists('g:airline_detect_iminsert')
 endif
 " }}}
 
-let g:lightline = {
-            \ 'active': {
-            \   'left': [ [ 'mode', 'paste' ],
-            \             [ 'readonly', 'filename', 'modified' ] ],
-            \   'right': [ [ 'lineinfo' ],
-            \              [ 'percent' ],
-            \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
-            \ },
-            \ 'component_function': {
-            \   'filename': 'LightlineFilename',
-            \   'fileformat': 'LightlineFileformat',
-            \   'filetype': 'LightlineFiletype',
-            \   'wordcount': 'LightlineWordCount',
-            \ } }
+let g:lightline = {}
+if g:cormacrelf.lightline
+  let g:lightline = {
+        \ 'active': {
+        \   'left': [ [ 'mode', 'paste' ],
+        \             [ 'readonly', 'filename', 'modified' ] ],
+        \   'right': [ [ 'lineinfo' ],
+        \              [ 'percent' ],
+        \              [ 'fileformat', 'fileencoding', 'filetype' ] ]
+        \ },
+        \ 'component_function': {
+        \   'filename': 'LightlineFilename',
+        \   'fileformat': 'LightlineFileformat',
+        \   'filetype': 'LightlineFiletype',
+        \   'wordcount': 'LightlineWordCount',
+        \   'cocstatus': 'coc#status',
+        \ } }
 
-func! s:fname()
-  return winwidth(0) > 70 ? expand('%') : expand('%:t')
-endfunc
-func! LightlineFilename()
-  return expand('%:t') =~# 'FZF$' ? 'fzf' :
-        \ &buftype == 'quickfix' ? 'quickfix' :
-        \ expand('%:t') !=# '' ? s:fname() : '[No Name]'
-endfunc
-func! LightlineFileformat()
-  return winwidth(0) > 90 ? &fileformat : ''
-endfunc
-func! LightlineFiletype()
-  return winwidth(0) > 90 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
-endfunc
+  func! s:fname()
+    return winwidth(0) > 70 ? expand('%') : expand('%:t')
+  endfunc
+  func! LightlineFilename()
+    return expand('%:t') =~# 'FZF$' ? 'fzf' :
+          \ &buftype == 'quickfix' ? 'quickfix' :
+          \ expand('%:t') !=# '' ? s:fname() : '[No Name]'
+  endfunc
+  func! LightlineFileformat()
+    return winwidth(0) > 90 ? &fileformat : ''
+  endfunc
+  func! LightlineFiletype()
+    return winwidth(0) > 90 ? (&filetype !=# '' ? &filetype : 'no ft') : ''
+  endfunc
 
-func! LightlineWordCount()
-  if exists("b:wc_enabled") && b:wc_enabled | return string(WordCount()) . 'w' | endif
-  return ""
-endfunc
+  func! LightlineWordCount()
+    if exists("b:wc_enabled") && b:wc_enabled | return string(WordCount()) . 'w' | endif
+    return ""
+  endfunc
+endif
 
 func! PbuildCount()
   return (split(system('pbuild -t count '.fnameescape(expand("%"))))[0])
@@ -225,7 +229,8 @@ autocmd Filetype css        setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype scss       setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype less       setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype jst        setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype xml        setlocal ts=2 sw=2 sts=2 expandtab
+let g:xml_syntax_folding=1
+autocmd Filetype xml        setlocal ts=2 sw=2 sts=2 expandtab foldmethod=syntax
 autocmd Filetype ruby,eruby setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype haskell    setlocal ts=4 sw=4 sts=4 expandtab
@@ -233,6 +238,7 @@ autocmd Filetype c          setlocal ts=8 sw=8 sts=8 expandtab
 autocmd Filetype cpp        setlocal ts=8 sw=8 sts=8 expandtab
 autocmd Filetype objc       setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype python     setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype typescript setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype markdown   setlocal ts=2 sw=2 sts=2 expandtab fo-=c
 autocmd Filetype scala      setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype go         setlocal ts=4 sw=4 sts=4 expandtab
@@ -707,6 +713,22 @@ augroup END
 " }}}
 " Plugin Configuration {{{
 
+" comfortable
+" noremap <silent> <ScrollWheelDown> :call comfortable_motion#flick(40)<CR>
+" noremap <silent> <ScrollWheelUp>   :call comfortable_motion#flick(-40)<CR>
+" :nmap <ScrollWheelUp> <nop>
+" :nmap <S-ScrollWheelUp> <nop>
+" :nmap <C-ScrollWheelUp> <nop>
+" :nmap <ScrollWheelDown> <nop>
+" :nmap <S-ScrollWheelDown> <nop>
+" :nmap <C-ScrollWheelDown> <nop>
+" :nmap <ScrollWheelLeft> <nop>
+" :nmap <S-ScrollWheelLeft> <nop>
+" :nmap <C-ScrollWheelLeft> <nop>
+" :nmap <ScrollWheelRight> <nop>
+" :nmap <S-ScrollWheelRight> <nop>
+" :nmap <C-ScrollWheelRight> <nop>
+
 let g:projectionist_heuristics = {
       \ "plugin/": { "*.vim": { "type": "vim" } }
       \ }
@@ -724,20 +746,26 @@ let g:pandoc#folding#fdc = 0
 let g:pandoc#modules#disabled = ["chdir", "folding"]
 let g:pandoc#formatting#mode='ha' " soft breaks; automatically set formatoptions
 let g:pandoc#completion#bib#mode = "citeproc"
-let g:pandoc#biblio#bibs = [$HOME."/lib/zotero-library.bib"]
-let g:pandoc#biblio#sources = "bcg"
+let g:pandoc#biblio#bibs = [$HOME."/lib/zotero-library.yaml"]
+let g:pandoc#biblio#sources = "g"
 let g:pandoc#completion#bib#use_preview = 0
-if g:cormacrelf.ncm2
-  au! User Ncm2Plugin call ncm2#register_source({
-        \ 'name' : 'pandoc-bib',
-        \ 'priority': 9,
-        \ 'subscope_enable': 1,
-        \ 'scope': ['pandoc'],
-        \ 'mark': 'bib',
-        \ 'word_pattern': '@\w+',
-        \ 'complete_pattern': ['@'],
-        \ 'on_complete': ['ncm2#on_complete#omni', 'pandoc#completion#Complete'],
-        \ })
+if has('nvim') && g:cormacrelf.ncm2
+  function! PandocNcm2()
+    call ncm2#register_source({
+          \ 'name' : 'pandoc-bib',
+          \ 'priority': 9,
+          \ 'subscope_enable': 1,
+          \ 'scope': ['pandoc'],
+          \ 'mark': 'bib',
+          \ 'word_pattern': '([^\W]|[-.~%$+])+',
+          \ 'complete_pattern': ['.*\[?@[a-z]+'],
+          \ 'auto_popup': 1,
+          \ 'complete_length': -1,
+          \ 'on_complete': ['ncm2#on_complete#omni', 'pandoc#completion#Complete'],
+          \ })
+          " \ 'on_complete': ['ncm2#on_complete#delay', 180, 'ncm2#on_complete#omni', 'pandoc#completion#Complete'],
+  endfunction
+  au! User Ncm2Plugin call PandocNcm2()
 endif
 
 " call ncm2#override_source('bufword', {'on_completed': 0})
@@ -748,6 +776,7 @@ let g:pandoc#syntax#style#underline_special = 0
 let g:pandoc#syntax#conceal#use = 0
 " https://github.com/vim-pandoc/vim-pandoc-syntax/issues/250
 let g:pandoc#syntax#codeblocks#embeds#langs = ["ruby", "python", "typescript",
+                                                  \ "json", "yaml",
                                                   \ "go", "c", "clojure",
                                                   \ "rust", "javascript", "sh" ]
 
@@ -763,7 +792,7 @@ endif
 
 " Syntastic checking
 let g:syntastic_mode_map = { 'mode': 'passive', 'active_filetypes': [],'passive_filetypes': [] }
-nnoremap <leader>e :SyntasticCheck<CR> :SyntasticToggleMode<CR>
+" nnoremap <leader>e :SyntasticCheck<CR> :SyntasticToggleMode<CR>
 
 " vim-sneak
 " vim-sneak overrides vim-surround functionality, so:
@@ -835,6 +864,7 @@ command! -range=% SoftWrap
 let g:cormacrelf.prose_hard_wrap = 1
 
 function! Prose()
+    let b:pandoc_biblio_bibs = []
     let b:wc_enabled = 1 " see airline wordcount segment
     " setlocal formatlistpat=\\C^\\s*[\\[({]\\\?\\([0-9]\\+\\\|[iIvVxXlLcCdDmM]\\+\\\|[a-zA-Z]\\)[\\]:.)}]\\s\\+\\\|^\\s*[-+o*]\\s\\+
 
@@ -852,11 +882,23 @@ function! Prose()
     " somehow it's disabled in vim-pandoc, though it works with only that
     " plugin & syntax loaded
     " syn spell toplevel
-    syn match myExCapitalWordsBQ +\<[A-Z]\+s\?\>+ contains=@NoSpell containedin=pandocBlockQuote contained
-    syn match myExCapitalWords +\<[A-Z]\+s\?\>+ contains=@NoSpell containedin=pandocUListItem,pandocListItem,pandocListItemContinuation
-    hi link myExCapitalWordsBQ pandocBlockQuote
+    syn match nospellCapitalsBQ +\<[A-Z]\+s\?\>+ contains=@NoSpell contained
+          \ containedin=pandocBlockQuote
+    syn match nospellCapitals +\<[A-Z]\+s\?\>+ contains=@NoSpell contained
+          \ containedin=pandocUListItem,pandocListItem,pandocListItemContinuation,pandocFootnoteDef,pandocAtxHeader,pandocSetexHeader
+
+    syn match nospellStrong +\<[A-Z]\+s\?\>+ contains=@NoSpell contained
+          \ containedin=pandocStrong
+    syn match nospellEmphasis +\<[A-Z]\+s\?\>+ contains=@NoSpell contained
+          \ containedin=pandocEmphasis
+    syn match nospellPCite +\<[^@\]]\+\>+ contains=@NoSpell containedin=pandocPCite contained
+    hi link nospellCapitalsBQ pandocBlockQuote
+    hi link nospellPCite pandocPCite
+    hi link nospellStrong pandocStrong
+    hi link nospellEmphasis pandocEmphasis
     setl cinwords=
 
+    setl foldmethod=manual " otherwise nvim spins at 100% when you undo? why? I don't want to know.
     setl noshowmatch
     setl nocindent
     setl smartindent
@@ -919,6 +961,8 @@ function! Prose()
     " for pandoc building using pbuild
     nnoremap <leader>bp :Dispatch!<cr>
     nnoremap <leader>bP :exec "Dispatch! ".b:dispatch." --open"<cr>
+    nnoremap <leader>bq :exec "Dispatch! ".b:dispatch." --open-only"<cr>
+    nnoremap <leader>bh :exec "Dispatch! ".b:dispatch." --open -o %.html -- -t html"<cr>
 
     " word count
     " nnoremap <leader>wc :!wordcount %<cr>
@@ -984,4 +1028,13 @@ endfunction
 
 " }}}
 
+
+function! CamelMacros()
+  " syn match nospellPCite +\<[^@\]]\+\>+ contains=@NoSpell
+  match cslCamelBadCase :macro="\C[a-z\-]*":
+  " syn match cslBadCaseDef :\vmacro name="[a-z]+-[a-z]+": containedin=xmlTag contained
+  match cslCamelBadDef :macro name="\C[a-z\-]*":
+  hi link cslCamelBadCase Error
+  hi link cslCamelBadDef Error
+endfunction
 

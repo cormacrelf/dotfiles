@@ -1,7 +1,5 @@
 $if(titleblock)$
-% $title$
-% $for(author)$$author$$sep$; $endfor$
-% $date$
+$titleblock$
 
 $endif$
 $for(header-includes)$
@@ -13,7 +11,7 @@ $include-before$
 
 $endfor$
 $if(toc)$
-$toc$
+$table-of-contents$
 
 $endif$
 $body$

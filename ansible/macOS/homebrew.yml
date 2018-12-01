@@ -15,6 +15,7 @@ homebrew_installed_packages:
   - ripgrep
   - fd
   - jq
+  - python-yq
   - coreutils
   - moreutils
   - binutils

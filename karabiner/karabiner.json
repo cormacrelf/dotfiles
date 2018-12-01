@@ -19,7 +19,7 @@
                         "manipulators": [
                             {
                                 "from": {
-                                    "key_code": "caps_lock",
+                                    "key_code": "caps_lock DISABLED",
                                     "modifiers": {
                                         "optional": [
                                             "any"
@@ -367,6 +367,14 @@
                     },
                     "to": {
                         "key_code": "fn"
+                    }
+                },
+                {
+                    "from": {
+                        "key_code": "caps_lock"
+                    },
+                    "to": {
+                        "key_code": "escape"
                     }
                 }
             ],

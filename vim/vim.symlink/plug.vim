@@ -6,6 +6,7 @@ Plug 'cohama/lexima.vim'
 Plug 'mattn/emmet-vim'
 Plug 'dkarter/bullets.vim'
 Plug 'reedes/vim-wordy'
+
 if version < 800
   Plug 'ConradIrwin/vim-bracketed-paste' " vim8/neovim have this now
 endif
@@ -24,6 +25,13 @@ if g:cormacrelf.snippets
   " Plug 'honza/vim-snippets'
 endif
 
+if has('nvim')
+  if g:cormacrelf.coc
+    Plug 'Shougo/neco-vim'
+    Plug 'neoclide/coc-neco'
+    Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+  endif
+endif
 if has('nvim')
   if g:cormacrelf.LanguageClient
     Plug 'autozimu/LanguageClient-neovim', {
@@ -62,9 +70,9 @@ Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
 Plug 'elixir-lang/vim-elixir'
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
-Plug 'maxmellon/vim-jsx-pretty', { 'for': ['javascript', 'javascript.jsx'] }
 " Plug 'othree/yajs.vim'
 Plug 'leafgarland/typescript-vim', { 'for': ['typescript'] }
+Plug 'maxmellon/vim-jsx-pretty', { 'for': ['javascript.jsx', 'typescript.tsx'] }
 " Plug 'HerringtonDarkholme/yats.vim', { 'for': ['typescript'] }
 Plug 'Quramy/vim-js-pretty-template', {'for': ['javascript', 'typescript']}
 Plug 'hashivim/vim-terraform'
@@ -106,8 +114,10 @@ Plug 'terryma/vim-expand-region'        " + or _
 " Plug 'tpope/vim-vinegar'
 Plug 'tpope/vim-projectionist'
 Plug 'cormacrelf/fuzzy-projectionist.vim'
-" Plug 'vim-airline/vim-airline'
-Plug 'itchyny/lightline.vim'
+if g:cormacrelf.lightline
+  " Plug 'vim-airline/vim-airline'
+  Plug 'itchyny/lightline.vim'
+endif
 Plug 'mhinz/vim-grepper'
 Plug 'tpope/vim-fugitive'
 Plug 'airblade/vim-gitgutter'
@@ -141,6 +151,7 @@ Plug 'justinmk/vim-sneak' " s<char><char>
 " Plug 'tpope/vim-commentary'
 " Plug 'Lokaltog/vim-easymotion'
 " Plug 'tpope/vim-ragtag'
+Plug 'yuttie/comfortable-motion.vim'
 
 " Colours and Appearance
 Plug 'xolox/vim-misc' | Plug 'xolox/vim-colorscheme-switcher'
