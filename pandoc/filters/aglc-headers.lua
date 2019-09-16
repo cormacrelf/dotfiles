@@ -36,6 +36,14 @@ function to_upper(el)
   })
 end
 
+function to_smallcaps(el)
+  return pandoc.walk_block(el, {
+    Str = function(el)
+      return pandoc.SmallCaps(el.text)
+    end
+  })
+end
+
 function to_roman(num)
   local III = pandoc.utils.to_roman_numeral(num)
   return text.lower(III)
@@ -59,6 +67,15 @@ local levels = { 0, 0, 0, 0, 0 }
 --   end
 -- end
 
+function big_space() 
+  -- latex fonts don't do character fallback well.
+  if FORMAT == "latex" then
+    return pandoc.RawInline("latex", "\\enspace")
+  else
+    return pandoc.Str(" ") -- en space
+  end
+end
+
 function Header(el)
   if el.level == 1 then
     levels[1] = levels[1] + 1
@@ -66,9 +83,12 @@ function Header(el)
     levels[3] = 0
     levels[4] = 0
     levels[5] = 0
-    table.insert(el.content, 1, pandoc.Str(pandoc.utils.to_roman_numeral(levels[1])))
-    table.insert(el.content, 2, pandoc.Space())
-    return to_upper(el)
+    el = to_smallcaps(el)
+    if el.identifier ~= 'refs' then
+      table.insert(el.content, 1, pandoc.Str(pandoc.utils.to_roman_numeral(levels[1])))
+    end
+    table.insert(el.content, 2, big_space())
+    return el
   end
   if el.level == 2 then
     levels[2] = levels[2] + 1
@@ -77,7 +97,7 @@ function Header(el)
     levels[5] = 0
     el = to_emph(el)
     table.insert(el.content, 1, pandoc.Str(to_ALPHA(levels[2])))
-    table.insert(el.content, 2, pandoc.Space())
+    table.insert(el.content, 2, big_space())
     return el
   end
   if el.level == 3 then
@@ -86,20 +106,20 @@ function Header(el)
     levels[5] = 0
     el = to_emph(el)
     table.insert(el.content, 1, pandoc.Str(levels[3]))
-    table.insert(el.content, 2, pandoc.Space())
+    table.insert(el.content, 2, big_space())
     return el
   end
   if el.level == 4 then
     levels[4] = levels[4] + 1
     levels[5] = 0
     table.insert(el.content, 1, pandoc.Str('('..to_alpha(levels[4])..')'))
-    table.insert(el.content, 2, pandoc.Space())
+    table.insert(el.content, 2, big_space())
     return to_emph(el)
   end
   if el.level == 5 then
     levels[5] = levels[5] + 1
     table.insert(el.content, 1, pandoc.Str('('..to_roman(levels[5])..')'))
-    table.insert(el.content, 2, pandoc.Space())
+    table.insert(el.content, 2, big_space())
     return to_emph(el)
   end
 end
