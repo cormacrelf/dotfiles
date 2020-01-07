@@ -29,7 +29,7 @@ if has('nvim')
   if g:cormacrelf.coc
     Plug 'Shougo/neco-vim'
     Plug 'neoclide/coc-neco'
-    Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+    Plug 'neoclide/coc.nvim', {'branch': 'release'}
   endif
 endif
 if has('nvim')
@@ -120,6 +120,7 @@ if g:cormacrelf.lightline
 endif
 Plug 'mhinz/vim-grepper'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb' " for Gbrowse
 Plug 'airblade/vim-gitgutter'
 " Plug 'mhinz/vim-signify' " replace gitgutter
 " Plug 'mhinz/vim-startify'

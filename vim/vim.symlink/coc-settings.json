@@ -6,7 +6,17 @@
   "coc.source.omni.filetypes": [
     "pandoc"
   ],
-   "languageserver": {
+  "languageserver": {
+    "rust": {
+      "command": "ra_lsp_server",
+      "args": [],
+      "filetypes": ["rust"],
+      "cwd": "./",
+      "initializationOptions": {
+      },
+      "settings": {
+      }
+    },
     "haskell": {
       "command": "hie-wrapper",
       "args": ["--lsp"],

@@ -35,6 +35,11 @@ if has("win32") || has("win64") || has("win16")
     " set shellcmdflag=-command
 endif
 
+if &shell =~# 'nu$'
+    set shell=/bin/zsh
+    let $SHELL = &shell
+endif
+
 command! PlugInstallCmd set shell=bash shellcmdflag=-c | PlugInstall
 
 " use a POSIX compatible shell if you're on fish
@@ -204,7 +209,7 @@ endif
 
 set breakindent
 set list
-set listchars=tab:»\ ,extends:›,precedes:‹,nbsp:·,trail:·
+set listchars=extends:›,precedes:‹,nbsp:·,trail:·
 set autoindent                                     " automatic indent new lines
 set cindent                                        " be smart about it: actually, use filetype
 " don't muck up indenting with #

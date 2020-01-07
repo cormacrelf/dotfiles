@@ -12,3 +12,5 @@ _pathadd $HOME/Library/Python/2.7/bin
 _pathadd $HOME/go/bin
 _pathadd $HOME/.local/bin # haskell stack build binaries
 
+
+export PATH="$HOME/.cargo/bin:$PATH"

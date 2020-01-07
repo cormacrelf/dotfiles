@@ -5,7 +5,6 @@ symlinks:
   - { src: alacritty, dest: .config/alacritty }
   - { src: vim/vim.symlink, dest: .vim }
   - { src: vim/vim.symlink/vimrc.vim, dest: .vimrc }
-  - { src: zsh/zshrc.symlink, dest: .zshrc }
   - { src: git/gitignore.symlink, dest: .gitignore }
   - { src: git/gitconfig.symlink, dest: .gitconfig }
   - { src: tmux/tmux.conf, dest: .tmux.conf }
