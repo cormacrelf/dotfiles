@@ -1,18 +1,74 @@
 {
   "coc.source.file.enable": false,
   "coc.source.buffer.enable": false,
-  "coc.source.neco.enable": false,
-  "coc.preferences.triggerAfterInsertEnter": true,
-  "coc.source.omni.filetypes": [
-    "pandoc"
-  ],
-   "languageserver": {
+  "coc.source.around.enable": false,
+  "diagnostic.virtualText": true,
+  "suggest.snippetIndicator": " ►",
+  "suggest.noselect": false,
+  "snippets.snipmate.enable": false,
+  "suggest.completionItemKindLabels": {
+    "snippet": "snip"
+  },
+  "python.linting.pylintPath": "/Users/cormac/Library/Python/3.7/bin/pylint",
+  "snippets.ultisnips.enable": false,
+  "languageserver": {
+    "pandoc_citekeys": {
+      "command": "/Users/cormac/git/pandoc-lsp/target/debug/pandoc-lsp",
+      "args": [],
+      "filetypes": ["pandoc"],
+      "cwd": "./",
+      "initializationOptions": {
+        "coc.source.omni.filetypes": false
+      },
+      "settings": {
+        "path": "/Users/cormac/Dropbox/anu/comparative/project/bib.json"
+      }
+    },
     "haskell": {
       "command": "hie-wrapper",
       "args": ["--lsp"],
       "filetypes": ["haskell"],
       "cwd": "./",
       "initializationOptions": {
+      },
+      "settings": {
+      }
+    },
+    "csl": {
+      "command": "/Users/cormac/git/citeproc-rs/target/debug/citeproc-lsp",
+      "args": [],
+      "filetypes": ["xml"],
+      "trace.server": "verbose",
+      "cwd": "./",
+      "initializationOptions": {
+      },
+      "settings": {
+      }
+    },
+    "ccls": {
+      "command": "ccls",
+      "filetypes": ["c", "cpp"],
+      "rootPatterns": [".ccls-root", "compile_commands.json", ".git"],
+      "initializationOptions": {
+        "cache": {
+          "directory": ".ccls-cache"
+        },
+        "client": {
+          "snippetSupport": true
+        },
+        "_comment": "see https://github.com/MaskRay/ccls/issues/191#issuecomment-577129941",
+        "clang": {
+          "extraArgs": [
+            "-isystem/usr/local/include",
+            "-isystem/Library/Developer/CommandLineTools/usr/lib/clang/10.0.1/include",
+            "-isystem/Library/Developer/CommandLineTools/usr/include",
+            "-isystem/Library/Developer/CommandLineTools/usr/include/c++/v1",
+            "-isystem/usr/include",
+            "-isysroot/System/Library/Frameworks",
+            "-isysroot/Library/Frameworks"
+          ],
+          "resourceDir": "/Library/Developer/CommandLineTools/usr/lib/clang/10.0.1"
+        }
       },
       "settings": {
       }

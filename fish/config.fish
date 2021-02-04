@@ -58,8 +58,12 @@ end
 _pathadd $HOME/bin
 _pathadd $HOME/.dotfiles/bin
 _pathadd $HOME/Library/Python/2.7/bin
+_pathadd $HOME/Library/Python/3.7/bin
 _pathadd $HOME/go/bin
 _pathadd $HOME/.local/bin
+_pathadd $HOME/esp/xtensa-lx106-elf/bin
+
+set -gx IDF_PATH "$HOME/esp/ESP8266_RTOS_SDK"
 # last specified has priority
 
 # abbreviations / aliases
@@ -69,6 +73,7 @@ set -g CONFIG "$HOME/.config"
 set -g FISHCONFIG "$HOME/.config/fish/config.fish"
 abbr -a -- - 'cd -'
 alias ef="$EDITOR $CONFIG/fish/config.fish"
+alias tf="terraform"
 
 # fzf native
 set -x FZF_DEFAULT_COMMAND 'fd --type f'
@@ -85,7 +90,6 @@ set -U FZF_OPEN_COMMAND "fd --type f"
 
 abbr :q 'exit'
 abbr md 'mkdir -p'
-source ~/.asdf/asdf.fish
 
 function bsr
   brew services restart $argv
@@ -99,3 +103,11 @@ function bsstop
   brew services stop $argv
 end
 
+
+# The next line updates PATH for the Google Cloud SDK.
+if [ -f '/Users/cormac/google-cloud-sdk/path.fish.inc' ]; . '/Users/cormac/google-cloud-sdk/path.fish.inc'; end
+
+# opam configuration
+source /Users/cormac/.opam/opam-init/init.fish > /dev/null 2> /dev/null; or true
+
+source /usr/local/Cellar/asdf/0.8.0/asdf.fish

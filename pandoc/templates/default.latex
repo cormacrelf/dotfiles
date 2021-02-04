@@ -169,8 +169,38 @@ $endif$
 
 \usepackage{xcolor}
 
-% yale law journal inspired
-% requires documentclass=scrartcl
+% % yale law journal inspired
+% % requires documentclass=scrartcl
+% \usepackage{setspace}
+% \onehalfspacing
+% \definecolor{grey}{HTML}{454545}
+% \definecolor{grey}{HTML}{000000}
+% \addtokomafont{footnote}{\sffamily}
+% \addtokomafont{footnotereference}{\sffamily\color{grey}}
+% \addtokomafont{footnotelabel}{\sffamily}
+% \setkomafont{title}{\Large\rmfamily}
+% \setkomafont{section}{\normalsize\bfseries\sffamily}
+% \setkomafont{subsection}{\normalsize\mdseries\rmfamily}
+% \setkomafont{subsubsection}{\normalsize\mdseries\rmfamily}
+% \setkomafont{paragraph}{\normalsize\mdseries\rmfamily}
+% \setkomafont{subparagraph}{\normalsize\mdseries\rmfamily}
+
+% % aglc4
+% % requires documentclass=scrartcl
+% \usepackage{setspace}
+% \onehalfspacing
+% \definecolor{grey}{HTML}{454545}
+% \definecolor{grey}{HTML}{000000}
+% \addtokomafont{footnote}{\sffamily\footnotesize}
+% \addtokomafont{footnotereference}{\sffamily\color{grey}}
+% \addtokomafont{footnotelabel}{\sffamily}
+% \setkomafont{title}{\Large\rmfamily}
+% \setkomafont{section}{\large\mdseries\sffamily\scshape\centering}
+% \setkomafont{subsection}{\normalsize\mdseries\rmfamily\centering}
+% \setkomafont{subsubsection}{\normalsize\mdseries\rmfamily}
+% \setkomafont{paragraph}{\normalsize\mdseries\rmfamily}
+% \setkomafont{subparagraph}{\normalsize\mdseries\rmfamily}
+
 \usepackage{setspace}
 \onehalfspacing
 \definecolor{grey}{HTML}{454545}
@@ -178,12 +208,12 @@ $endif$
 \addtokomafont{footnote}{\sffamily}
 \addtokomafont{footnotereference}{\sffamily\color{grey}}
 \addtokomafont{footnotelabel}{\sffamily}
-\setkomafont{title}{\Large\rmfamily}
-\setkomafont{section}{\normalsize\bfseries\sffamily}
-\setkomafont{subsection}{\normalsize\mdseries\rmfamily}
-\setkomafont{subsubsection}{\normalsize\mdseries\rmfamily}
-\setkomafont{paragraph}{\normalsize\mdseries\rmfamily}
-\setkomafont{subparagraph}{\normalsize\mdseries\rmfamily}
+\setkomafont{title}{\LARGE\rmfamily}
+\setkomafont{section}{\Large\bfseries\sffamily}
+\setkomafont{subsection}{\large\bfseries\sffamily}
+\setkomafont{subsubsection}{\normalsize\bfseries\sffamily}
+\setkomafont{paragraph}{\normalsize\mdseries\sffamily}
+\setkomafont{subparagraph}{\normalsize\mdseries\sffamily}
 
 % hyperref goes last
 

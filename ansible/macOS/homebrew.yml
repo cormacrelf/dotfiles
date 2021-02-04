@@ -47,6 +47,9 @@ homebrew_fonts:
   - font-eb-garamond
   - font-ibm-plex
   - font-open-sans
+  - font-cooper-hewitt
+  - font-merriweather
+  - font-charter
 
 homebrew_cask_apps:
   - docker

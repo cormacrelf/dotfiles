@@ -6,7 +6,7 @@
 	path = ~/.gitconfig.local
 [core]
 	editor = nvim
-	excludesfile = ~/.gitignore_global
+	excludesfile = /Users/cormac/.gitignore_global
 	whitespace=fix,-indent-with-non-tab,trailing-space,cr-at-eol
 	untrackedCache = true
 	# pager = diff-so-fancy | less --tabs=4 -RFX
@@ -16,11 +16,16 @@
 	branch = yellow reverse
 [difftool "sourcetree"]
 	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
 [mergetool "sourcetree"]
-	cmd = /Applications/SourceTree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
 	trustExitCode = true
 [alias]
-	ign = ls-files -o -i --exclude-standard
+  # list all .gitignored files (e.g. pipe | xargs rm -f)
+	ls-ignored = ls-files -o -i --exclude-standard
+  # unrelated to ls-ignored
+	ignore-changes = update-index --assume-unchanged
+	unignore-changes = update-index --no-assume-unchanged
 	bi = bisect
 	co = checkout
 	c = commit
@@ -76,6 +81,7 @@
 [diff]
 	tool = ksdiff
 	compactionHeuristic = true
+	algorithm = histogram
 [difftool]
 	prompt = false
 [difftool "ksdiff"]
@@ -101,8 +107,13 @@
 	smudge = git hawser smudge %f
 	required = true
 [filter "lfs"]
-	clean = git-lfs clean %f
-	smudge = git-lfs smudge %f
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
 	required = true
+	process = git-lfs filter-process
 [credential]
 	helper = osxkeychain
+[commit]
+	template = /Users/cormac/.stCommitMsg
+[pull]
+	rebase = true

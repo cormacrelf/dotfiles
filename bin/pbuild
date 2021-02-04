@@ -54,27 +54,26 @@ set -g AFTER_FILTERS
 set PREFIX "$HOME/.pandoc"
 
 # Location of your working bibliography file
-set BIB "--filter=pandoc-citeproc --metadata bibliography=$HOME/lib/zotero-library.yaml"
+set BIB "--filter=pandoc-citeproc --metadata bibliography=$HOME/lib/zotero-library.json"
 
 # CSL stylesheet (located in the csl folder of the PREFIX directory).
 set CSL ""
 set AGLC "$HOME/Zotero/styles/australian-guide-to-legal-citation.csl"
+set AGLC "$HOME/git/aglc4/src/aglc4.csl"
 test -s "$AGLC"; and set CSL "--csl $AGLC"
 set SUPPRESS_BIB "--metadata suppress-bibliography=true"
 
 # Latex engine
-set ENGINE "xelatex"
+set ENGINE "tectonic"
 
 # Latex Template
 set TEMPLATE "default.latex"
-set MODERNTEMPLATE "$PREFIX/templates/xelatex-modern.template"
-set LONGTEMPLATE "$PREFIX/kjhealy/xelatex.template"
 
 # For word docs
 set REFERENCE_DOC "--reference-doc $DOTFILES/pandoc/yale-law-journal.docx" # default location is $PREFIX/reference.docx, override with pbuild --reference-docx <loc>
 
 # Markdown Extensions
-set EXTENSIONS "+smart+citations+simple_tables+pipe_tables+table_captions+yaml_metadata_block+fenced_code_blocks+fancy_lists+startnum+example_lists+line_blocks+footnotes+inline_notes+inline_code_attributes+superscript+subscript+tex_math_dollars+raw_tex+fenced_divs" 
+set EXTENSIONS "+smart+citations+simple_tables+multiline_tables+pipe_tables+table_captions+yaml_metadata_block+fenced_code_blocks+fancy_lists+startnum+example_lists+line_blocks+footnotes+inline_notes+inline_code_attributes+superscript+subscript+tex_math_dollars+raw_tex+fenced_divs" 
 # Short doc arguments. Override with env variables.
 # (note that `: ${var=value}` sets var iff not already set.)
 
@@ -106,6 +105,8 @@ set flags $flags 't/type=' 'h/help' 'q/open-only' 'O/open' 'o/output=' 'p-print-
 set flags $flags 'c/csl=' 'b/bib=' 'v/variable=+'
 set flags $flags 'r/reference-doc=' 'a-append-bibliography'
 set flags $flags 'f-no-filters'
+set flags $flags 'e/engine='
+set flags $flags 'y-count-footnotes'
 set -l argv
 argparse "--name=$pbuild" "--min-args=1" $flags -- $pbuild_argv
 if test $status -ne 0
@@ -117,6 +118,15 @@ set -g REST $argv[1..-1]
 
 # flags handling {{{
 
+if set -q _flag_engine
+  if test "$_flag_engine" != "none"
+    set BIB "--filter $_flag_engine"
+  else 
+    set BIB ""
+  end
+  set SUPPRESS_BIB ""
+  set CSL ""
+end
 if set -q _flag_type
   set -g SUBCOMMAND $_flag_type
 end
@@ -179,7 +189,7 @@ function get_var
 end
 
 add_var geometry 'a4paper,top=3cm,bottom=3cm,left=3cm,right=3cm'
-add_var papersize 'a4paper'
+add_var papersize 'a4'
 # add_var mainfont 'EB Garamond'
 add_var mainfont 'Baskerville'
 # add_var sansfont 'Helvetica'
@@ -248,6 +258,50 @@ end
 
 # }}}
 
+
+# CONFIGURATION -- i.e. cli params in yml {{{
+
+function read_config_bool
+  set -l from_yml (yq ".$argv[1]" pbuild.yml)
+  if test "$from_yml" != "null"
+    echo $from_yml
+  end
+end
+
+function read_config_string
+  set -l from_yml (yq -r ".$argv[1]" pbuild.yml)
+  if test "$from_yml" != "null"
+    echo $from_yml
+  end
+end
+
+if test -s pbuild.yml
+  set -l append_bib (read_config_bool append_bibliography)
+  if test "$append_bib" = "true"
+    set SUPPRESS_BIB "--metadata suppress-bibliography=false"
+  end
+  if test "$append_bib" = "false"
+    set SUPPRESS_BIB "--metadata suppress-bibliography=true"
+  end
+
+  set -l bibliography (read_config_string bibliography)
+  if test -n "$bibliography"
+    set BIB "--filter=pandoc-citeproc --metadata bibliography=$bibliography"
+  end
+
+  set -l reference_doc (read_config_string reference_doc)
+  if test -n "$reference_doc"
+    set REFERENCE_DOC "--reference-doc $reference_doc"
+  end
+
+  set -l count_footnotes (read_config_bool count_footnotes)
+  if test "$count_footnotes" = "true"
+    set -g _flag_count_footnotes "something"
+  end
+end
+
+# }}}
+
 # }}}
 
 # subcommands {{{
@@ -267,7 +321,7 @@ end
 
 set -g INPUT
 set -g OUTPUT
-set -g PANDOC_COMMON "pandoc -s $BEFORE_FILTERS $BIB $AFTER_FILTERS $CSL $SUPPRESS_BIB -r markdown$EXTENSIONS"
+set -g PANDOC_COMMON "pandoc -s $BEFORE_FILTERS $BIB $AFTER_FILTERS $CSL $SUPPRESS_BIB -r markdown$EXTENSIONS --strip-comments"
 
 function pb_common
   set -l cmd "$PANDOC_COMMON $argv $INPUT $PANDOC_ARGV"
@@ -292,6 +346,9 @@ end
 
 function sub_count
   set -l WC "--lua-filter=$DOTFILES/pandoc/filters/wordcount.lua"
+  if set -q _flag_count_footnotes
+    set WC "--lua-filter=$DOTFILES/pandoc/filters/wordcount_all.lua"
+  end
   set -l cmd "$PANDOC_COMMON $WC $INPUT $PANDOC_ARGV"
   echo $cmd | bash 2>/dev/null
   return $status
@@ -300,6 +357,12 @@ end
 function sub_short
   set -g OUTPUT (change_ext "$INPUT" pdf)
   pb_common (make_shortargs) "-o $OUTPUT"
+  return $status
+end
+
+function sub_html
+  set -g OUTPUT (change_ext "$INPUT" html)
+  pb_common "--metadata title=\"Preview for $INPUT\" -o $OUTPUT"
   return $status
 end
 

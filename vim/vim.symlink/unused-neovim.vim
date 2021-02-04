@@ -10,7 +10,8 @@ if has('win32') || has ('win64')
 else
   let $VIM_HOME = $HOME."/.config/nvim"
 endif
-let $VIM_INIT = $VIM_HOME.'/init.vim'
+let $NEOVIM_LUA_INIT = $VIM_HOME.'/init.lua'
+let $NEOVIM_VIMSCRIPT_INIT = $VIM_HOME.'/legacy-init.vim'
 let $VIM_VIMRC = $VIM_HOME.'/vimrc.vim'
 let $VIM_PLUG = $VIM_HOME.'/plug.vim'
 let $VIM_G_INIT = $VIM_HOME.'/ginit.vim'
@@ -19,53 +20,27 @@ if !exists("$VIM_CONFIG")
 endif
 
 nnoremap <leader>Ve  :e $VIM_VIMRC<cr>
-nnoremap <leader>Vn  :e $VIM_INIT<cr>
+nnoremap <leader>Vn  :e $NEOVIM_VIMSCRIPT_INIT<cr>
+nnoremap <leader>Vl  :e $NEOVIM_LUA_INIT<cr>
 nnoremap <leader>Vp  :e $VIM_PLUG<cr>
 nnoremap <leader>Vg  :e $VIM_G_INIT<cr>
 " }}}
 
 " Source the ~/.vimrc
 source $VIM_VIMRC
-runtime! python_setup.vim
-" after because vimrc also maps this
-nnoremap <leader>Vs  :so $VIM_INIT<cr>
 
 " }}}
 " colorscheme, appearance {{{
-
-let g:github_colors_soft = 1
-let g:github_colors_block_diffmark = 1
-let g:airline_theme = "github"
-let g:lightline.colorscheme = "github"
-colorscheme github
-unmap <f5>
-nnoremap <f5> :call github_colors#toggle_soft()<cr>
-
-set titlestring=nvim:\ %f\ %a%r%m
 
 if has('guicursor')
     set guicursor
 endif
 
 " }}}
-" Embedded terminal {{{
-
-" Handy shortcuts for switching away from the terminal window
-tnoremap <Esc> <C-\><C-n>
-tnoremap <A-h> <C-\><C-n><C-w>h
-tnoremap <A-j> <C-\><C-n><C-w>j
-tnoremap <A-k> <C-\><C-n><C-w>k
-tnoremap <A-l> <C-\><C-n><C-w>l
-" nnoremap <A-h> <C-w>h
-" nnoremap <A-j> <C-w>j
-" nnoremap <A-k> <C-w>k
-" nnoremap <A-l> <C-w>l
-
-" }}}
 " Typescript {{{
 
 function! Typescript()
-  JsPreTmpl html
+  " JsPreTmpl html
   syn clear foldBraces
   setl indentkeys+=0.
   setl foldmethod=marker foldmarker=#region,#endregion
@@ -183,69 +158,13 @@ endif
 " }}}
 endif
 " }}}
-" ncm2 {{{
-if g:cormacrelf.ncm2
-  " --- required ---
-
-  " enable ncm2 for all buffer
-  autocmd BufEnter * call ncm2#enable_for_buffer()
-
-  " note that must keep noinsert in completeopt, the others is optional
-  set completeopt=noinsert,menuone,noselect
-
-  " --- optional ---
-
-  " auto trigger
-  au TextChangedI * call ncm2#auto_trigger()
-
-  " CTRL-C doesn't trigger the InsertLeave autocmd . map to <ESC> instead.
-  inoremap <c-c> <ESC>
-
-  imap <c-n> <Plug>(ncm2_manual_trigger)
-
-  " When the <Enter> key is pressed while the popup menu is visible, it only
-  " hides the menu. Use this mapping to close the menu and also start a new
-  " line.
-  " inoremap <expr> <CR> (pumvisible() ? "\<c-y>\<cr>" : "\<CR>")
-
-  " Use <TAB> to select the popup menu:
-  inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-n>" : "\<tab>"
-  inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-  " --- using ultisnips ---
-
-  if g:cormacrelf.snippets
-    " Press enter key to trigger snippet expansion
-    " The parameters are the same as `:help feedkeys()`
-    inoremap <silent> <expr> <CR> ncm2_ultisnips#expand_or("\<CR>", 'n')
-    inoremap <silent> <expr> <Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-    inoremap <silent> <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
-
-    " c-j c-k for moving in snippet
-    let g:UltiSnipsExpandTrigger = "<Plug>(ultisnips_expand)"
-    let g:UltiSnipsJumpForwardTrigger = "<c-j>"
-    let g:UltiSnipsJumpBackwardTrigger = "<c-k>"
-    let g:UltiSnipsRemoveSelectModeMappings = 0
-  endif
-
-endif
-
-" https://github.com/SirVer/ultisnips/issues/593
-if g:cormacrelf.snippets
-  augroup ultisnips_no_auto_expansion
-    au!
-    au VimEnter * au! UltiSnips_AutoTrigger
-  augroup END
-endif
-
-" }}}
 " {{{ Terraform
 
 function! Terraform()
     setlocal commentstring=#%s
     " we want nmap so it can use gl
     nmap <leader>= mgvi{gl=`g
-    nnoremap gK T"f_l"tyt":!start https://www.terraform.io/docs/providers/aws/r/<C-r>t.html<cr>
+    nnoremap gK T"f_l"tyt":!open https://www.terraform.io/docs/providers/aws/r/<C-r>t.html<cr>
     command! Vars above split %:h/variables.tf
     command! Out below split %:h/outputs.tf
     command! Main below split %:h/main.tf
@@ -306,15 +225,18 @@ autocmd! User GoyoLeave nested call <SID>goyo_leave()
 " }}}
 " Coq {{{
 
+hi default CheckedByCoq ctermbg=10 guibg='#90ee90'
+hi default SentToCoq ctermbg=12 guibg='#e5e8fa'
+
 function! Coq()
     command! Coq call CoqLaunch()
     call coquille#FNMapping()
     if &background == 'dark'
-        hi CheckedByCoq ctermbg=10 guibg='#2F4C40'
-        hi SentToCoq ctermbg=12 guibg='#53B087'
+        " hi CheckedByCoq ctermbg=10 guibg='#2F4C40'
+        " hi SentToCoq ctermbg=12 guibg='#53B087'
     else
-        hi CheckedByCoq ctermbg=10 guibg='#90ee90'
-        hi SentToCoq ctermbg=12 guibg=LimeGreen
+        " hi CheckedByCoq ctermbg=10 guibg='#90ee90'
+        " hi SentToCoq ctermbg=12 guibg='#e5e8fa'
     endif
 endfunction
 augroup COQ
@@ -324,7 +246,7 @@ augroup END
 
 " }}}
 
-" CoC {{{
+if g:cormacrelf.coc " CoC {{{
 
 " Use K for show documentation in preview window
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -343,23 +265,93 @@ autocmd! CursorHold * silent call CocActionAsync('highlight')
 " Remap keys for gotos
 nmap <silent> gd <Plug>(coc-definition)
 nmap <silent> gy <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
+imap <silent><expr> <C-n> coc#refresh()
 
 " Remap for rename current word
 nmap <leader>rn <Plug>(coc-rename)
+
+" Remap for rename current word
+nmap <leader>rf <Plug>(coc-refactor)
 
 " Remap for format selected region
 vmap <leader>f  <Plug>(coc-format-selected)
 nmap <leader>f  <Plug>(coc-format-selected)
 
-nmap ]d <Plug>(coc-diagnostic-next)
-nmap [d <Plug>(coc-diagnostic-prev)
+nmap <silent> ]d <Plug>(coc-diagnostic-next)
+nmap <silent> [d <Plug>(coc-diagnostic-prev)
 
 vmap <leader>i  <Plug>(coc-codeaction-selected)
 nmap <leader>i  <Plug>(coc-codeaction-selected)
 nmap <leader>ii  <Plug>(coc-codeaction)
 
+nmap <leader>.  <Plug>(coc-fix-current)
+
+" inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
+let g:coc_snippet_next = '\<c-l>'
+let g:coc_snippet_prev = '\<c-k>'
+
+" Use <C-l> to trigger snippet expand.
+" imap <C-l> <Plug>(coc-snippets-expand)
+" Use <C-j> to select text for visual text of snippet.
+" vmap <C-j> <Plug>(coc-snippets-select)
+" Use <C-j> to jump to forward placeholder, which is default
+" let g:coc_snippet_next = '<c-j>'
+" Use <C-k> to jump to backward placeholder, which is default
+" let g:coc_snippet_prev = '<c-k>'
+
+" Use tab for trigger completion with characters ahead and navigate.
+" Use command ':verbose imap <tab>' to make sure tab is not mapped by other plugin.
+" function! s:check_back_space() abort
+"   let col = col('.') - 1
+"   return !col || getline('.')[col - 1]  =~# '\s'
+" endfunction
+" inoremap <silent><expr> <TAB>
+"       \ pumvisible() ? "\<C-n>" :
+"       \ <SID>check_back_space() ? "\<TAB>" :
+"       \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+""""""""""""
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? coc#rpc#request('doKeymap', ['snippets-expand-jump','']) :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+
+function! s:expand_jump() abort
+  return "\<Plug>(coc-snippets-expand-jump)"
+endfunction
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+""""""""""""
+
+""""""""""""
+" Use <C-l> for trigger snippet expand.
+imap <C-l> <Plug>(coc-snippets-expand)
+
+" Use <C-j> for select text for visual placeholder of snippet.
+vmap <C-j> <Plug>(coc-snippets-select)
+
+" Use <C-j> for jump to next placeholder, it's default of coc.nvim
+let g:coc_snippet_next = '<c-j>'
+
+" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
+let g:coc_snippet_prev = '<c-k>'
+
+" Use <C-j> for both expand and jump (make expand higher priority.)
+imap <C-j> <Plug>(coc-snippets-expand-jump)
+""""""""""""
+
+" Use <cr> for confirm completion, `<C-g>u` means break undo chain at current position.
+" Coc only does snippet and additional edit on confirm.
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" vista.vim
+let g:vista_default_executive = 'coc'
 
 " coc-jest
 
@@ -372,5 +364,14 @@ nnoremap <leader>te :call CocAction('runCommand', 'jest.singleTest')<CR>
 " Init jest in current cwd, require global jest command exists
 command! JestInit :call CocAction('runCommand', 'jest.init')
 
+" lexima.vim
+
+" call lexima#add_rule({'char': '<', 'input_after': '>', 'filetype': 'xml'})
+" call lexima#add_rule({'char': '>', 'at': '\%#\>', 'leave': 1, 'filetype': 'xml'})
+" call lexima#add_rule({'char': '<BS>', 'at': '\<\%#\$', 'delete': 1, 'filetype': 'xml'})
+
 " }}}
+elseif g:cormacrelf.nvim_lsp " {{{
+
+endif " }}}
 

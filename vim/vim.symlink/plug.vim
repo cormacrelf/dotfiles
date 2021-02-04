@@ -3,9 +3,47 @@
 " Plug 'rstacruz/vim-closer'
 " Plug 'tpope/vim-endwise'
 Plug 'cohama/lexima.vim'
-Plug 'mattn/emmet-vim'
-Plug 'dkarter/bullets.vim'
 Plug 'reedes/vim-wordy'
+Plug 'neomake/neomake'
+Plug 'Chiel92/vim-autoformat'
+Plug 'rhysd/git-messenger.vim'
+Plug 'rbong/vim-flog'
+Plug 'liuchengxu/vista.vim'
+Plug 'norcalli/nvim_utils'
+" straight up doesn't work at the moment, but could be good
+" Plug 'weilbith/nvim-lsp-smag'
+
+" " barbar
+" Plug 'kyazdani42/nvim-web-devicons'
+" Plug 'romgrk/lib.kom'
+" Plug 'romgrk/barbar.nvim'
+
+" Bullets.vim {{{
+
+" i think we have to set this before loading the plugin, because these are
+" read as soon as the file is loaded.
+"
+" don't clash with git-messenger, and any other plugins that don't have a
+" filetype when they first open a buffer
+let g:bullets_enable_in_empty_buffers = 0
+let g:bullets_enabled_file_types = [
+    \ 'markdown',
+    \ 'pandoc',
+    \ 'text',
+    \ 'gitcommit'
+    \]
+
+Plug 'dkarter/bullets.vim'
+
+" }}}
+
+if has('nvim')
+  Plug 'Shougo/defx.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+  Plug 'Shougo/defx.nvim'
+  Plug 'roxma/nvim-yarp'
+  Plug 'roxma/vim-hug-neovim-rpc'
+endif
 
 if version < 800
   Plug 'ConradIrwin/vim-bracketed-paste' " vim8/neovim have this now
@@ -18,36 +56,40 @@ Plug 'junegunn/goyo.vim'
 
 " snippets
 if g:cormacrelf.snippets
-  Plug 'tomtom/tlib_vim'
-  Plug 'MarcWeber/vim-addon-mw-utils'
   Plug 'SirVer/ultisnips'
-  " Plug 'garbas/vim-snipmate'
   " Plug 'honza/vim-snippets'
 endif
 
+" Plug 'tomtom/tlib_vim'
+" Plug 'MarcWeber/vim-addon-mw-utils'
+" Plug 'garbas/vim-snipmate'
+" Plug 'mattn/emmet-vim'
+
 if has('nvim')
   if g:cormacrelf.coc
-    Plug 'Shougo/neco-vim'
-    Plug 'neoclide/coc-neco'
-    Plug 'neoclide/coc.nvim', {'tag': '*', 'do': { -> coc#util#install()}}
+    Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': { -> coc#util#install()}}
+  elseif g:cormacrelf.nvim_lsp
+    " Collection of common configurations for the Nvim LSP client
+    Plug 'neovim/nvim-lspconfig'
+
+    " Extensions to built-in LSP, for example, providing type inlay hints
+    Plug 'tjdevries/lsp_extensions.nvim'
+
+    " Autocompletion framework for built-in LSP
+    Plug 'nvim-lua/completion-nvim'
+
+    " Diagnostic navigation and settings for built-in LSP
+    Plug 'nvim-lua/diagnostic-nvim'
   endif
-endif
-if has('nvim')
-  if g:cormacrelf.LanguageClient
-    Plug 'autozimu/LanguageClient-neovim', {
-    \ 'branch': 'next',
-    \ 'do': 'bash install.sh',
-    \ }
-  endif
-endif
-if g:cormacrelf.ncm2
-  " Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
-  Plug 'roxma/nvim-yarp'
-  Plug 'ncm2/ncm2'
-  Plug 'ncm2/ncm2-path'
-  if g:cormacrelf.snippets
-    Plug 'ncm2/ncm2-ultisnips'
-  endif
+
+  if g:cormacrelf.treesitter
+    Plug 'nvim-treesitter/nvim-treesitter'
+    Plug 'nvim-treesitter/playground'
+    Plug 'nvim-treesitter/nvim-treesitter-refactor'
+    Plug 'nvim-treesitter/nvim-treesitter-textobjects'
+    Plug 'romgrk/nvim-treesitter-context'
+  end
+
 endif
 
 Plug 'tpope/vim-dispatch'
@@ -57,16 +99,19 @@ Plug 'junegunn/fzf.vim'
 Plug 'Shougo/echodoc.vim'
 
 " Language-specific
+Plug 'jparise/vim-graphql'
+Plug 'rhysd/vim-llvm'
 Plug 'tpope/vim-scriptease'
 Plug 'dag/vim-fish'
 Plug 'neovimhaskell/haskell-vim'
 Plug 'vim-ruby/vim-ruby'
 Plug 'vim-pandoc/vim-pandoc'
 Plug 'vim-pandoc/vim-pandoc-syntax'
+Plug 'dhruvasagar/vim-table-mode'
 Plug 'othree/html5.vim'
-Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
+" Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 Plug 'derekwyatt/vim-scala'
-Plug 'rust-lang/rust.vim'
+" Plug 'rust-lang/rust.vim'
 Plug 'cespare/vim-toml'
 Plug 'elixir-lang/vim-elixir'
 Plug 'pangloss/vim-javascript', { 'for': ['javascript', 'javascript.jsx'] }
@@ -77,10 +122,11 @@ Plug 'maxmellon/vim-jsx-pretty', { 'for': ['javascript.jsx', 'typescript.tsx'] }
 Plug 'Quramy/vim-js-pretty-template', {'for': ['javascript', 'typescript']}
 Plug 'hashivim/vim-terraform'
 Plug 'juliosueiras/vim-terraform-completion'
+Plug 'dpwright/vim-tup'
 Plug 'PProvost/vim-ps1' " Powershell
-" Plug 'https://framagit.org/tyreunom/coquille', {
-"       \ 'branch': 'pathogen-bundle',
-"       \ 'do': ':UpdateRemotePlugins' }
+Plug 'https://framagit.org/tyreunom/coquille.git', {
+      \ 'branch': 'master',
+      \ 'do': ':UpdateRemotePlugins' }
 " Plug 'fsharp/vim-fsharp', {
 "       \ 'for': 'fsharp',
 "       \ 'do':  'make fsautocomplete' }
@@ -98,16 +144,18 @@ Plug 'kien/rainbow_parentheses.vim'
 
 
 " Text Objects
-Plug 'vim-scripts/argtextobj.vim'
 Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-textobj-indent'
-Plug 'kana/vim-textobj-syntax' " viy
 Plug 'tpope/vim-surround'
-Plug 'kana/vim-textobj-function'          " af if
-Plug 'beloglazov/vim-textobj-punctuation' " au iu
-Plug 'wellle/targets.vim'
-Plug 'terryma/vim-expand-region'        " + or _
+" Plug 'wellle/targets.vim'
 
+" obsoleted by tree-sitter text objects
+" Plug 'kana/vim-textobj-syntax' " viy
+" Plug 'kana/vim-textobj-function'          " af if
+" Plug 'vim-scripts/argtextobj.vim'
+" Plug 'beloglazov/vim-textobj-punctuation' " au iu
+" Plug 'terryma/vim-expand-region'          " + or _
+" Plug 'LandonSchropp/vim-stamp'            " paste with S<textobj>, without affecting \" register
 
 " Navigation, behaviour
 " Plug 'kien/ctrlp.vim'
@@ -120,8 +168,15 @@ if g:cormacrelf.lightline
 endif
 Plug 'mhinz/vim-grepper'
 Plug 'tpope/vim-fugitive'
+Plug 'tpope/vim-rhubarb'
+
 Plug 'airblade/vim-gitgutter'
-" Plug 'mhinz/vim-signify' " replace gitgutter
+" if has('nvim') || has('patch-8.0.902')
+"   Plug 'mhinz/vim-signify'
+" else
+"   Plug 'mhinz/vim-signify', { 'branch': 'legacy' }
+" endif
+
 " Plug 'mhinz/vim-startify'
 " Plug 'vim-scripts/tasklist.vim', { 'on': 'TaskList' }
 Plug 'mbbill/undotree', { 'on': 'UndotreeToggle' }
@@ -146,31 +201,16 @@ Plug 'tomtom/tcomment_vim'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-unimpaired'
 Plug 'vim-scripts/matchit.zip'
-Plug 'justinmk/vim-sneak' " s<char><char>
+" Plug 'justinmk/vim-sneak' " s<char><char>
 " Plug 'AndrewRadev/splitjoin.vim'
 " Plug 'tpope/vim-commentary'
 " Plug 'Lokaltog/vim-easymotion'
 " Plug 'tpope/vim-ragtag'
-Plug 'yuttie/comfortable-motion.vim'
+" Plug 'yuttie/comfortable-motion.vim'
 
 " Colours and Appearance
-Plug 'xolox/vim-misc' | Plug 'xolox/vim-colorscheme-switcher'
-Plug 'whatyouhide/vim-gotham'
-Plug 'ewilazarus/preto'
-Plug 'romainl/Apprentice'
-Plug 'morhetz/gruvbox'
-Plug 'dracula/vim'
-Plug 'vim-scripts/chlordane.vim'
-" Plug 'malcolmbaig/vim-two-firewatch' " white brace matching, but even in light mode
-Plug 'shofel/vim-two-firewatch'
-Plug 'w0ng/vim-hybrid'
-Plug 'sjl/badwolf'
-Plug 'chriskempson/base16-vim'
-Plug 'rakr/vim-togglebg'
 Plug 'cormacrelf/vim-colors-github'
-Plug 'https://gitlab.com/protesilaos/tempus-themes-vim.git'
-" Plug 'jszakmeister/vim-togglecursor'
-
+Plug 'cormacrelf/dark-notify'
 
 " External
 " Plug 'Shougo/vimproc'

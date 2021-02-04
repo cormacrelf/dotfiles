@@ -10,7 +10,6 @@ if $VIM_HOME == ''
         let $VIM_HOME = $HOME."/.vim"
     endif
 endif
-let $VIM_INIT = $VIM_HOME.'/init.vim'
 let $VIM_VIMRC = $VIM_HOME.'/vimrc.vim'
 let $VIM_PLUG = $VIM_HOME.'/plug.vim'
 let $VIM_G_INIT = $VIM_HOME.'/ginit.vim'
@@ -46,12 +45,14 @@ endif
 " get g:cormacrelf to adapt vim init script to situations
 source $VIM_CONFIG
 
-filetype off
-call plug#begin($VIM_HOME.'/plugged')
-    so $VIM_PLUG
-call plug#end()
-filetype plugin indent on
-syntax on
+if !has("nvim")
+  filetype off
+  call plug#begin($VIM_HOME.'/plugged')
+      so $VIM_PLUG
+  call plug#end()
+  filetype plugin indent on
+  syntax on
+endif
 
 " Startup {{{
 " do this first so any yank mappings still cache
@@ -129,7 +130,12 @@ if g:cormacrelf.lightline
 endif
 
 func! PbuildCount()
-  return (split(system('pbuild -t count '.fnameescape(expand("%"))))[0])
+  let x = split(system('pbuild -t count ' . fnameescape(expand("%"))))
+  if len(x) > 0
+    return x[0]
+  else
+    return -1
+  endif
 endfunc
 
 " }}}
@@ -150,7 +156,6 @@ if !(has("nvim") || has("gui_running"))
     let g:airline_theme='github'
     let g:lightline.colorscheme = 'github'
 endif
-nnoremap <f5> :call github_colors#toggle_soft()<cr>
 
 if executable('rg')
     set grepprg=rg\ --no-heading\ --vimgrep
@@ -223,6 +228,7 @@ set ts=2 sw=2 sts=2 expandtab
 " specifics
 augroup FILETYPES
 autocmd!
+au BufRead *.h setf c
 autocmd Filetype html       setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype liquid     setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype css        setlocal ts=4 sw=4 sts=4 expandtab
@@ -232,20 +238,21 @@ autocmd Filetype jst        setlocal ts=2 sw=2 sts=2 expandtab
 let g:xml_syntax_folding=1
 autocmd Filetype xml        setlocal ts=2 sw=2 sts=2 expandtab foldmethod=syntax
 autocmd Filetype ruby,eruby setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype javascript setlocal ts=2 sw=2 sts=2 expandtab
+autocmd Filetype javascript setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype typescript setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype haskell    setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype c          setlocal ts=8 sw=8 sts=8 expandtab
-autocmd Filetype cpp        setlocal ts=8 sw=8 sts=8 expandtab
+autocmd Filetype cpp        setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype objc       setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype python     setlocal ts=4 sw=4 sts=4 expandtab
-autocmd Filetype typescript setlocal ts=4 sw=4 sts=4 expandtab
 autocmd Filetype markdown   setlocal ts=2 sw=2 sts=2 expandtab fo-=c
 autocmd Filetype scala      setlocal ts=2 sw=2 sts=2 expandtab
-autocmd Filetype go         setlocal ts=4 sw=4 sts=4 expandtab
+autocmd Filetype go         setlocal ts=4 sw=4 sts=4 expandt
 autocmd Filetype vim        setlocal ts=2 sw=2 sts=2 expandtab com+=":\""
 autocmd Filetype clojure    setlocal ts=2 sw=2 sts=2 expandtab
 autocmd Filetype ada        setlocal ts=3 sw=3 sts=3 expandtab
 autocmd Filetype makefile   setlocal ts=4 sw=4 sts=4 noexpandtab
+autocmd Filetype toml       setlocal ts=2 sw=2 sts=2 expandtab
 augroup END
 
 " }}}
@@ -258,8 +265,8 @@ let maplocalleader = "\\"
 
 " Editing mappings {{{
 
-" select all
-noremap <Leader>a ggVG
+" select all (note with tmux, you need to press this twice)
+noremap <C-a> ggVG
 
 " start replace s/// using current selection
 vnoremap <leader><F2> "hy:%s/<C-r>h//gc<left><left><left>
@@ -375,7 +382,6 @@ nnoremap <D-<>       :tabe ~/.vimrc<cr>
 nnoremap <leader>Vs  :so $VIM_VIMRC<cr>
 nnoremap <leader>Vc  :e $VIM_CONFIG<cr>
 nnoremap <leader>Ve  :e $VIM_VIMRC<cr>
-nnoremap <leader>Vn  :e $VIM_INIT<cr>
 nnoremap <leader>Vp  :e $VIM_PLUG<cr>
 
 " vim-grepper!
@@ -472,8 +478,6 @@ set winminheight=0
 
 " }}}
 " Plugin Mapping {{{
-
-call togglebg#map("<F4>")
 
 let g:AutoPairsShortcutToggle = ''
 
@@ -682,6 +686,7 @@ let g:neomake_verbose = 2
 au FileType rust let b:AutoPairs = { '(': ')', '{': '}', '[': ']', '"': '"' }
 let g:neomake_rust_enabled_makers = ['cargo']
 au FileType rust let b:neomake_makers = "cargo"
+let g:rustfmt_autosave = 0
 
 " Paredit {{{
 
@@ -800,11 +805,11 @@ xmap gs <Plug>VSurround
 autocmd FileType pandoc   let b:surround_99 = "[//]: # (\r)"
 
 " 2-character Sneak (default)
-nmap s <Plug>Sneak_s
-nmap S <Plug>Sneak_S
+" nmap s <Plug>Sneak_s
+" nmap S <Plug>Sneak_S
 " visual-mode
-xmap s <Plug>Sneak_s
-xmap S <Plug>Sneak_S
+" xmap s <Plug>Sneak_s
+" xmap S <Plug>Sneak_S
 
 " explicit repeat (as opposed to automatic 'clever-s' repeat)
 " nmap ; <Plug>SneakNext
@@ -886,19 +891,22 @@ function! Prose()
           \ containedin=pandocBlockQuote
     syn match nospellCapitals +\<[A-Z]\+s\?\>+ contains=@NoSpell contained
           \ containedin=pandocUListItem,pandocListItem,pandocListItemContinuation,pandocFootnoteDef,pandocAtxHeader,pandocSetexHeader
-
+    syn match nospellCapitalsRoot +\<[A-Z]\+s\?\>+ contains=@NoSpell
     syn match nospellStrong +\<[A-Z]\+s\?\>+ contains=@NoSpell contained
           \ containedin=pandocStrong
+    syn match nospellAtxHeader +\<[A-Z]\+s\?\>+ contains=@NoSpell contained
+          \ containedin=pandocAtxHeader
     syn match nospellEmphasis +\<[A-Z]\+s\?\>+ contains=@NoSpell contained
           \ containedin=pandocEmphasis
     syn match nospellPCite +\<[^@\]]\+\>+ contains=@NoSpell containedin=pandocPCite contained
     hi link nospellCapitalsBQ pandocBlockQuote
     hi link nospellPCite pandocPCite
     hi link nospellStrong pandocStrong
+    hi link nospellAtxHeader pandocAtxHeader
     hi link nospellEmphasis pandocEmphasis
     setl cinwords=
 
-    setl foldmethod=manual " otherwise nvim spins at 100% when you undo? why? I don't want to know.
+    " setl foldmethod=manual " otherwise nvim spins at 100% when you undo? why? I don't want to know.
     setl noshowmatch
     setl nocindent
     setl smartindent
@@ -1014,7 +1022,7 @@ augroup END
 command! Prose execute Prose()
 
 " Pandoc table mode, automatic aligning using Tabularize
-autocmd Filetype pandoc inoremap <silent> <Bar> <Bar><Esc>:call AlignPandocTables()<CR>a
+" autocmd Filetype pandoc inoremap <silent> <Bar> <Bar><Esc>:call AlignPandocTables()<CR>a
 function! AlignPandocTables()
     let p = '^\s*|\s.*\s|\s*$'
     if  exists(':Tabularize') && getline('.') =~# '^\s*|' && (getline(line('.')-1) =~# p || getline(line('.')+1) =~# p)
@@ -1025,6 +1033,19 @@ function! AlignPandocTables()
         call search(repeat('[^|]*|',column).'\s\{-\}'.repeat('.',position),'ce',line('.'))
     endif
 endfunction
+
+" let g:table_mode_corner='+'
+" let g:table_mode_corner_corner='+'
+" let g:table_mode_separator="|"
+" let g:table_mode_header_fillchar='='
+let g:table_mode_corner='+'
+let g:table_mode_corner_corner='+'
+let g:table_mode_header_fillchar='='
+
+au FileType pandoc let b:table_mode_corner='+'
+au FileType pandoc let b:table_mode_corner_corner='+'
+au FileType pandoc let b:table_mode_header_fillchar='-'
+
 
 " }}}
 
